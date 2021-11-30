@@ -2,6 +2,20 @@
 
 clicar project.
 
+## Development tool
+
+This projects uses code generator
+
+```
+flutter packages pub run build_runner build
+```
+
+- Resolves `json_serializable`
+
+```
+flutter pub run build_runner build --delete-conflicting-outputs
+```
+
 <h3 align="center">Clean code Architecture</h3>
 
 <br />

@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.clicar">
    <application
-        android:label="clicar"
+        android:label="Clicar"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

@@ -35,6 +35,21 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
+  # Service locator
+  get_it: ^7.2.0
+  # Bloc for state management
+  flutter_bloc: ^8.0.0
+  # Value equality
+  equatable: ^2.0.3
+  # Functional programming thingies
+  dartz: ^0.10.0
+  # Remote API
+  http: ^0.13.4
+  # Local cache
+  shared_preferences: ^2.0.9
+  # Json annotator
+  json_annotation: ^4.3.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -45,6 +60,26 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
+
+  # For testing.
+  mockito: ^5.0.16
+  # Code generator
+  build_runner: ^2.0.0
+  # Code generator from models (to json and from json)
+  json_serializable: ^6.0.0
+  #Integration tests
+  flutter_driver:
+    sdk: flutter
+  test: any
+  #bloc testing
+  bloc_test: ^9.0.1
+  #icon generator
+  flutter_launcher_icons: "^0.9.2"
+
+flutter_icons:
+  android: "ic_launcher"
+  ios: true
+  image_path: "assets/images/icon.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

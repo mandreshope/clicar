@@ -1,5 +1,5 @@
-import 'package:clicar/presentation/pages/home_page.dart';
-import 'package:clicar/presentation/pages/login_page.dart';
+import 'package:clicar/presentation/pages/home/home_page.dart';
+import 'package:clicar/presentation/pages/login/login_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

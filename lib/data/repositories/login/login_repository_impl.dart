@@ -26,7 +26,11 @@ class LoginRepositoryImpl implements LoginRepository {
         final remoteData = await remoteDataSource.login(email, password);
         localDataSource.cacheToken(remoteData);
         return Right(remoteData);
-      } on ServerException {
+      } on ServerException catch (_) {
+        return Left(ServerFailure());
+      } on SocketException catch (_) {
+        return Left(ServerFailure());
+      } catch (e) {
         return Left(ServerFailure());
       }
     } else {

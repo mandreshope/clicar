@@ -15,6 +15,7 @@ String get firstCurrentStackTrace => StackTrace.current
 const String baseUrl = "https://mybase.url.com/";
 
 const String cachedToken = "CACHED_TOKEN";
+const assetsImages = "assets/images/";
 
 ///endpoint
 const String loginEndPoint = "/login";

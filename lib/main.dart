@@ -1,4 +1,6 @@
 import 'package:clicar/core/routes/app_pages.dart';
+import 'package:clicar/core/utils/constants.dart';
+import 'package:clicar/core/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:logging/logging.dart';
@@ -9,7 +11,6 @@ Future<void> main() async {
 
   await di
       .init(); //Inject all the dependencies and wait for it is done (i.e. UI won't built until all the dependencies are injected)
-  _setupLogging();
 
   runApp(const App());
 }
@@ -22,9 +23,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Clicar',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: CustomTheme.themeData,
       localizationsDelegates: const [
         // ... app-specific localization delegate[s] here
         GlobalMaterialLocalizations.delegate,
@@ -40,11 +39,4 @@ class App extends StatelessWidget {
       initialRoute: Routes.login,
     );
   }
-}
-
-void _setupLogging() {
-  Logger.root.level = Level.ALL;
-  Logger.root.onRecord.listen((rec) {
-    debugPrint('${rec.level.name}: ${rec.time}: ${rec.message}');
-  });
 }

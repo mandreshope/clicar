@@ -2,7 +2,7 @@ import 'package:clicar/core/utils/constants.dart';
 import 'package:clicar/core/utils/responsive.dart';
 import 'package:clicar/core/utils/theme.dart';
 import 'package:clicar/injection_container.dart';
-import 'package:clicar/presentation/blocs/login/login_bloc.dart';
+import 'package:clicar/presentation/pages/login/bloc/login_bloc.dart';
 import 'package:clicar/presentation/widgets/basic_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -76,7 +76,8 @@ class ForgotPasswordPage extends StatelessWidget {
                               ),
                               PrimaryButton(
                                 onPressed: () {},
-                                width: Responsive.width(context) * .3,
+                                height: 50.0,
+                                width: 40.w(context),
                                 child: Text(
                                   'Valider',
                                   style: TextStyle(

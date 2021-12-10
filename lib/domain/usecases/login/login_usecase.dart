@@ -12,16 +12,16 @@ class LoginUseCase implements UseCase<Login, LoginParams> {
 
   @override
   Future<Either<Failure, Login>> call(LoginParams params) async {
-    return await repository.loginUser(params.email, params.password);
+    return await repository.loginUser(params.username, params.password);
   }
 }
 
 class LoginParams extends Equatable {
-  final String email;
+  final String username;
   final String password;
 
-  const LoginParams({required this.email, required this.password});
+  const LoginParams({required this.username, required this.password});
 
   @override
-  List<Object?> get props => [email, password];
+  List<Object?> get props => [username, password];
 }

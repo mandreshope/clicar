@@ -116,41 +116,86 @@ class TextFieldFilled extends StatelessWidget {
   final TextInputType? textInputType;
   final bool? obscureText;
   final String labelText;
+  final String? Function(String?)? validator;
   const TextFieldFilled({
     Key? key,
     required this.labelText,
     this.textInputType,
     this.controller,
     this.obscureText,
+    this.validator,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.grey,
-          width: 0.5,
-        ),
-      ),
-      child: TextField(
-        controller: controller,
-        keyboardType: textInputType,
-        obscureText: obscureText ?? false,
-        decoration: InputDecoration(
-          labelStyle: TextStyle(
-            fontSize: CustomTheme.bodyText1.sp(context),
-            color: const ColorScheme.light().onSecondary,
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.grey,
+            width: 0.5,
           ),
-          labelText: labelText,
-          enabledBorder: InputBorder.none,
-          disabledBorder: InputBorder.none,
-          border: InputBorder.none,
-          filled: true,
-          fillColor: CustomTheme.greyColor,
         ),
-      ),
-    );
+        child: FormField(
+          validator: validator,
+          builder: (FormFieldState<String> state) {
+            return Column(
+              children: [
+                TextFormField(
+                  onChanged: (v) {
+                    state.didChange(v);
+                  },
+                  controller: controller,
+                  keyboardType: textInputType,
+                  obscureText: obscureText ?? false,
+                  decoration: InputDecoration(
+                    errorBorder: InputBorder.none,
+                    labelStyle: TextStyle(
+                      fontSize: CustomTheme.bodyText1.sp(context),
+                      color: const ColorScheme.light().onSecondary,
+                    ),
+                    labelText: labelText,
+                    enabledBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    border: InputBorder.none,
+                    filled: true,
+                    fillColor: CustomTheme.greyColor,
+                  ),
+                ),
+                Offstage(
+                  offstage: !state.hasError,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 5.0,
+                      horizontal: 15.0,
+                    ),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.error,
+                            color: Theme.of(context).errorColor,
+                            size: CustomTheme.bodyText1.sp(context),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            "${state.errorText}",
+                            style: TextStyle(
+                              color: Theme.of(context).errorColor,
+                              fontSize: CustomTheme.bodyText2.sp(context),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            );
+          },
+        ));
   }
 }
 

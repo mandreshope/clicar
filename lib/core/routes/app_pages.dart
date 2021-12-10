@@ -1,7 +1,8 @@
 import 'package:clicar/presentation/pages/forgot_password/forgot_password.dart';
 import 'package:clicar/presentation/pages/home/home_page.dart';
 import 'package:clicar/presentation/pages/login/login_page.dart';
-import 'package:clicar/presentation/pages/register/register.dart';
+import 'package:clicar/presentation/pages/register/register_page.dart';
+import 'package:clicar/presentation/pages/splash/splash_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -10,9 +11,17 @@ part './app_routes.dart';
 abstract class AppPages {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case Routes.splash:
+        return MaterialPageRoute(
+          builder: (_) => const SplashPage(),
+          settings: RouteSettings(
+            name: Routes.splash,
+            arguments: settings.arguments,
+          ),
+        );
       case Routes.login:
         return MaterialPageRoute(
-          builder: (_) => const LoginPage(),
+          builder: (_) => LoginPage(),
           settings: RouteSettings(
             name: Routes.login,
             arguments: settings.arguments,
@@ -28,7 +37,7 @@ abstract class AppPages {
         );
       case Routes.register:
         return MaterialPageRoute(
-          builder: (_) => const RegisterPage(),
+          builder: (_) => RegisterPage(),
           settings: RouteSettings(
             name: Routes.register,
             arguments: settings.arguments,
@@ -44,9 +53,9 @@ abstract class AppPages {
         );
       default:
         return MaterialPageRoute(
-          builder: (_) => const LoginPage(),
+          builder: (_) => const SplashPage(),
           settings: RouteSettings(
-            name: Routes.login,
+            name: Routes.splash,
             arguments: settings.arguments,
           ),
         );

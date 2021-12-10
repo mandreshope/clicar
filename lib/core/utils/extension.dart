@@ -4,6 +4,25 @@ import 'package:clicar/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+extension TestString on String {
+  bool get isValidateEmail => RegExp(
+          r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$")
+      .hasMatch(this);
+  bool get isValidateUrl => RegExp(
+          r'^((?:.|\n)*?)((http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?)')
+      .hasMatch(this);
+  isValidatePassword() => length >= 6 ? true : false;
+
+  bool isdouble() {
+    try {
+      double.parse(this);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+}
+
 extension FormatDate on DateTime {
   String get formatDateyMMMMd =>
       DateFormat.yMMMMd('fr_FR').format(toUtc().toLocal());

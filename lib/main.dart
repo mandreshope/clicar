@@ -36,7 +36,7 @@ class App extends StatelessWidget {
       locale: const Locale('fr', 'FR'),
       onGenerateRoute: AppPages.generateRoute,
       navigatorObservers: [AppObserver()],
-      initialRoute: Routes.login,
+      initialRoute: Routes.splash,
     );
   }
 }

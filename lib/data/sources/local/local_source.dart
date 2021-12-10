@@ -5,15 +5,15 @@ import 'package:clicar/core/utils/constants.dart';
 import 'package:clicar/data/models/login/login_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-abstract class LoginLocalSource {
+abstract class LocalSource {
   Future<LoginModel> getLastToken();
   Future<void> cacheToken(LoginModel loginModel);
 }
 
-class LoginLocalSourceImpl extends LoginLocalSource {
+class LocalSourceImpl extends LocalSource {
   final SharedPreferences sharedPreferences;
 
-  LoginLocalSourceImpl({required this.sharedPreferences});
+  LocalSourceImpl({required this.sharedPreferences});
 
   @override
   Future<void> cacheToken(LoginModel loginModel) {

@@ -10,19 +10,14 @@ class UserCheckLoginStatusEvent extends LoginEvent {
 }
 
 class UserLoginEvent extends LoginEvent {
-  final String email;
+  final String username;
   final String password;
 
   const UserLoginEvent({
-    required this.email,
+    required this.username,
     required this.password,
   });
 
   @override
-  List<Object?> get props => [email, password];
-}
-
-class UserSkipLoginEvent extends LoginEvent {
-  @override
-  List<Object?> get props => [];
+  List<Object?> get props => [username, password];
 }

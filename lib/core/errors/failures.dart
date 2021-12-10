@@ -6,7 +6,15 @@ abstract class Failure extends Equatable {
 }
 
 // General failures
-class ServerFailure extends Failure {}
+class ServerFailure extends Failure {
+  final String message;
+  ServerFailure({required this.message});
+  @override
+  List<Object> get props => [message];
+
+  @override
+  bool? get stringify => true;
+}
 
 class CacheFailure extends Failure {}
 

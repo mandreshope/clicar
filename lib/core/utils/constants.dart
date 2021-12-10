@@ -26,7 +26,8 @@ const String cachedToken = "CACHED_TOKEN";
 const assetsImages = "assets/images/";
 
 /// server config
-const String baseUrl = "https://api-new.clicar.fr/";
+const String baseUrl = "https://api-new.clicar.fr";
 
 /// endpoint
-const String loginEndPoint = "auth/login";
+const String loginEndpoint = "/auth/login";
+const String registerEndpoint = "/user";

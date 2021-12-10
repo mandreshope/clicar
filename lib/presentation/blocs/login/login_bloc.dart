@@ -1,11 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:clicar/core/errors/failures.dart';
 import 'package:clicar/core/usecases/fetch_token_usecase.dart';
-import 'package:clicar/core/utils/constants.dart';
 import 'package:clicar/domain/entities/login/login.dart';
 import 'package:clicar/domain/usecases/login/login_usecase.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';

@@ -1,9 +1,8 @@
+import 'package:clicar/core/routes/app_observer.dart';
 import 'package:clicar/core/routes/app_pages.dart';
-import 'package:clicar/core/utils/constants.dart';
 import 'package:clicar/core/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:logging/logging.dart';
 import 'package:clicar/injection_container.dart' as di; //Dependency injector
 
 Future<void> main() async {
@@ -36,6 +35,7 @@ class App extends StatelessWidget {
       ],
       locale: const Locale('fr', 'FR'),
       onGenerateRoute: AppPages.generateRoute,
+      navigatorObservers: [AppObserver()],
       initialRoute: Routes.login,
     );
   }

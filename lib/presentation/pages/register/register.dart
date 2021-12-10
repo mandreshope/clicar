@@ -9,14 +9,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clicar/core/utils/extension.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class RegisterPage extends StatelessWidget {
+  const RegisterPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<LoginBloc>(
       create: (_) => sl<LoginBloc>(),
       child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+        ),
         body: Stack(
           children: [
             Container(
@@ -27,7 +30,7 @@ class LoginPage extends StatelessWidget {
                 children: [
                   SizedBox(
                     height: Responsive.height(context) -
-                        (Responsive.height(context) * 0.5),
+                        (Responsive.height(context) * 0.7),
                     child: Center(
                       child: Image.asset(
                         "${assetsImages}clicar_logo.png",
@@ -39,8 +42,7 @@ class LoginPage extends StatelessWidget {
               ),
             ),
             DraggableScrollableSheet(
-              initialChildSize: 0.5,
-              minChildSize: 0.5,
+              initialChildSize: 0.7,
               builder:
                   (BuildContext context, ScrollController scrollController) {
                 return Container(
@@ -61,12 +63,31 @@ class LoginPage extends StatelessWidget {
                           ),
                           child: Column(
                             children: [
-                              const TitleWithSeparator(title: "Connexion"),
+                              const TitleWithSeparator(title: "Inscription"),
                               const SizedBox(
                                 height: 30,
                               ),
                               const TextFieldFilled(
                                 labelText: 'Utilisateur',
+                              ),
+                              const SizedBox(
+                                height: CustomTheme.spacer,
+                              ),
+                              const TextFieldFilled(
+                                labelText: 'Nom',
+                              ),
+                              const SizedBox(
+                                height: CustomTheme.spacer,
+                              ),
+                              const TextFieldFilled(
+                                labelText: 'Prénom',
+                              ),
+                              const SizedBox(
+                                height: CustomTheme.spacer,
+                              ),
+                              const TextFieldFilled(
+                                labelText: 'Email',
+                                textInputType: TextInputType.emailAddress,
                               ),
                               const SizedBox(
                                 height: CustomTheme.spacer,
@@ -79,52 +100,26 @@ class LoginPage extends StatelessWidget {
                               const SizedBox(
                                 height: CustomTheme.spacer,
                               ),
+                              const TextFieldFilled(
+                                labelText: 'Confirmation mot de passe',
+                                textInputType: TextInputType.visiblePassword,
+                                obscureText: true,
+                              ),
+                              const SizedBox(
+                                height: CustomTheme.spacer,
+                              ),
                               PrimaryButton(
                                 onPressed: () {
                                   Navigator.of(context).pushNamed(
                                     Routes.home,
-                                    arguments: "args",
                                   );
                                 },
+                                width: Responsive.width(context) * .3,
                                 child: Text(
-                                  'Se connecter',
+                                  "S'inscrire",
                                   style: TextStyle(
                                     fontSize: CustomTheme.button.sp(context),
                                     color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10.0,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  Navigator.of(context).pushNamed(
-                                    Routes.forgotPassword,
-                                  );
-                                },
-                                child: Text(
-                                  "Mot de passe oublié ?",
-                                  style: TextStyle(
-                                    color: CustomTheme.primaryColor,
-                                    fontSize: CustomTheme.bodyText1.sp(context),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10.0,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  Navigator.of(context).pushNamed(
-                                    Routes.register,
-                                  );
-                                },
-                                child: Text(
-                                  "S'inscrire ?",
-                                  style: TextStyle(
-                                    color: CustomTheme.primaryColor,
-                                    fontSize: CustomTheme.bodyText1.sp(context),
                                   ),
                                 ),
                               ),
@@ -139,22 +134,6 @@ class LoginPage extends StatelessWidget {
             ),
           ],
         ),
-        /*Center(
-          child: BlocBuilder<LoginBloc, LoginState>(
-            builder: (context, state) {
-              debugPrint("$logTrace intial state: $state");
-              return TextButton(
-                onPressed: () {
-                  context.read<LoginBloc>().add(const UserLoginEvent(
-                        email: "mandreshope@gmail.com",
-                        password: "123456",
-                      ));
-                },
-                child: const Text("click here..."),
-              );
-            },
-          ),
-        ),*/
       ),
     );
   }

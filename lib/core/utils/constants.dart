@@ -1,7 +1,9 @@
-String get logTrace =>
-    '[EVENT] ' +
-    StackTrace.current.toString().split("\n").toList()[1].split("      ").last;
+import 'package:flutter/cupertino.dart';
 
+/// debug tools
+String get logTrace =>
+    '[LOG_TRACE] ' +
+    StackTrace.current.toString().split("\n").toList()[1].split("      ").last;
 String get firstCurrentStackTrace => StackTrace.current
     .toString()
     .split("\n")
@@ -12,10 +14,19 @@ String get firstCurrentStackTrace => StackTrace.current
     .first
     .toString();
 
-const String baseUrl = "https://mybase.url.com/";
+/// navigator
+Object? navigatorArgs(BuildContext context) {
+  return ModalRoute.of(context)!.settings.arguments;
+}
 
+/// sharedPref keys
 const String cachedToken = "CACHED_TOKEN";
+
+/// assets
 const assetsImages = "assets/images/";
 
-///endpoint
-const String loginEndPoint = "/login";
+/// server config
+const String baseUrl = "https://api-new.clicar.fr/";
+
+/// endpoint
+const String loginEndPoint = "auth/login";

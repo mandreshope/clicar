@@ -28,4 +28,42 @@ class CustomTheme {
   );
   static const defaultPadding = 20.0;
   static const spacer = 20.0;
+  static TextStyle mainBtnTextStyle = TextStyle(
+    color: const ColorScheme.light().onSecondary,
+    fontWeight: FontWeight.bold,
+    fontSize: subtitle2,
+  );
+
+  ///size 18
+  static double headline1 = 18;
+
+  ///size 17
+  static double headline2 = 17;
+
+  ///size 16
+  static double headline3 = 16;
+
+  ///size 15
+  static double headline4 = 15;
+
+  ///size 14
+  static double subtitle1 = 14;
+
+  ///size 12
+  static double subtitle2 = 13;
+
+  ///size 12
+  static double bodyText1 = 12;
+
+  ///size 10
+  static double bodyText2 = 10;
+
+  ///size 12
+  static double caption = 12;
+
+  ///size 12
+  static double button = 12;
+
+  ///size 10
+  static double overline = 10;
 }

@@ -30,4 +30,8 @@ const String baseUrl = "https://api-new.clicar.fr";
 
 /// endpoint
 const String loginEndpoint = "/auth/login";
-const String registerEndpoint = "/user";
+const String registerEndpoint = "/user/subscribe";
+const String forgotPasswordEndpoint = "/auth/forgotPassword";
+const String changePasswordEndpoint = "/auth/changePassword";
+const String meEndpoint = "/user/me";
+const String userInfoUpdateEndpoint = "/user/edit";

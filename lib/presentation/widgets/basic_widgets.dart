@@ -96,7 +96,7 @@ class SecondaryButton extends StatelessWidget {
               ),
           shape: MaterialStateProperty.all(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(radius ?? 0.0),
+              borderRadius: BorderRadius.circular(radius ?? 10.0),
               side: BorderSide(color: borderColor ?? Colors.grey, width: 0.5),
             ),
           ),
@@ -112,6 +112,7 @@ class SecondaryButton extends StatelessWidget {
 }
 
 class TextFieldFilled extends StatelessWidget {
+  final String? initialValue;
   final TextEditingController? controller;
   final TextInputType? textInputType;
   final bool? obscureText;
@@ -120,6 +121,7 @@ class TextFieldFilled extends StatelessWidget {
   const TextFieldFilled({
     Key? key,
     required this.labelText,
+    this.initialValue,
     this.textInputType,
     this.controller,
     this.obscureText,
@@ -128,74 +130,105 @@ class TextFieldFilled extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: Colors.grey,
-            width: 0.5,
-          ),
-        ),
-        child: FormField(
-          validator: validator,
-          builder: (FormFieldState<String> state) {
-            return Column(
-              children: [
-                TextFormField(
-                  onChanged: (v) {
-                    state.didChange(v);
-                  },
-                  controller: controller,
-                  keyboardType: textInputType,
-                  obscureText: obscureText ?? false,
-                  decoration: InputDecoration(
-                    errorBorder: InputBorder.none,
-                    labelStyle: TextStyle(
-                      fontSize: CustomTheme.bodyText1.sp(context),
-                      color: const ColorScheme.light().onSecondary,
-                    ),
-                    labelText: labelText,
-                    enabledBorder: InputBorder.none,
-                    disabledBorder: InputBorder.none,
-                    border: InputBorder.none,
-                    filled: true,
-                    fillColor: CustomTheme.greyColor,
+    return FormField(
+      validator: validator,
+      initialValue: initialValue,
+      builder: (FormFieldState<String> state) {
+        return Column(
+          children: [
+            TextFormField(
+              onChanged: (v) {
+                state.didChange(v);
+              },
+              onSaved: (v) {
+                state.save();
+              },
+              onFieldSubmitted: (v) {
+                state.save();
+              },
+              controller: controller,
+              keyboardType: textInputType,
+              obscureText: obscureText ?? false,
+              decoration: InputDecoration(
+                errorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Theme.of(context).errorColor,
+                    width: 0.5,
+                  ),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                labelStyle: TextStyle(
+                  fontSize: CustomTheme.bodyText1.sp(context),
+                  color: const ColorScheme.light().onSecondary,
+                ),
+                labelText: labelText,
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Colors.grey,
+                    width: 0.5,
+                  ),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                disabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Colors.grey,
+                    width: 0.5,
+                  ),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: CustomTheme.primaryColor,
+                    width: 2.0,
+                  ),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Colors.grey,
+                    width: 0.5,
+                  ),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                filled: true,
+                fillColor: CustomTheme.greyColor,
+              ),
+            ),
+            Offstage(
+              offstage: !state.hasError,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 5.0,
+                  horizontal: 10.0,
+                ),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.error,
+                        color: Theme.of(context).errorColor,
+                        size: CustomTheme.bodyText1.sp(context),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        "${state.errorText}",
+                        style: TextStyle(
+                          color: Theme.of(context).errorColor,
+                          fontSize: CustomTheme.bodyText2.sp(context),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                Offstage(
-                  offstage: !state.hasError,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 5.0,
-                      horizontal: 15.0,
-                    ),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.error,
-                            color: Theme.of(context).errorColor,
-                            size: CustomTheme.bodyText1.sp(context),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            "${state.errorText}",
-                            style: TextStyle(
-                              color: Theme.of(context).errorColor,
-                              fontSize: CustomTheme.bodyText2.sp(context),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            );
-          },
-        ));
+              ),
+            )
+          ],
+        );
+      },
+    );
   }
 }
 
@@ -255,6 +288,35 @@ class BottomLogo extends StatelessWidget {
           "${assetsImages}clicar_logo.png",
           scale: 7.sp(context),
           color: CustomTheme.primaryColor,
+        ),
+      ),
+    );
+  }
+}
+
+class Avatar extends StatelessWidget {
+  final double? height;
+  final double? width;
+  const Avatar({
+    Key? key,
+    this.height,
+    this.width,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height ?? 70.sp(context),
+      width: width ?? 70.sp(context),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(100.w(context)),
+        color: CustomTheme.greyColor,
+      ),
+      child: const Center(
+        child: Icon(
+          Icons.person,
+          size: 30,
+          color: Colors.grey,
         ),
       ),
     );

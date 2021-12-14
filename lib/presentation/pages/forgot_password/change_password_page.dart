@@ -3,7 +3,7 @@ import 'package:clicar/core/utils/constants.dart';
 import 'package:clicar/core/utils/responsive.dart';
 import 'package:clicar/core/utils/theme.dart';
 import 'package:clicar/core/utils/validator.dart';
-import 'package:clicar/presentation/pages/login/bloc/auth_bloc.dart';
+import 'package:clicar/presentation/pages/forgot_password/bloc/forgot_password_bloc.dart';
 import 'package:clicar/presentation/widgets/basic_widgets.dart';
 import 'package:clicar/presentation/widgets/circular_progress_widget.dart';
 import 'package:clicar/presentation/widgets/snack_bar_widget.dart';
@@ -11,17 +11,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clicar/core/utils/extension.dart';
 
-class RegisterPage extends StatelessWidget {
-  RegisterPage({Key? key}) : super(key: key);
+class ChangePasswordPage extends StatelessWidget {
+  ChangePasswordPage({Key? key}) : super(key: key);
 
-  final TextEditingController username = TextEditingController();
   final TextEditingController email = TextEditingController();
   final TextEditingController password = TextEditingController();
-  final TextEditingController cpassword = TextEditingController();
-  final TextEditingController lastName = TextEditingController();
-  final TextEditingController firstName = TextEditingController();
-  final TextEditingController role = TextEditingController();
-
+  final TextEditingController code = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -40,7 +35,7 @@ class RegisterPage extends StatelessWidget {
               children: [
                 SizedBox(
                   height: Responsive.height(context) -
-                      (Responsive.height(context) * 0.7),
+                      (Responsive.height(context) * .6),
                   child: Center(
                     child: Image.asset(
                       "${assetsImages}clicar_logo.png",
@@ -52,8 +47,8 @@ class RegisterPage extends StatelessWidget {
             ),
           ),
           DraggableScrollableSheet(
-            initialChildSize: 0.7,
-            minChildSize: 0.7,
+            initialChildSize: 0.6,
+            minChildSize: 0.6,
             maxChildSize: 1.0,
             builder: (BuildContext context, ScrollController scrollController) {
               return Container(
@@ -77,42 +72,18 @@ class RegisterPage extends StatelessWidget {
                           key: _formKey,
                           child: Column(
                             children: [
-                              const TitleWithSeparator(title: "Inscription"),
+                              const TitleWithSeparator(
+                                  title: "Mot de passe oublié ?"),
                               const SizedBox(
                                 height: 30,
                               ),
                               TextFieldFilled(
-                                controller: username,
-                                labelText: "Nom d'utilisateur",
+                                controller: code,
+                                labelText: "Code de confirmation",
+                                textInputType: TextInputType.number,
                                 validator: (value) {
                                   if (value == null || value.trim().isEmpty) {
-                                    return 'Veuillez saisir votre username';
-                                  }
-                                  return null;
-                                },
-                              ),
-                              const SizedBox(
-                                height: CustomTheme.spacer,
-                              ),
-                              TextFieldFilled(
-                                controller: lastName,
-                                labelText: 'Nom',
-                                validator: (value) {
-                                  if (value == null || value.trim().isEmpty) {
-                                    return 'Veuillez saisir votre nom';
-                                  }
-                                  return null;
-                                },
-                              ),
-                              const SizedBox(
-                                height: CustomTheme.spacer,
-                              ),
-                              TextFieldFilled(
-                                controller: firstName,
-                                labelText: 'Prénom',
-                                validator: (value) {
-                                  if (value == null || value.trim().isEmpty) {
-                                    return 'Veuillez saisir votre prénom';
+                                    return 'Veuillez saisir le code';
                                   }
                                   return null;
                                 },
@@ -122,7 +93,7 @@ class RegisterPage extends StatelessWidget {
                               ),
                               TextFieldFilled(
                                 controller: email,
-                                labelText: 'Email',
+                                labelText: "Email",
                                 textInputType: TextInputType.emailAddress,
                                 validator: Validator.email,
                               ),
@@ -131,12 +102,12 @@ class RegisterPage extends StatelessWidget {
                               ),
                               TextFieldFilled(
                                 controller: password,
-                                labelText: 'Mot de passe',
+                                labelText: 'Nouveau mot de passe',
                                 textInputType: TextInputType.visiblePassword,
                                 obscureText: true,
                                 validator: (value) {
                                   if (value == null) {
-                                    return 'Veuillez saisir votre mot de passe';
+                                    return 'Veuillez saisir votre nouveau mot de passe';
                                   } else if (value.isValidatePassword() ==
                                       false) {
                                     return 'Veuillez saisir au moin 6 caractères';
@@ -147,38 +118,37 @@ class RegisterPage extends StatelessWidget {
                               const SizedBox(
                                 height: CustomTheme.spacer,
                               ),
-                              TextFieldFilled(
-                                controller: cpassword,
-                                labelText: 'Confirmation mot de passe',
-                                textInputType: TextInputType.visiblePassword,
-                                obscureText: true,
-                                validator: (value) {
-                                  if (value == null) {
-                                    return 'Veuillez saisir votre confirmation mot de passe';
-                                  } else if (value != password.text) {
-                                    return 'les mots de passe saisis ne correspondent pas';
-                                  }
-                                  return null;
-                                },
-                              ),
-                              const SizedBox(
-                                height: CustomTheme.spacer,
-                              ),
-                              BlocBuilder<AuthBloc, AuthState>(
+                              BlocBuilder<ForgotPasswordBloc,
+                                  ForgotPasswordState>(
                                 buildWhen: (prevState, currState) {
-                                  if (currState is LoggedState) {
+                                  if (currState is PasswordChangedState) {
+                                    SnackBarWidget.show(
+                                      isError: false,
+                                      message:
+                                          "Votre mot de passe a été modifié avec succès",
+                                      context: context,
+                                    );
                                     WidgetsBinding.instance!
                                         .addPostFrameCallback((timeStamp) {
                                       Navigator.of(context)
                                           .pushNamedAndRemoveUntil(
-                                              Routes.home, (route) => false);
+                                              Routes.login, (route) => false);
                                     });
                                   } else if (currState is ErrorState) {
-                                    SnackBarWidget.show(
-                                      isError: true,
-                                      message: currState.message,
-                                      context: context,
-                                    );
+                                    if (currState.message == "Locked") {
+                                      SnackBarWidget.show(
+                                        isError: true,
+                                        message:
+                                            "Code de confirmation invalide",
+                                        context: context,
+                                      );
+                                    } else {
+                                      SnackBarWidget.show(
+                                        isError: true,
+                                        message: currState.message,
+                                        context: context,
+                                      );
+                                    }
                                   }
                                   return true;
                                 },
@@ -196,21 +166,18 @@ class RegisterPage extends StatelessWidget {
                                       onPressed: () {
                                         if (_formKey.currentState!.validate()) {
                                           context
-                                              .read<AuthBloc>()
-                                              .add(UserRegisterEvent(
-                                                username: username.text,
-                                                email: email.text,
+                                              .read<ForgotPasswordBloc>()
+                                              .add(ChangePasswordEvent(
                                                 password: password.text,
-                                                lastName: lastName.text,
-                                                firstName: firstName.text,
-                                                role: role.text,
+                                                code: code.text,
+                                                email: email.text,
                                               ));
                                         }
                                       },
                                       height: 50.0,
                                       width: 40.w(context),
                                       child: Text(
-                                        "S'inscrire",
+                                        'Valider',
                                         style: TextStyle(
                                           fontSize:
                                               CustomTheme.button.sp(context),

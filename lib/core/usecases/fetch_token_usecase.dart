@@ -1,12 +1,12 @@
 import 'package:clicar/core/errors/failures.dart';
 import 'package:clicar/core/usecases/usecase.dart';
-import 'package:clicar/domain/entities/login/login.dart';
-import 'package:clicar/domain/repositories/login/login_repository.dart';
+import 'package:clicar/domain/entities/auth/login.dart';
+import 'package:clicar/domain/repositories/auth/auth_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
 class FetchTokenUseCase implements UseCase<Login, TokenParams> {
-  final LoginRepository repository;
+  final AuthRepository repository;
 
   FetchTokenUseCase({required this.repository});
 

@@ -1,55 +1,21 @@
 import 'package:clicar/core/routes/app_pages.dart';
+import 'package:clicar/core/utils/extension.dart';
 import 'package:clicar/core/utils/responsive.dart';
 import 'package:clicar/core/utils/theme.dart';
 import 'package:clicar/presentation/pages/home/bloc/user_bloc.dart';
 import 'package:clicar/presentation/pages/login/bloc/auth_bloc.dart';
 import 'package:clicar/presentation/widgets/basic_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:clicar/core/utils/extension.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
-  void initState() {
-    super.initState();
-    context.read<UserBloc>().add(MeEvent());
-  }
+class AccountPage extends StatelessWidget {
+  const AccountPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        actions: [
-          BlocBuilder<AuthBloc, AuthState>(
-            buildWhen: (prevState, currState) {
-              if (currState is NotLoggedState) {
-                WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-                  Navigator.of(context)
-                      .pushNamedAndRemoveUntil(Routes.login, (route) => false);
-                });
-              }
-              return true;
-            },
-            builder: (context, state) {
-              return IconButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed(Routes.account);
-                },
-                icon: const Icon(
-                  Icons.settings,
-                ),
-              );
-            },
-          ),
-        ],
       ),
       body: Stack(
         children: [
@@ -123,7 +89,7 @@ class _HomePageState extends State<HomePage> {
                             SecondaryButton(
                               width: double.infinity,
                               child: Text(
-                                'Signature des contrats',
+                                'Importer une photo',
                                 style: CustomTheme.mainBtnTextStyle.copyWith(
                                   fontSize: CustomTheme
                                       .mainBtnTextStyle.fontSize
@@ -138,7 +104,7 @@ class _HomePageState extends State<HomePage> {
                             SecondaryButton(
                               width: double.infinity,
                               child: Text(
-                                'Réaliser un départ',
+                                'Changer de mote de passe',
                                 style: CustomTheme.mainBtnTextStyle.copyWith(
                                   fontSize: CustomTheme
                                       .mainBtnTextStyle.fontSize
@@ -153,47 +119,34 @@ class _HomePageState extends State<HomePage> {
                             SecondaryButton(
                               width: double.infinity,
                               child: Text(
-                                'Réaliser un retour',
+                                'Mes informations',
                                 style: CustomTheme.mainBtnTextStyle.copyWith(
                                   fontSize: CustomTheme
                                       .mainBtnTextStyle.fontSize
                                       ?.sp(context),
                                 ),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.of(context)
+                                    .pushNamed(Routes.userInfo);
+                              },
                             ),
                             const SizedBox(
                               height: CustomTheme.spacer,
                             ),
-                            SecondaryButton(
-                              width: double.infinity,
+                            InkWell(
+                              onTap: () {
+                                context.read<AuthBloc>().add(UserLogOutEvent());
+                              },
                               child: Text(
-                                'Joindre des documents',
-                                style: CustomTheme.mainBtnTextStyle.copyWith(
-                                  fontSize: CustomTheme
-                                      .mainBtnTextStyle.fontSize
-                                      ?.sp(context),
+                                "se déconnecter".toUpperCase(),
+                                style: TextStyle(
+                                  color: CustomTheme.primaryColor,
+                                  fontSize: CustomTheme.bodyText1.sp(context),
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.underline,
                                 ),
                               ),
-                              onPressed: () {},
-                            ),
-                            const SizedBox(
-                              height: CustomTheme.spacer,
-                            ),
-                            SecondaryButton(
-                              width: double.infinity,
-                              child: Text(
-                                'Consulter les statistiques',
-                                style: CustomTheme.mainBtnTextStyle.copyWith(
-                                  fontSize: CustomTheme
-                                      .mainBtnTextStyle.fontSize
-                                      ?.sp(context),
-                                ),
-                              ),
-                              onPressed: () {},
-                            ),
-                            const SizedBox(
-                              height: CustomTheme.spacer,
                             ),
                           ],
                         ),

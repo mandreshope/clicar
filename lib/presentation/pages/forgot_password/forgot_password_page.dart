@@ -2,7 +2,8 @@ import 'package:clicar/core/routes/app_pages.dart';
 import 'package:clicar/core/utils/constants.dart';
 import 'package:clicar/core/utils/responsive.dart';
 import 'package:clicar/core/utils/theme.dart';
-import 'package:clicar/presentation/pages/login/bloc/auth_bloc.dart';
+import 'package:clicar/core/utils/validator.dart';
+import 'package:clicar/presentation/pages/forgot_password/bloc/forgot_password_bloc.dart';
 import 'package:clicar/presentation/widgets/basic_widgets.dart';
 import 'package:clicar/presentation/widgets/circular_progress_widget.dart';
 import 'package:clicar/presentation/widgets/snack_bar_widget.dart';
@@ -10,17 +11,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clicar/core/utils/extension.dart';
 
-class LoginPage extends StatelessWidget {
-  LoginPage({Key? key}) : super(key: key);
+class ForgotPasswordPage extends StatelessWidget {
+  ForgotPasswordPage({Key? key}) : super(key: key);
 
-  final TextEditingController username = TextEditingController();
-  final TextEditingController password = TextEditingController();
-
+  final TextEditingController email = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+      ),
       body: Stack(
         children: [
           Container(
@@ -31,7 +33,7 @@ class LoginPage extends StatelessWidget {
               children: [
                 SizedBox(
                   height: Responsive.height(context) -
-                      (Responsive.height(context) * 0.5),
+                      (Responsive.height(context) * .5),
                   child: Center(
                     child: Image.asset(
                       "${assetsImages}clicar_logo.png",
@@ -68,53 +70,42 @@ class LoginPage extends StatelessWidget {
                           key: _formKey,
                           child: Column(
                             children: [
-                              const TitleWithSeparator(title: "Connexion"),
+                              const TitleWithSeparator(
+                                  title: "Mot de passe oublié ?"),
                               const SizedBox(
                                 height: 30,
                               ),
                               TextFieldFilled(
-                                labelText: 'Utilisateur',
-                                controller: username,
-                                validator: (value) {
-                                  if (value == null || value.trim().isEmpty) {
-                                    return 'Veuillez saisir votre username';
-                                  }
-                                  return null;
-                                },
+                                controller: email,
+                                labelText: "Email",
+                                textInputType: TextInputType.emailAddress,
+                                validator: Validator.email,
                               ),
                               const SizedBox(
                                 height: CustomTheme.spacer,
                               ),
-                              TextFieldFilled(
-                                labelText: 'Mot de passe',
-                                controller: password,
-                                textInputType: TextInputType.visiblePassword,
-                                obscureText: true,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Veuillez saisir votre mot de passe';
-                                  }
-                                  return null;
-                                },
-                              ),
-                              const SizedBox(
-                                height: CustomTheme.spacer,
-                              ),
-                              BlocBuilder<AuthBloc, AuthState>(
+                              BlocBuilder<ForgotPasswordBloc,
+                                  ForgotPasswordState>(
                                 buildWhen: (prevState, currState) {
-                                  if (currState is LoggedState) {
+                                  if (currState is VerificationCodeSentState) {
+                                    SnackBarWidget.show(
+                                      isError: false,
+                                      message:
+                                          "un code est envoyé à votre adresse email",
+                                      context: context,
+                                    );
                                     WidgetsBinding.instance!
                                         .addPostFrameCallback((timeStamp) {
-                                      Navigator.of(context)
-                                          .pushNamedAndRemoveUntil(
-                                              Routes.home, (route) => false);
+                                      Navigator.of(context).pushNamed(
+                                        Routes.changePassword,
+                                      );
                                     });
                                   } else if (currState is ErrorState) {
-                                    if (currState.message == "Unauthorized") {
+                                    if (currState.message == "Bad Request") {
                                       SnackBarWidget.show(
                                         isError: true,
                                         message:
-                                            "Nom d'utilisateur ou mot de pase invalide",
+                                            "Veuillez vérifier votre email",
                                         context: context,
                                       );
                                     } else {
@@ -125,7 +116,7 @@ class LoginPage extends StatelessWidget {
                                       );
                                     }
                                   }
-                                  return currState is! LoggedState;
+                                  return true;
                                 },
                                 builder: (context, state) {
                                   return Visibility(
@@ -138,19 +129,19 @@ class LoginPage extends StatelessWidget {
                                       ),
                                     ),
                                     replacement: PrimaryButton(
-                                      height: 50.0,
-                                      width: 40.w(context),
                                       onPressed: () {
                                         if (_formKey.currentState!.validate()) {
-                                          BlocProvider.of<AuthBloc>(context)
-                                              .add(UserLoginEvent(
-                                            username: username.text,
-                                            password: password.text,
-                                          ));
+                                          context
+                                              .read<ForgotPasswordBloc>()
+                                              .add(UserForgotPasswordEvent(
+                                                email: email.text,
+                                              ));
                                         }
                                       },
+                                      height: 50.0,
+                                      width: 40.w(context),
                                       child: Text(
-                                        'Se connecter',
+                                        'Valider',
                                         style: TextStyle(
                                           fontSize:
                                               CustomTheme.button.sp(context),
@@ -160,40 +151,6 @@ class LoginPage extends StatelessWidget {
                                     ),
                                   );
                                 },
-                              ),
-                              const SizedBox(
-                                height: 10.0,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  Navigator.of(context).pushNamed(
-                                    Routes.forgotPassword,
-                                  );
-                                },
-                                child: Text(
-                                  "Mot de passe oublié ?",
-                                  style: TextStyle(
-                                    color: CustomTheme.primaryColor,
-                                    fontSize: CustomTheme.bodyText1.sp(context),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10.0,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  Navigator.of(context).pushNamed(
-                                    Routes.register,
-                                  );
-                                },
-                                child: Text(
-                                  "S'inscrire ?",
-                                  style: TextStyle(
-                                    color: CustomTheme.primaryColor,
-                                    fontSize: CustomTheme.bodyText1.sp(context),
-                                  ),
-                                ),
                               ),
                             ],
                           ),

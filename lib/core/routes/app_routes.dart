@@ -7,5 +7,8 @@ abstract class Routes {
   static const notFound = '/notFound';
   static const login = '/login';
   static const register = '/register';
-  static const forgotPassword = 'forgot-password';
+  static const forgotPassword = '/forgot-password';
+  static const changePassword = '/change-password';
+  static const account = '/account';
+  static const userInfo = '/user-info';
 }

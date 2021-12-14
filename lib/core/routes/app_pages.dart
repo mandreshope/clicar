@@ -1,4 +1,7 @@
-import 'package:clicar/presentation/pages/forgot_password/forgot_password.dart';
+import 'package:clicar/presentation/pages/account/account_page.dart';
+import 'package:clicar/presentation/pages/account/user_info_page.dart';
+import 'package:clicar/presentation/pages/forgot_password/change_password_page.dart';
+import 'package:clicar/presentation/pages/forgot_password/forgot_password_page.dart';
 import 'package:clicar/presentation/pages/home/home_page.dart';
 import 'package:clicar/presentation/pages/login/login_page.dart';
 import 'package:clicar/presentation/pages/register/register_page.dart';
@@ -45,9 +48,33 @@ abstract class AppPages {
         );
       case Routes.forgotPassword:
         return MaterialPageRoute(
-          builder: (_) => const ForgotPasswordPage(),
+          builder: (_) => ForgotPasswordPage(),
           settings: RouteSettings(
             name: Routes.forgotPassword,
+            arguments: settings.arguments,
+          ),
+        );
+      case Routes.changePassword:
+        return MaterialPageRoute(
+          builder: (_) => ChangePasswordPage(),
+          settings: RouteSettings(
+            name: Routes.changePassword,
+            arguments: settings.arguments,
+          ),
+        );
+      case Routes.account:
+        return MaterialPageRoute(
+          builder: (_) => const AccountPage(),
+          settings: RouteSettings(
+            name: Routes.account,
+            arguments: settings.arguments,
+          ),
+        );
+      case Routes.userInfo:
+        return MaterialPageRoute(
+          builder: (_) => UserInfoPage(),
+          settings: RouteSettings(
+            name: Routes.userInfo,
             arguments: settings.arguments,
           ),
         );

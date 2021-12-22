@@ -1,11 +1,11 @@
-import 'package:clicar/core/routes/app_observer.dart';
-import 'package:clicar/core/routes/app_pages.dart';
-import 'package:clicar/core/utils/theme.dart';
-import 'package:clicar/providers.dart';
+import 'package:clicar/app/core/routes/app_observer.dart';
+import 'package:clicar/app/core/routes/app_pages.dart';
+import 'package:clicar/app/core/utils/theme.dart';
+import 'package:clicar/di/injection_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:clicar/injection_container.dart' as di; //Dependency injector
+import 'package:clicar/di/injection_container.dart' as di; //Dependency injector
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

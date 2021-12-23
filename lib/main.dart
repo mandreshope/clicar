@@ -3,6 +3,7 @@ import 'package:clicar/app/core/routes/app_pages.dart';
 import 'package:clicar/app/core/utils/theme.dart';
 import 'package:clicar/di/injection_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:clicar/di/injection_container.dart' as di; //Dependency injector
@@ -13,7 +14,12 @@ Future<void> main() async {
   await di
       .init(); //Inject all the dependencies and wait for it is done (i.e. UI won't built until all the dependencies are injected)
 
-  runApp(const App());
+  BlocOverrides.runZoned(
+    () {
+      runApp(const App());
+    },
+    blocObserver: GlobalBlocObserver(),
+  );
 }
 
 class App extends StatelessWidget {

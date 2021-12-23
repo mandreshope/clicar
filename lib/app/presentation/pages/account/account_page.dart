@@ -1,9 +1,11 @@
 import 'package:clicar/app/core/routes/app_pages.dart';
+import 'package:clicar/app/core/states/base_state.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/responsive.dart';
 import 'package:clicar/app/core/utils/theme.dart';
 import 'package:clicar/app/presentation/pages/home/bloc/user/user_bloc.dart';
 import 'package:clicar/app/presentation/pages/login/bloc/auth_bloc.dart';
+import 'package:clicar/app/presentation/widgets/auth_listener_widget.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,15 +15,7 @@ class AccountPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthBloc, AuthState>(
-      listener: (context, state) {
-        if (state is NotLoggedState) {
-          WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-            Navigator.of(context)
-                .pushNamedAndRemoveUntil(Routes.login, (route) => false);
-          });
-        }
-      },
+    return AuthListenerWidget(
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -35,7 +29,7 @@ class AccountPage extends StatelessWidget {
               child: SizedBox(
                 height: Responsive.height(context) -
                     (Responsive.height(context) * 0.75),
-                child: BlocBuilder<UserBloc, UserState>(
+                child: BlocBuilder<UserBloc, BaseState>(
                   builder: (context, state) {
                     return Column(
                       children: [

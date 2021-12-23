@@ -1,4 +1,6 @@
 import 'package:clicar/app/core/routes/app_pages.dart';
+import 'package:clicar/app/core/states/base_state.dart';
+import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/responsive.dart';
 import 'package:clicar/app/core/utils/theme.dart';
@@ -8,6 +10,7 @@ import 'package:clicar/app/presentation/pages/account/bloc/user_info/user_info_b
 import 'package:clicar/app/presentation/pages/account/bloc/user_info/user_info_bloc.dart';
 import 'package:clicar/app/presentation/pages/home/bloc/user/user_bloc.dart';
 import 'package:clicar/app/presentation/pages/login/bloc/auth_bloc.dart';
+import 'package:clicar/app/presentation/widgets/auth_listener_widget.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
 import 'package:clicar/app/presentation/widgets/circular_progress_widget.dart';
 import 'package:clicar/app/presentation/widgets/snack_bar_widget.dart';
@@ -43,7 +46,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
     super.initState();
     final userBloc = context.read<UserBloc>();
     userBloc.add(MeUserEvent());
-    if (context.read<UserInfoBloc>().state is user_info_bloc.UserInfoInitial) {
+    if (context.read<UserInfoBloc>().state.status == Status.initial) {
       final meUserState = userBloc.state;
       if (meUserState is MeUserState) {
         initFields(meUserState);
@@ -64,19 +67,26 @@ class _UserInfoPageState extends State<UserInfoPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocListener(
-      listeners: [
-        BlocListener<AuthBloc, AuthState>(
-          listener: (context, state) {
-            if (state is NotLoggedState) {
-              WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-                Navigator.of(context)
-                    .pushNamedAndRemoveUntil(Routes.login, (route) => false);
-              });
-            }
-          },
-        ),
-      ],
+    return BlocListener<UserBloc, BaseState>(
+      listener: (context, state) {
+        if (state is MeUserState) {
+          /// initFields on state change
+          initFields(state);
+        } else if (state.status == Status.tokenExpired) {
+          SnackBarWidget.show(
+            isError: true,
+            message: tokenExpiredMessage,
+            context: context,
+          );
+          context.read<AuthBloc>().add(UserLogOutEvent());
+        } else if (state.status == Status.error) {
+          SnackBarWidget.show(
+            isError: true,
+            message: state.message,
+            context: context,
+          );
+        }
+      },
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -90,7 +100,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
               child: SizedBox(
                 height: Responsive.height(context) -
                     (Responsive.height(context) * 0.75),
-                child: BlocBuilder<UserBloc, UserState>(
+                child: BlocBuilder<UserBloc, BaseState>(
                   builder: (context, state) {
                     return Column(
                       children: [
@@ -149,175 +159,163 @@ class _UserInfoPageState extends State<UserInfoPage> {
                           ),
                           child: Form(
                             key: _formKey,
-                            child: BlocBuilder<UserBloc, UserState>(
-                              buildWhen: (prevState, currState) {
-                                if (currState is MeUserState) {
-                                  /// initFields on state change
-                                  initFields(currState);
-                                } else if (currState is ErrorUserState) {
-                                  SnackBarWidget.show(
-                                    isError: true,
-                                    message: currState.message,
-                                    context: context,
-                                  );
-                                }
-                                return true;
-                              },
-                              builder: (context, state) {
-                                return Column(
+                            child: Column(
+                              children: [
+                                const TitleWithSeparator(title: "Mes infos"),
+                                const SizedBox(
+                                  height: 30,
+                                ),
+                                Row(
                                   children: [
-                                    const TitleWithSeparator(
-                                        title: "Mes infos"),
-                                    const SizedBox(
-                                      height: 30,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: TextFieldFilled(
-                                            initialValue: lastName.text,
-                                            labelText: 'Nom',
-                                            controller: lastName,
-                                            validator: (value) {
-                                              if (value == null ||
-                                                  value.trim().isEmpty) {
-                                                return 'Veuillez saisir votre nom';
-                                              }
-                                              return null;
-                                            },
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: CustomTheme.spacer,
-                                        ),
-                                        Expanded(
-                                          child: TextFieldFilled(
-                                            initialValue: firstName.text,
-                                            labelText: 'Prénom',
-                                            controller: firstName,
-                                            validator: (value) {
-                                              if (value == null ||
-                                                  value.isEmpty) {
-                                                return 'Veuillez saisir votre prénom';
-                                              }
-                                              return null;
-                                            },
-                                          ),
-                                        ),
-                                      ],
+                                    Expanded(
+                                      child: TextFieldFilled(
+                                        initialValue: lastName.text,
+                                        labelText: 'Nom',
+                                        controller: lastName,
+                                        validator: (value) {
+                                          if (value == null ||
+                                              value.trim().isEmpty) {
+                                            return 'Veuillez saisir votre nom';
+                                          }
+                                          return null;
+                                        },
+                                      ),
                                     ),
                                     const SizedBox(
-                                      height: CustomTheme.spacer,
+                                      width: CustomTheme.spacer,
                                     ),
-                                    TextFieldFilled(
-                                      initialValue: username.text,
-                                      labelText: "Nom d'utilisateur",
-                                      controller: username,
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return "Veuillez saisir votre nom d'utilisateur";
-                                        }
-                                        return null;
-                                      },
-                                    ),
-                                    const SizedBox(
-                                      height: CustomTheme.spacer,
-                                    ),
-                                    TextFieldFilled(
-                                      initialValue: email.text,
-                                      labelText: 'Email',
-                                      controller: email,
-                                      validator: Validator.email,
-                                    ),
-                                    const SizedBox(
-                                      height: CustomTheme.spacer,
-                                    ),
-                                    TextFieldFilled(
-                                      initialValue: role.text,
-                                      labelText: 'Rôle',
-                                      controller: role,
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Veuillez saisir votre rôle';
-                                        }
-                                        return null;
-                                      },
-                                    ),
-                                    const SizedBox(
-                                      height: CustomTheme.spacer,
-                                    ),
-                                    BlocBuilder<user_info_bloc.UserInfoBloc,
-                                        user_info_bloc.UserInfoState>(
-                                      buildWhen: (prevState, currState) {
-                                        if (currState is user_info_bloc
-                                            .UserInfoUpdatedState) {
-                                          SnackBarWidget.show(
-                                            isError: false,
-                                            message:
-                                                "Infos mis à jour avec succès",
-                                            context: context,
-                                          );
-                                        } else if (currState
-                                            is user_info_bloc.ErrorState) {
-                                          SnackBarWidget.show(
-                                            isError: true,
-                                            message: currState.message,
-                                            context: context,
-                                          );
-                                        }
-                                        return true;
-                                      },
-                                      builder: (context, state) {
-                                        return Visibility(
-                                          visible: state
-                                              is user_info_bloc.LoadingState,
-                                          child: PrimaryButton(
-                                            height: 50.0,
-                                            width: 40.w(context),
-                                            child: const CircularProgress(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          replacement: PrimaryButton(
-                                            height: 50.0,
-                                            width: 40.w(context),
-                                            onPressed: () {
-                                              if (_formKey.currentState!
-                                                  .validate()) {
-                                                context
-                                                    .read<
-                                                        user_info_bloc
-                                                            .UserInfoBloc>()
-                                                    .add(user_info_bloc
-                                                        .UserInfoUpdateEvent(
-                                                      username: username.text,
-                                                      email: email.text,
-                                                      lastName: lastName.text,
-                                                      firstName: firstName.text,
-                                                      role: role.text,
-                                                      deleted: false,
-                                                      id: id.text,
-                                                    ));
-                                              }
-                                            },
-                                            child: Text(
-                                              'Valider',
-                                              style: TextStyle(
-                                                fontSize: CustomTheme.button
-                                                    .sp(context),
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                    const SizedBox(
-                                      height: 10.0,
+                                    Expanded(
+                                      child: TextFieldFilled(
+                                        initialValue: firstName.text,
+                                        labelText: 'Prénom',
+                                        controller: firstName,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Veuillez saisir votre prénom';
+                                          }
+                                          return null;
+                                        },
+                                      ),
                                     ),
                                   ],
-                                );
-                              },
+                                ),
+                                const SizedBox(
+                                  height: CustomTheme.spacer,
+                                ),
+                                TextFieldFilled(
+                                  initialValue: username.text,
+                                  labelText: "Nom d'utilisateur",
+                                  controller: username,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Veuillez saisir votre nom d'utilisateur";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: CustomTheme.spacer,
+                                ),
+                                TextFieldFilled(
+                                  initialValue: email.text,
+                                  labelText: 'Email',
+                                  controller: email,
+                                  validator: Validator.email,
+                                ),
+                                const SizedBox(
+                                  height: CustomTheme.spacer,
+                                ),
+                                TextFieldFilled(
+                                  initialValue: role.text,
+                                  labelText: 'Rôle',
+                                  controller: role,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Veuillez saisir votre rôle';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: CustomTheme.spacer,
+                                ),
+                                BlocBuilder<UserInfoBloc, BaseState>(
+                                  buildWhen: (prevState, currState) {
+                                    if (currState is UserInfoUpdatedState) {
+                                      SnackBarWidget.show(
+                                        isError: false,
+                                        message: "Infos mis à jour avec succès",
+                                        context: context,
+                                      );
+                                    }
+                                    if (currState.status ==
+                                        Status.tokenExpired) {
+                                      SnackBarWidget.show(
+                                        isError: true,
+                                        message: tokenExpiredMessage,
+                                        context: context,
+                                      );
+                                      context
+                                          .read<AuthBloc>()
+                                          .add(UserLogOutEvent());
+                                    } else if (currState.status ==
+                                        Status.error) {
+                                      SnackBarWidget.show(
+                                        isError: true,
+                                        message: currState.message,
+                                        context: context,
+                                      );
+                                    }
+                                    return true;
+                                  },
+                                  builder: (context, state) {
+                                    return Visibility(
+                                      visible: state.status == Status.loading,
+                                      child: PrimaryButton(
+                                        height: 50.0,
+                                        width: 40.w(context),
+                                        child: const CircularProgress(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      replacement: PrimaryButton(
+                                        height: 50.0,
+                                        width: 40.w(context),
+                                        onPressed: () {
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            context
+                                                .read<
+                                                    user_info_bloc
+                                                        .UserInfoBloc>()
+                                                .add(user_info_bloc
+                                                    .UserInfoUpdateEvent(
+                                                  username: username.text,
+                                                  email: email.text,
+                                                  lastName: lastName.text,
+                                                  firstName: firstName.text,
+                                                  role: role.text,
+                                                  deleted: false,
+                                                  id: id.text,
+                                                ));
+                                          }
+                                        },
+                                        child: Text(
+                                          'Valider',
+                                          style: TextStyle(
+                                            fontSize:
+                                                CustomTheme.button.sp(context),
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: 10.0,
+                                ),
+                              ],
                             ),
                           ),
                         )

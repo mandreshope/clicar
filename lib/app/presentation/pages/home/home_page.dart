@@ -1,10 +1,14 @@
 import 'package:clicar/app/core/routes/app_pages.dart';
+import 'package:clicar/app/core/states/base_state.dart';
+import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/core/utils/responsive.dart';
 import 'package:clicar/app/core/utils/theme.dart';
 import 'package:clicar/app/presentation/pages/home/bloc/home/home_bloc.dart';
 import 'package:clicar/app/presentation/pages/home/bloc/user/user_bloc.dart';
 import 'package:clicar/app/presentation/pages/login/bloc/auth_bloc.dart';
+import 'package:clicar/app/presentation/widgets/auth_listener_widget.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
+import 'package:clicar/app/presentation/widgets/snack_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,26 +18,9 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocListener(
-      listeners: [
-        BlocListener<AuthBloc, AuthState>(
-          listener: (context, state) {
-            if (state is NotLoggedState) {
-              WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-                Navigator.of(context)
-                    .pushNamedAndRemoveUntil(Routes.login, (route) => false);
-              });
-            }
-          },
-        ),
-        BlocListener<HomeBloc, HomeState>(
-          listener: (context, state) {
-            if (state is HomeInitial) {
-              context.read<UserBloc>().add(MeUserEvent());
-            }
-          },
-        ),
-      ],
+    context.read<UserBloc>().add(MeUserEvent());
+
+    return AuthListenerWidget(
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -57,9 +44,14 @@ class HomePage extends StatelessWidget {
               child: SizedBox(
                 height: Responsive.height(context) -
                     (Responsive.height(context) * 0.75),
-                child: BlocBuilder<UserBloc, UserState>(
+                child: BlocBuilder<UserBloc, BaseState>(
                   buildWhen: (prevState, currState) {
-                    if (currState is TokenExpiredUserState) {
+                    if (currState.status == Status.tokenExpired) {
+                      SnackBarWidget.show(
+                        isError: true,
+                        message: tokenExpiredMessage,
+                        context: context,
+                      );
                       context.read<AuthBloc>().add(UserLogOutEvent());
                     }
                     return prevState != currState;

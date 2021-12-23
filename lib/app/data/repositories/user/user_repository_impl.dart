@@ -21,27 +21,31 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<Either<Failure, User>> me() async {
     if (await networkInfo.isConnected) {
-      try {
-        final remoteData = await remoteDataSource.me();
-        return Right(remoteData);
-      } on ServerException catch (_) {
-        return Left(ServerFailure(
-          message: _.message,
-          statusCode: _.statusCode,
-          body: _.body,
-        ));
-      } on SocketException catch (_) {
-        return Left(ServerFailure(
-          message: _.toString(),
-          body: '',
-          statusCode: 0,
-        ));
-      } catch (_) {
-        return Left(ServerFailure(
-          message: _.toString(),
-          body: '',
-          statusCode: 0,
-        ));
+      if (localDataSource.isExpiredToken() == false) {
+        try {
+          final remoteData = await remoteDataSource.me();
+          return Right(remoteData);
+        } on ServerException catch (_) {
+          return Left(ServerFailure(
+            message: _.message,
+            statusCode: _.statusCode,
+            body: _.body,
+          ));
+        } on SocketException catch (_) {
+          return Left(ServerFailure(
+            message: _.toString(),
+            body: '',
+            statusCode: 0,
+          ));
+        } catch (_) {
+          return Left(ServerFailure(
+            message: _.toString(),
+            body: '',
+            statusCode: 0,
+          ));
+        }
+      } else {
+        return Left(TokenExpiredFailure());
       }
     } else {
       return Left(NoConnectionFailure());
@@ -59,36 +63,40 @@ class UserRepositoryImpl implements UserRepository {
     required String email,
   }) async {
     if (await networkInfo.isConnected) {
-      try {
-        final result = await localDataSource.getLastToken();
-        final remoteData = await remoteDataSource.userInfoUpdate(
-            token: result.token,
-            role: role,
-            deleted: deleted,
-            id: id,
-            lastName: lastName,
-            firstName: firstName,
-            username: username,
-            email: email);
-        return Right(remoteData);
-      } on ServerException catch (_) {
-        return Left(ServerFailure(
-          message: _.message,
-          statusCode: _.statusCode,
-          body: _.body,
-        ));
-      } on SocketException catch (_) {
-        return Left(ServerFailure(
-          message: _.toString(),
-          body: '',
-          statusCode: 0,
-        ));
-      } catch (_) {
-        return Left(ServerFailure(
-          message: _.toString(),
-          body: '',
-          statusCode: 0,
-        ));
+      if (localDataSource.isExpiredToken() == false) {
+        try {
+          final result = await localDataSource.getLastToken();
+          final remoteData = await remoteDataSource.userInfoUpdate(
+              token: result.token,
+              role: role,
+              deleted: deleted,
+              id: id,
+              lastName: lastName,
+              firstName: firstName,
+              username: username,
+              email: email);
+          return Right(remoteData);
+        } on ServerException catch (_) {
+          return Left(ServerFailure(
+            message: _.message,
+            statusCode: _.statusCode,
+            body: _.body,
+          ));
+        } on SocketException catch (_) {
+          return Left(ServerFailure(
+            message: _.toString(),
+            body: '',
+            statusCode: 0,
+          ));
+        } catch (_) {
+          return Left(ServerFailure(
+            message: _.toString(),
+            body: '',
+            statusCode: 0,
+          ));
+        }
+      } else {
+        return Left(TokenExpiredFailure());
       }
     } else {
       return Left(NoConnectionFailure());

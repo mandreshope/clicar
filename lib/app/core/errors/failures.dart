@@ -30,3 +30,5 @@ class TokenFailure extends Failure {}
 class CacheFailure extends Failure {}
 
 class NoConnectionFailure extends Failure {}
+
+class TokenExpiredFailure extends Failure {}

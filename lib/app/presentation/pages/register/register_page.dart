@@ -1,4 +1,5 @@
 import 'package:clicar/app/core/routes/app_pages.dart';
+import 'package:clicar/app/core/states/base_state.dart';
 import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/core/utils/responsive.dart';
 import 'package:clicar/app/core/utils/theme.dart';
@@ -164,16 +165,16 @@ class RegisterPage extends StatelessWidget {
                               const SizedBox(
                                 height: CustomTheme.spacer,
                               ),
-                              BlocBuilder<AuthBloc, AuthState>(
+                              BlocBuilder<AuthBloc, BaseState>(
                                 buildWhen: (prevState, currState) {
-                                  if (currState is LoggedState) {
+                                  if (currState.status == Status.logged) {
                                     WidgetsBinding.instance!
                                         .addPostFrameCallback((timeStamp) {
                                       Navigator.of(context)
                                           .pushNamedAndRemoveUntil(
                                               Routes.home, (route) => false);
                                     });
-                                  } else if (currState is ErrorState) {
+                                  } else if (currState.status == Status.error) {
                                     SnackBarWidget.show(
                                       isError: true,
                                       message: currState.message,
@@ -184,7 +185,7 @@ class RegisterPage extends StatelessWidget {
                                 },
                                 builder: (context, state) {
                                   return Visibility(
-                                    visible: state is LoadingState,
+                                    visible: state.status == Status.loading,
                                     child: PrimaryButton(
                                       height: 50.0,
                                       width: 40.w(context),

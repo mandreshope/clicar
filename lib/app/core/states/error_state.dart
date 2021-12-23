@@ -1,7 +1,7 @@
-part of 'auth_bloc.dart';
+import 'package:clicar/app/core/states/base_state.dart';
 
-class AuthState extends BaseState {
-  const AuthState({
+class ErrorState extends BaseState {
+  const ErrorState({
     required Status status,
     required String message,
   }) : super(

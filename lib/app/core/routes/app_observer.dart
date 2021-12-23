@@ -1,10 +1,9 @@
-import 'package:clicar/app/core/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class AppObserver extends RouteObserver<PageRoute<dynamic>> {
   void _sendScreenView(PageRoute<dynamic> route, String navigateType) {
     var screenName = route.settings.name;
-    debugPrint('$logTrace $navigateType $screenName');
+    debugPrint('[ROUTE] $navigateType $screenName\n');
     // do something with it, ie. send it to your analytics service collector
   }
 

@@ -2,46 +2,52 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:clicar/app/core/errors/failures.dart';
+import 'package:clicar/app/core/states/base_state.dart';
+import 'package:clicar/app/core/states/error_state.dart';
 import 'package:clicar/app/core/usecases/usecase.dart';
 import 'package:clicar/app/domain/entities/user/user.dart';
 import 'package:clicar/app/domain/usecases/user/me_usecase.dart';
-import 'package:clicar/app/presentation/pages/login/bloc/auth_bloc.dart';
-import 'package:clicar/di/injection_container.dart';
 import 'package:equatable/equatable.dart';
 
 part 'user_event.dart';
 part 'user_state.dart';
 
-class UserBloc extends Bloc<UserEvent, UserState> {
+class UserBloc extends Bloc<UserEvent, BaseState> {
   final MeUseCase meUseCase;
   UserBloc({
     required this.meUseCase,
-  }) : super(UserInitial()) {
+  }) : super(const BaseState(status: Status.initial, message: 'UserInitial')) {
     on<MeUserEvent>(_meEvent);
   }
 
   Future<void> _meEvent(MeUserEvent event, Emitter emit) async {
-    emit(LoadingUserState());
+    emit(const BaseState(status: Status.loading, message: 'loading ⌛'));
     try {
       final result = await meUseCase(NoParams());
       result.fold(
         (failure) {
           if (failure is NoConnectionFailure) {
-            emit(const ErrorUserState(message: 'No connextion error'));
+            emit(const ErrorState(
+                status: Status.error, message: 'No connextion error'));
           } else if (failure is ServerFailure) {
-            if (failure.body.toString().contains("TokenExpiredError")) {
-              sl.get<AuthBloc>().add(UserLogOutEvent());
-              return;
-            }
-            emit(ErrorUserState(message: failure.message));
+            emit(ErrorState(status: Status.error, message: failure.message));
+          } else if (failure is TokenExpiredFailure) {
+            emit(const ErrorState(
+                status: Status.tokenExpired,
+                message: 'token expired 🔑🔑🔑🔑🔑🪙🪙🔑🔑🔑'));
           } else {
-            emit(const ErrorUserState(message: 'Unknown error'));
+            emit(const ErrorState(
+                status: Status.error, message: 'Unknown error'));
           }
         },
-        (success) => emit(MeUserState(user: success)),
+        (success) => emit(MeUserState(
+          user: success,
+          status: Status.meUser,
+          message: 'getMe has a value',
+        )),
       );
     } catch (_) {
-      emit(ErrorUserState(message: _.toString()));
+      emit(ErrorState(status: Status.error, message: _.toString()));
     }
   }
 }

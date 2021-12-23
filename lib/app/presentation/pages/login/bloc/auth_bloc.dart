@@ -1,19 +1,18 @@
 import 'package:bloc/bloc.dart';
 import 'package:clicar/app/core/errors/failures.dart';
+import 'package:clicar/app/core/states/base_state.dart';
+import 'package:clicar/app/core/states/error_state.dart';
 import 'package:clicar/app/core/usecases/fetch_token_usecase.dart';
 import 'package:clicar/app/core/usecases/usecase.dart';
-import 'package:clicar/app/core/utils/constants.dart';
-import 'package:clicar/app/domain/entities/auth/login.dart';
 import 'package:clicar/app/domain/usecases/auth/login_usecase.dart';
 import 'package:clicar/app/domain/usecases/auth/logout_usecase.dart';
 import 'package:clicar/app/domain/usecases/auth/register_usecase.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
 
-class AuthBloc extends Bloc<AuthEvent, AuthState> {
+class AuthBloc extends Bloc<AuthEvent, BaseState> {
   final LoginUseCase loginUseCase;
   final LogoutUseCase logoutUseCase;
   final FetchTokenUseCase fetchTokenUseCase;
@@ -24,7 +23,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required this.loginUseCase,
     required this.fetchTokenUseCase,
     required this.registerUseCase,
-  }) : super(LoginInitial()) {
+  }) : super(const BaseState(
+            status: Status.loginInitial, message: "loginInitial")) {
     on<UserCheckLoginStatusEvent>(_userCheckLoginStatusEvent);
     on<UserLoginEvent>(_userLoginEvent);
     on<UserLogOutEvent>(_userLogOutEvent);
@@ -33,23 +33,24 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future<void> _userCheckLoginStatusEvent(
       UserCheckLoginStatusEvent event, emit) async {
-    emit(LoadingState());
+    emit(const BaseState(status: Status.loading, message: 'loading...'));
     try {
       final result = await fetchTokenUseCase(TokenParams());
       result.fold(
-        (failure) => emit(NotLoggedState()),
+        (failure) => emit(
+            const BaseState(status: Status.notLogged, message: 'notLogged 😢')),
         (success) {
-          debugPrint("$logTrace token : ${success.token}");
-          emit(LoggedState(login: Login(token: success.token)));
+          emit(const BaseState(
+              status: Status.logged, message: 'user logged 😊'));
         },
       );
     } catch (_) {
-      emit(ErrorState(message: _.toString()));
+      emit(ErrorState(status: Status.error, message: _.toString()));
     }
   }
 
   Future<void> _userLoginEvent(UserLoginEvent event, emit) async {
-    emit(LoadingState());
+    emit(const BaseState(status: Status.loading, message: 'loading ⌛'));
     try {
       final result = await loginUseCase(
         LoginParams(
@@ -59,22 +60,24 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
       result.fold((failure) {
         if (failure is NoConnectionFailure) {
-          emit(const ErrorState(message: 'No connextion error'));
+          emit(const ErrorState(
+              status: Status.error, message: 'No connextion error'));
         } else if (failure is ServerFailure) {
-          emit(ErrorState(message: failure.message));
+          emit(ErrorState(status: Status.error, message: failure.message));
         } else {
-          emit(const ErrorState(message: 'Unknown error'));
+          emit(
+              const ErrorState(status: Status.error, message: 'Unknown error'));
         }
       }, (success) {
-        emit(LoggedState(login: Login(token: success.token)));
+        emit(const BaseState(status: Status.logged, message: 'user logged 😊'));
       });
     } catch (_) {
-      emit(ErrorState(message: _.toString()));
+      emit(ErrorState(status: Status.error, message: _.toString()));
     }
   }
 
   Future<void> _userRegisterEvent(event, emit) async {
-    emit(LoadingState());
+    emit(const BaseState(status: Status.loading, message: 'loading ⌛'));
     try {
       final result = await registerUseCase(RegisterParams(
         username: event.username,
@@ -86,34 +89,36 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       ));
       result.fold((failure) {
         if (failure is NoConnectionFailure) {
-          emit(const ErrorState(message: 'No connextion error'));
+          emit(const ErrorState(
+              status: Status.error, message: 'No connextion error'));
         } else if (failure is ServerFailure) {
-          emit(ErrorState(message: failure.message));
+          emit(ErrorState(status: Status.error, message: failure.message));
         } else {
-          emit(const ErrorState(message: 'Unknown error'));
+          emit(
+              const ErrorState(status: Status.error, message: 'Unknown error'));
         }
       }, (success) {
-        emit(LoggedState(login: Login(token: success.token)));
+        emit(const BaseState(status: Status.logged, message: 'user logged 😊'));
       });
     } catch (_) {
-      emit(ErrorState(message: _.toString()));
+      emit(ErrorState(status: Status.error, message: _.toString()));
     }
   }
 
   Future<void> _userLogOutEvent(UserLogOutEvent event, emit) async {
     await logoutUseCase(NoParams());
-    emit(NotLoggedState());
+    emit(const BaseState(status: Status.notLogged, message: 'notLogged 😢'));
   }
 
   @override
-  void onChange(Change<AuthState> change) {
+  void onChange(Change<BaseState> change) {
     super.onChange(change);
     /* debugPrint("$change");*/
   }
 
   @override
-  void onTransition(Transition<AuthEvent, AuthState> transition) {
+  void onTransition(Transition<AuthEvent, BaseState> transition) {
     super.onTransition(transition);
-    debugPrint("$transition");
+    /* debugPrint("$transition");*/
   }
 }

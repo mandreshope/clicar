@@ -4,4 +4,5 @@ abstract class LocalSource {
   Future<LoginModel> getLastToken();
   Future<void> cacheToken(String token);
   Future<void> removeToken();
+  bool isExpiredToken();
 }

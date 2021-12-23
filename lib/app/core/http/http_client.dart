@@ -7,8 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class HttpClient extends BaseClient {
   @override
   Future<StreamedResponse> send(BaseRequest request) {
-    debugPrint(
-        "$logTrace ${this.runtimeType} ${request.method} : ${request.url}");
+    debugPrint("$logTrace $runtimeType ${request.method} : ${request.url}\n");
 
     /// interceptor
     request.headers
@@ -20,7 +19,7 @@ class HttpClient extends BaseClient {
     final sharedPreferences = sl<SharedPreferences>();
     String? token = sharedPreferences.getString(cachedToken);
     if (token != null) {
-      debugPrint("$logTrace token : $token");
+      debugPrint("$logTrace token : $token\n");
       request.headers.putIfAbsent('Authorization', () => "Bearer $token");
     }
     return request.send();

@@ -24,3 +24,7 @@ const String cachedToken = "CACHED_TOKEN";
 
 /// assets
 const assetsImages = "assets/images/";
+
+/// message
+const String tokenExpiredMessage =
+    "Votre session a expiré. Veuillez vous reconnecter";

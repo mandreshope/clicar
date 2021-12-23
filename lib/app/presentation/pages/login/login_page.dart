@@ -1,4 +1,5 @@
 import 'package:clicar/app/core/routes/app_pages.dart';
+import 'package:clicar/app/core/states/base_state.dart';
 import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/core/utils/responsive.dart';
 import 'package:clicar/app/core/utils/theme.dart';
@@ -20,6 +21,7 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("==========> widget rebuild");
     return Scaffold(
       body: Stack(
         children: [
@@ -100,16 +102,16 @@ class LoginPage extends StatelessWidget {
                               const SizedBox(
                                 height: CustomTheme.spacer,
                               ),
-                              BlocBuilder<AuthBloc, AuthState>(
+                              BlocBuilder<AuthBloc, BaseState>(
                                 buildWhen: (prevState, currState) {
-                                  if (currState is LoggedState) {
+                                  if (currState.status == Status.logged) {
                                     WidgetsBinding.instance!
                                         .addPostFrameCallback((timeStamp) {
                                       Navigator.of(context)
                                           .pushNamedAndRemoveUntil(
                                               Routes.home, (route) => false);
                                     });
-                                  } else if (currState is ErrorState) {
+                                  } else if (currState.status == Status.error) {
                                     if (currState.message == "Unauthorized") {
                                       SnackBarWidget.show(
                                         isError: true,
@@ -125,11 +127,11 @@ class LoginPage extends StatelessWidget {
                                       );
                                     }
                                   }
-                                  return currState is! LoggedState;
+                                  return currState.status != Status.logged;
                                 },
                                 builder: (context, state) {
                                   return Visibility(
-                                    visible: state is LoadingState,
+                                    visible: state.status == Status.loading,
                                     child: PrimaryButton(
                                       height: 50.0,
                                       width: 40.w(context),

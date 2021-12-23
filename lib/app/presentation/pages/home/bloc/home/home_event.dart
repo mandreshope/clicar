@@ -8,3 +8,8 @@ class OnInitHomeEvent extends HomeEvent {
   @override
   List<Object> get props => [];
 }
+
+class OnReadyHomeEvent extends HomeEvent {
+  @override
+  List<Object> get props => [];
+}

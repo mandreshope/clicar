@@ -3,7 +3,9 @@ import 'package:clicar/app/core/states/base_state.dart';
 import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/core/utils/theme.dart';
 import 'package:clicar/app/presentation/pages/login/bloc/auth_bloc.dart';
+import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/circular_progress_widget.dart';
+import 'package:clicar/di/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clicar/app/core/utils/extension.dart';
@@ -14,17 +16,26 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, BaseState>(
+      listenWhen: (prev,next){
+        return  next.status == Status.initial;
+      },
       listener: (context, state) {
+        print("#### STATE CHANGED");
         if (state.status == Status.logged) {
-          WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+
+          print(">>>>>>>>>>>>>>>>>>>>> LOGGED");
+          Navigator.pushNamedAndRemoveUntil(context, AppRoutes.home, (route) => false);
+         /* WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
             Navigator.of(context)
                 .pushNamedAndRemoveUntil(Routes.home, (route) => false);
-          });
+          });*/
         } else {
-          WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+          print(">>>>>>>>>>>>>>>>>>>>>NOT LOGGED");
+          Navigator.pushNamedAndRemoveUntil(context, AppRoutes.login, (route) => false);
+         /* WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
             Navigator.of(context)
                 .pushNamedAndRemoveUntil(Routes.login, (route) => false);
-          });
+          });*/
         }
       },
       child: Scaffold(

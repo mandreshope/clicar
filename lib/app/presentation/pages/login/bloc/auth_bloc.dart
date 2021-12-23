@@ -37,8 +37,11 @@ class AuthBloc extends Bloc<AuthEvent, BaseState> {
     try {
       final result = await fetchTokenUseCase(TokenParams());
       result.fold(
-        (failure) => emit(
-            const BaseState(status: Status.notLogged, message: 'notLogged 😢')),
+        (failure) {
+          emit(const BaseState(status: Status.notLogged, message: 'notLogged 😢'));
+          emit(const BaseState(status: Status.initial, message: 'notLogged 😢'));
+
+        },
         (success) {
           emit(const BaseState(
               status: Status.logged, message: 'user logged 😊'));
@@ -46,6 +49,7 @@ class AuthBloc extends Bloc<AuthEvent, BaseState> {
       );
     } catch (_) {
       emit(ErrorState(status: Status.error, message: _.toString()));
+
     }
   }
 

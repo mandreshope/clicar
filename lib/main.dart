@@ -1,6 +1,7 @@
 import 'package:clicar/app/core/routes/app_observer.dart';
 import 'package:clicar/app/core/routes/app_pages.dart';
 import 'package:clicar/app/core/utils/theme.dart';
+import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/di/injection_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,14 +40,15 @@ class App extends StatelessWidget {
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
+        routes: AppRoutes.routes,
         supportedLocales: const [
           Locale('fr', 'FR'),
           Locale('en', 'US'),
         ],
+        initialRoute: AppRoutes.splash,
         locale: const Locale('fr', 'FR'),
-        onGenerateRoute: AppPages.generateRoute,
+        //onGenerateRoute: AppPages.generateRoute,
         navigatorObservers: [AppObserver()],
-        initialRoute: Routes.splash,
       ),
     );
   }

@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 
 class CustomTheme {
   static const Color primaryColor = Color(0xFF050249);
-  static const Color greyColor = Color(0xFFf5f6f7);
+  static const Color secondaryColor = Color(0xFF467CBC);
+  static const Color greyColor = Color(0xFFF5F6F7);
   static const Radius radius = Radius.circular(30);
+  /*bleu ciel : #467CBC
+  bleu foncé : #001749*/
   static ThemeData themeData = ThemeData(
     primaryColor: primaryColor,
     colorScheme: ColorScheme.fromSwatch(
@@ -28,6 +31,7 @@ class CustomTheme {
   );
   static const defaultPadding = 20.0;
   static const spacer = 20.0;
+  static const extraSpacer = 40.0;
   static TextStyle mainBtnTextStyle = TextStyle(
     color: const ColorScheme.light().onSecondary,
     fontWeight: FontWeight.bold,

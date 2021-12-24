@@ -51,6 +51,11 @@ dependencies:
   json_annotation: ^4.4.0
   # Jwt decoder
   jwt_decoder: ^2.0.1
+  # design
+  expandable: ^5.0.1
+  signature: ^5.0.0
+  # path
+  path_provider: ^2.0.8
 
 dev_dependencies:
   flutter_test:

@@ -136,7 +136,10 @@ class _HomePageState extends State<HomePage> {
                                         ?.sp(context),
                                   ),
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pushNamed(AppRoutes.signature);
+                                },
                               ),
                               const SizedBox(
                                 height: CustomTheme.spacer,

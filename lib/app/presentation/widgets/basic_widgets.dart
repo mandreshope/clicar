@@ -111,6 +111,60 @@ class SecondaryButton extends StatelessWidget {
   }
 }
 
+class SearchTextFieldUnderlined extends StatelessWidget {
+  final TextEditingController? controller;
+  const SearchTextFieldUnderlined({
+    Key? key,
+    this.controller,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      decoration: const InputDecoration(
+        prefixIcon: Icon(Icons.search, color: Colors.grey),
+        border: UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.grey,
+            width: 0.5,
+          ),
+        ),
+        errorBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.grey,
+            width: 0.5,
+          ),
+        ),
+        disabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.grey,
+            width: 0.5,
+          ),
+        ),
+        focusedErrorBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.grey,
+            width: 0.5,
+          ),
+        ),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.grey,
+            width: 0.5,
+          ),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: CustomTheme.primaryColor,
+            width: 0.5,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class TextFieldFilled extends StatelessWidget {
   final String? initialValue;
   final TextEditingController? controller;
@@ -321,6 +375,54 @@ class Avatar extends StatelessWidget {
           size: 30,
           color: Colors.grey,
         ),
+      ),
+    );
+  }
+}
+
+class ContainerRoundedGrey extends StatelessWidget {
+  final Widget child;
+  final double? width;
+  final double? height;
+  const ContainerRoundedGrey({
+    required this.child,
+    this.width,
+    this.height,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      width: width,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        border: Border.all(
+          color: Colors.grey,
+          width: 0.5,
+        ),
+        color: CustomTheme.greyColor,
+      ),
+      child: child,
+    );
+  }
+}
+
+class SuccessIcon extends StatelessWidget {
+  final double? width;
+  final double? height;
+  const SuccessIcon({Key? key, this.width, this.height}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width ?? 50,
+      height: height ?? 50,
+      child: Image.asset(
+        "${assetsImages}success.png",
+        color: CustomTheme.secondaryColor,
+        fit: BoxFit.contain,
       ),
     );
   }

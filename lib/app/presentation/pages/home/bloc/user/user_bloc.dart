@@ -40,11 +40,13 @@ class UserBloc extends Bloc<UserEvent, BaseState> {
                 status: Status.error, message: 'Unknown error'));
           }
         },
-        (success) => emit(MeUserState(
-          user: success,
-          status: Status.meUser,
-          message: 'getMe has a value',
-        )),
+        (success) {
+          emit(MeUserState(
+            user: success,
+            status: Status.meUser,
+            message: 'getMe has a value',
+          ));
+        },
       );
     } catch (_) {
       emit(ErrorState(status: Status.error, message: _.toString()));

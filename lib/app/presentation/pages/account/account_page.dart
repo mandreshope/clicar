@@ -1,10 +1,10 @@
-import 'package:clicar/app/core/routes/app_pages.dart';
 import 'package:clicar/app/core/states/base_state.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/responsive.dart';
 import 'package:clicar/app/core/utils/theme.dart';
 import 'package:clicar/app/presentation/pages/home/bloc/user/user_bloc.dart';
 import 'package:clicar/app/presentation/pages/login/bloc/auth_bloc.dart';
+import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/auth_listener_widget.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
 import 'package:flutter/material.dart';
@@ -134,7 +134,7 @@ class AccountPage extends StatelessWidget {
                                 ),
                                 onPressed: () {
                                   Navigator.of(context)
-                                      .pushNamed(Routes.userInfo);
+                                      .pushNamed(AppRoutes.userInfo);
                                 },
                               ),
                               const SizedBox(

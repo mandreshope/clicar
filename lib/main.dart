@@ -1,5 +1,4 @@
-import 'package:clicar/app/core/routes/app_observer.dart';
-import 'package:clicar/app/core/routes/app_pages.dart';
+import 'package:clicar/app/presentation/routes/app_observer.dart';
 import 'package:clicar/app/core/utils/theme.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/di/injection_providers.dart';
@@ -47,7 +46,6 @@ class App extends StatelessWidget {
         ],
         initialRoute: AppRoutes.splash,
         locale: const Locale('fr', 'FR'),
-        //onGenerateRoute: AppPages.generateRoute,
         navigatorObservers: [AppObserver()],
       ),
     );

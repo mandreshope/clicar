@@ -118,6 +118,7 @@ class TextFieldFilled extends StatelessWidget {
   final bool? obscureText;
   final String labelText;
   final String? Function(String?)? validator;
+  final FocusNode? focusNode;
   const TextFieldFilled({
     Key? key,
     required this.labelText,
@@ -126,6 +127,7 @@ class TextFieldFilled extends StatelessWidget {
     this.controller,
     this.obscureText,
     this.validator,
+    this.focusNode,
   }) : super(key: key);
 
   @override
@@ -137,6 +139,7 @@ class TextFieldFilled extends StatelessWidget {
         return Column(
           children: [
             TextFormField(
+              focusNode: focusNode,
               onChanged: (v) {
                 state.didChange(v);
               },

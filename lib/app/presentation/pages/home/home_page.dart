@@ -1,11 +1,10 @@
-import 'package:clicar/app/core/routes/app_pages.dart';
 import 'package:clicar/app/core/states/base_state.dart';
 import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/core/utils/responsive.dart';
 import 'package:clicar/app/core/utils/theme.dart';
-import 'package:clicar/app/presentation/pages/home/bloc/home/home_bloc.dart';
 import 'package:clicar/app/presentation/pages/home/bloc/user/user_bloc.dart';
 import 'package:clicar/app/presentation/pages/login/bloc/auth_bloc.dart';
+import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/auth_listener_widget.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
 import 'package:clicar/app/presentation/widgets/snack_bar_widget.dart';
@@ -13,13 +12,22 @@ import 'package:flutter/material.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    context.read<UserBloc>().add(MeUserEvent());
+  State<HomePage> createState() => _HomePageState();
+}
 
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    context.read<UserBloc>().add(MeUserEvent());
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return AuthListenerWidget(
       child: Scaffold(
         appBar: AppBar(
@@ -27,7 +35,7 @@ class HomePage extends StatelessWidget {
           actions: [
             IconButton(
               onPressed: () {
-                Navigator.of(context).pushNamed(Routes.account);
+                Navigator.of(context).pushNamed(AppRoutes.account);
               },
               icon: const Icon(
                 Icons.settings,

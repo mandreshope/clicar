@@ -1,6 +1,6 @@
-import 'package:clicar/app/core/routes/app_pages.dart';
 import 'package:clicar/app/core/states/base_state.dart';
 import 'package:clicar/app/presentation/pages/login/bloc/auth_bloc.dart';
+import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,7 +18,7 @@ class AuthListenerWidget extends StatelessWidget {
         if (state.status == Status.notLogged) {
           WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
             Navigator.of(context)
-                .pushNamedAndRemoveUntil(Routes.login, (route) => false);
+                .pushNamedAndRemoveUntil(AppRoutes.login, (route) => false);
           });
         }
       },

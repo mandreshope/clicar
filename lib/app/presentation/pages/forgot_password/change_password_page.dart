@@ -1,9 +1,9 @@
-import 'package:clicar/app/core/routes/app_pages.dart';
 import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/core/utils/responsive.dart';
 import 'package:clicar/app/core/utils/theme.dart';
 import 'package:clicar/app/core/utils/validator.dart';
 import 'package:clicar/app/presentation/pages/forgot_password/bloc/forgot_password_bloc.dart';
+import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
 import 'package:clicar/app/presentation/widgets/circular_progress_widget.dart';
 import 'package:clicar/app/presentation/widgets/snack_bar_widget.dart';
@@ -132,7 +132,8 @@ class ChangePasswordPage extends StatelessWidget {
                                         .addPostFrameCallback((timeStamp) {
                                       Navigator.of(context)
                                           .pushNamedAndRemoveUntil(
-                                              Routes.login, (route) => false);
+                                              AppRoutes.login,
+                                              (route) => false);
                                     });
                                   } else if (currState is ErrorState) {
                                     if (currState.message == "Locked") {

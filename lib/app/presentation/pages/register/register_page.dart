@@ -1,10 +1,10 @@
-import 'package:clicar/app/core/routes/app_pages.dart';
 import 'package:clicar/app/core/states/base_state.dart';
 import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/core/utils/responsive.dart';
 import 'package:clicar/app/core/utils/theme.dart';
 import 'package:clicar/app/core/utils/validator.dart';
 import 'package:clicar/app/presentation/pages/login/bloc/auth_bloc.dart';
+import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
 import 'package:clicar/app/presentation/widgets/circular_progress_widget.dart';
 import 'package:clicar/app/presentation/widgets/snack_bar_widget.dart';
@@ -172,7 +172,7 @@ class RegisterPage extends StatelessWidget {
                                         .addPostFrameCallback((timeStamp) {
                                       Navigator.of(context)
                                           .pushNamedAndRemoveUntil(
-                                              Routes.home, (route) => false);
+                                              AppRoutes.home, (route) => false);
                                     });
                                   } else if (currState.status == Status.error) {
                                     SnackBarWidget.show(

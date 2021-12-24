@@ -1,4 +1,3 @@
-import 'package:clicar/app/core/routes/app_pages.dart';
 import 'package:clicar/app/core/states/base_state.dart';
 import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/core/utils/theme.dart';
@@ -16,23 +15,28 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, BaseState>(
-      listenWhen: (prev,next){
-        return  next.status == Status.initial;
+      listenWhen: (prev, next) {
+        return next.status == Status.notLogged || next.status == Status.logged;
       },
       listener: (context, state) {
         print("#### STATE CHANGED");
         if (state.status == Status.logged) {
-
           print(">>>>>>>>>>>>>>>>>>>>> LOGGED");
-          Navigator.pushNamedAndRemoveUntil(context, AppRoutes.home, (route) => false);
-         /* WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            AppRoutes.home,
+            (route) => false,
+            arguments: "coucouc",
+          );
+          /* WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
             Navigator.of(context)
                 .pushNamedAndRemoveUntil(Routes.home, (route) => false);
           });*/
         } else {
           print(">>>>>>>>>>>>>>>>>>>>>NOT LOGGED");
-          Navigator.pushNamedAndRemoveUntil(context, AppRoutes.login, (route) => false);
-         /* WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+          Navigator.pushNamedAndRemoveUntil(
+              context, AppRoutes.login, (route) => false);
+          /* WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
             Navigator.of(context)
                 .pushNamedAndRemoveUntil(Routes.login, (route) => false);
           });*/

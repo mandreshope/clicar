@@ -38,6 +38,11 @@ class CustomTheme {
     fontSize: subtitle2,
   );
 
+  static const defaultBorderRadius = 10.0;
+
+  ///size 24
+  static double headline = 24;
+
   ///size 18
   static double headline1 = 18;
 

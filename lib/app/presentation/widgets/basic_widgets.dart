@@ -96,7 +96,8 @@ class SecondaryButton extends StatelessWidget {
               ),
           shape: MaterialStateProperty.all(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(radius ?? 10.0),
+              borderRadius: BorderRadius.circular(
+                  radius ?? CustomTheme.defaultBorderRadius),
               side: BorderSide(color: borderColor ?? Colors.grey, width: 0.5),
             ),
           ),
@@ -212,7 +213,8 @@ class TextFieldFilled extends StatelessWidget {
                     color: Theme.of(context).errorColor,
                     width: 0.5,
                   ),
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius:
+                      BorderRadius.circular(CustomTheme.defaultBorderRadius),
                 ),
                 labelStyle: TextStyle(
                   fontSize: CustomTheme.bodyText1.sp(context),
@@ -224,28 +226,32 @@ class TextFieldFilled extends StatelessWidget {
                     color: Colors.grey,
                     width: 0.5,
                   ),
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius:
+                      BorderRadius.circular(CustomTheme.defaultBorderRadius),
                 ),
                 disabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(
                     color: Colors.grey,
                     width: 0.5,
                   ),
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius:
+                      BorderRadius.circular(CustomTheme.defaultBorderRadius),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: const BorderSide(
                     color: CustomTheme.primaryColor,
                     width: 2.0,
                   ),
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius:
+                      BorderRadius.circular(CustomTheme.defaultBorderRadius),
                 ),
                 border: OutlineInputBorder(
                   borderSide: const BorderSide(
                     color: Colors.grey,
                     width: 0.5,
                   ),
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius:
+                      BorderRadius.circular(CustomTheme.defaultBorderRadius),
                 ),
                 filled: true,
                 fillColor: CustomTheme.greyColor,
@@ -397,7 +403,7 @@ class ContainerRoundedGrey extends StatelessWidget {
       height: height,
       width: width,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(CustomTheme.defaultBorderRadius),
         border: Border.all(
           color: Colors.grey,
           width: 0.5,
@@ -424,6 +430,72 @@ class SuccessIcon extends StatelessWidget {
         color: CustomTheme.secondaryColor,
         fit: BoxFit.contain,
       ),
+    );
+  }
+}
+
+class ConfirmDialog extends StatelessWidget {
+  final String title;
+  const ConfirmDialog({required this.title, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(
+          CustomTheme.defaultBorderRadius,
+        ),
+      ),
+      title: Text(
+        title,
+        style: TextStyle(
+          fontSize: CustomTheme.headline.sp(context),
+          color: CustomTheme.primaryColor,
+        ),
+      ),
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(24.0, 0.0, 24.0, 0.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: PrimaryButton(
+                  radius: CustomTheme.defaultBorderRadius,
+                  onPressed: () async {
+                    Navigator.pop(context, true);
+                  },
+                  child: Text(
+                    'OUI',
+                    style: TextStyle(
+                      fontSize: CustomTheme.button.sp(context),
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: PrimaryButton(
+                  radius: CustomTheme.defaultBorderRadius,
+                  onPressed: () async {
+                    Navigator.pop(context, false);
+                  },
+                  child: Text(
+                    'NON',
+                    style: TextStyle(
+                      fontSize: CustomTheme.button.sp(context),
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        )
+      ],
     );
   }
 }

@@ -1,16 +1,17 @@
+import 'package:clicar/app/domain/entities/contract/history_reglement.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'history_reglement_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class HistoryReglementModel {
-  String? text;
-  String? date;
+class HistoryReglementModel extends HistoryReglement {
+  final String? text;
+  final String? date;
 
-  HistoryReglementModel({
+  const HistoryReglementModel({
     this.text,
     this.date,
-  });
+  }) : super(text: text, date: date);
 
   factory HistoryReglementModel.fromJson(Map<String, dynamic> json) =>
       _$HistoryReglementModelFromJson(json);

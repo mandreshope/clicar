@@ -1,21 +1,22 @@
+import 'package:clicar/app/domain/entities/contract/warranty.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'warranty_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class WarrantyModel {
+class WarrantyModel extends Warranty {
   @JsonKey(name: "_id")
-  String? id_;
-  String? amount;
-  int? id;
-  String? payementType;
-  String? commercial;
-  String? payementMode;
-  String? payementModality;
-  String? echeanceBegin;
-  String? echeanceEnd;
-  String? echeanceDay;
+  final String? id_;
+  final String? amount;
+  final int? id;
+  final String? payementType;
+  final String? commercial;
+  final String? payementMode;
+  final String? payementModality;
+  final String? echeanceBegin;
+  final String? echeanceEnd;
+  final String? echeanceDay;
 
-  WarrantyModel({
+  const WarrantyModel({
     this.id_,
     this.amount,
     this.id,
@@ -26,7 +27,18 @@ class WarrantyModel {
     this.echeanceBegin,
     this.echeanceEnd,
     this.echeanceDay,
-  });
+  }) : super(
+          id_: id_,
+          amount: amount,
+          id: id,
+          payementType: payementType,
+          commercial: commercial,
+          payementMode: payementMode,
+          payementModality: payementModality,
+          echeanceBegin: echeanceBegin,
+          echeanceEnd: echeanceEnd,
+          echeanceDay: echeanceDay,
+        );
 
   factory WarrantyModel.fromJson(Map<String, dynamic> json) =>
       _$WarrantyModelFromJson(json);

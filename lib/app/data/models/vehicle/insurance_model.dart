@@ -1,19 +1,25 @@
+import 'package:clicar/app/domain/entities/vehicle/insurance.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'insurance_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class InsuranceModel {
-  String? handledByClient;
-  String? insurer;
-  String? optionalInsurance;
-  String? type;
+class InsuranceModel extends Insurance {
+  final String? handledByClient;
+  final String? insurer;
+  final String? optionalInsurance;
+  final String? type;
 
-  InsuranceModel({
+  const InsuranceModel({
     this.handledByClient,
     this.insurer,
     this.optionalInsurance,
     this.type,
-  });
+  }) : super(
+          handledByClient: handledByClient,
+          insurer: insurer,
+          optionalInsurance: optionalInsurance,
+          type: type,
+        );
 
   factory InsuranceModel.fromJson(Map<String, dynamic> json) =>
       _$InsuranceModelFromJson(json);

@@ -1,25 +1,25 @@
+import 'package:clicar/app/domain/entities/contract/rent.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'rent_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class RentModel {
-  bool? isInsurance;
-  @JsonKey(name: "_id")
-  String? id_;
-  String? amount;
-  int? id;
-  String? unitPrice;
-  String? commercial;
-  String? locationType;
-  String? payementType;
-  String? duration;
-  String? echeanceBegin;
-  String? echeanceEnd;
-  String? echeanceDay;
-  String? payementMode;
-  String? kmInclus;
+class RentModel extends Rent {
+  final bool? isInsurance;
+  final String? id_;
+  final String? amount;
+  final int? id;
+  final String? unitPrice;
+  final String? commercial;
+  final String? locationType;
+  final String? payementType;
+  final String? duration;
+  final String? echeanceBegin;
+  final String? echeanceEnd;
+  final String? echeanceDay;
+  final String? payementMode;
+  final String? kmInclus;
 
-  RentModel({
+  const RentModel({
     this.isInsurance,
     this.id_,
     this.amount,
@@ -34,7 +34,22 @@ class RentModel {
     this.echeanceDay,
     this.payementMode,
     this.kmInclus,
-  });
+  }) : super(
+          isInsurance: isInsurance,
+          id_: id_,
+          amount: amount,
+          id: id,
+          unitPrice: unitPrice,
+          commercial: commercial,
+          locationType: locationType,
+          payementType: payementType,
+          duration: duration,
+          echeanceBegin: echeanceBegin,
+          echeanceEnd: echeanceEnd,
+          echeanceDay: echeanceDay,
+          payementMode: payementMode,
+          kmInclus: kmInclus,
+        );
 
   factory RentModel.fromJson(Map<String, dynamic> json) =>
       _$RentModelFromJson(json);

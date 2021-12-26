@@ -1,6 +1,7 @@
 import 'package:clicar/app/data/models/auth/forgot_password_model.dart';
 import 'package:clicar/app/data/models/auth/login_model.dart';
 import 'package:clicar/app/data/models/auth/register_model.dart';
+import 'package:clicar/app/data/models/contract/contract_model.dart';
 import 'package:clicar/app/data/models/user/user_model.dart';
 
 abstract class RemoteSource {
@@ -35,4 +36,5 @@ abstract class RemoteSource {
     required String username,
     required String email,
   });
+  Future<ContractModel> search({required keyWord});
 }

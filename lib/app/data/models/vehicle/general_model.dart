@@ -1,22 +1,23 @@
+import 'package:clicar/app/domain/entities/vehicle/general.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'general_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class GeneralModel {
+class GeneralModel extends General {
   @JsonKey(name: "case")
-  String? cases;
-  String? datelastKm;
-  String? keyDouble;
-  String? lastKm;
-  String? geoloc;
-  String? lastControlDate;
-  String? entryDate;
-  String? fuelType;
-  int? fuelGauge;
-  String? gaugeDate;
-  String? category;
+  final String? cases;
+  final String? datelastKm;
+  final String? keyDouble;
+  final String? lastKm;
+  final String? geoloc;
+  final String? lastControlDate;
+  final String? entryDate;
+  final String? fuelType;
+  final int? fuelGauge;
+  final String? gaugeDate;
+  final String? category;
 
-  GeneralModel({
+  const GeneralModel({
     this.cases,
     this.datelastKm,
     this.keyDouble,
@@ -28,7 +29,19 @@ class GeneralModel {
     this.fuelGauge,
     this.gaugeDate,
     this.category,
-  });
+  }) : super(
+          cases: cases,
+          datelastKm: datelastKm,
+          keyDouble: keyDouble,
+          lastKm: lastKm,
+          geoloc: geoloc,
+          lastControlDate: lastControlDate,
+          entryDate: entryDate,
+          fuelType: fuelType,
+          fuelGauge: fuelGauge,
+          gaugeDate: gaugeDate,
+          category: category,
+        );
 
   factory GeneralModel.fromJson(Map<String, dynamic> json) =>
       _$GeneralModelFromJson(json);

@@ -6,6 +6,7 @@ import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/data/models/auth/forgot_password_model.dart';
 import 'package:clicar/app/data/models/auth/login_model.dart';
 import 'package:clicar/app/data/models/auth/register_model.dart';
+import 'package:clicar/app/data/models/contract/contract_model.dart';
 import 'package:clicar/app/data/models/user/user_model.dart';
 import 'package:clicar/app/data/sources/remote/remote_config.dart';
 import 'package:clicar/app/data/sources/remote/remote_source.dart';
@@ -202,6 +203,27 @@ class RemoteSourceImpl extends RemoteSource {
         'username': username,
         'email': email,
       });
+    } else {
+      throw ServerException(
+        statusCode: response.statusCode,
+        message: response.reasonPhrase ?? 'Server Error',
+        body: response.body,
+      );
+    }
+  }
+
+  @override
+  Future<ContractModel> search({required keyWord}) async {
+    final url = Uri.parse(RemoteEndpoint.userInfoUpdate);
+    final response = await client.post(
+      url,
+      body: jsonEncode({
+        'keyWord': keyWord,
+      }),
+    );
+    if (response.statusCode == 200) {
+      _refreshToken(response.headers);
+      return ContractModel.fromJson(_parseBody(response.body));
     } else {
       throw ServerException(
         statusCode: response.statusCode,

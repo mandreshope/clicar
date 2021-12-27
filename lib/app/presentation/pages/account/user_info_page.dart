@@ -40,8 +40,6 @@ class _UserInfoPageState extends State<UserInfoPage> {
 
   final _formKey = GlobalKey<FormState>();
 
-  bool refresh = false;
-
   @override
   void initState() {
     super.initState();
@@ -114,7 +112,6 @@ class _UserInfoPageState extends State<UserInfoPage> {
                       return currState is MeUserState;
                     },
                     builder: (context, state) {
-                      refresh = false;
                       return Column(
                         children: [
                           const Avatar(),

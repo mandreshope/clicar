@@ -43,7 +43,7 @@ abstract class AppRoutes {
     AppRoutes.userInfo: (BuildContext context) => const UserInfoPage(),
     AppRoutes.forgotPassword: (BuildContext context) => ForgotPasswordPage(),
     AppRoutes.changePassword: (BuildContext context) => ChangePasswordPage(),
-    AppRoutes.signature: (BuildContext context) => const SignaturePage(),
+    AppRoutes.signature: (BuildContext context) => SignaturePage(),
     AppRoutes.signatureSummary: (BuildContext context) =>
         const SignatureSummaryPage(),
     AppRoutes.signatureAgreement: (BuildContext context) =>

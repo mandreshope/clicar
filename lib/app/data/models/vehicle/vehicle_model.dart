@@ -31,7 +31,7 @@ class VehicleModel extends Vehicle {
   final RegistrationModel? registration;
   final SaleModel? sale;
   final InsuranceModel? insurance;
-  final List<dynamic>? documents;
+  final dynamic documents;
   final String? createdBy;
   final String? createdAt;
   final int? v;

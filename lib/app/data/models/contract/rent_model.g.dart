@@ -8,7 +8,7 @@ part of 'rent_model.dart';
 
 RentModel _$RentModelFromJson(Map<String, dynamic> json) => RentModel(
       isInsurance: json['isInsurance'] as bool?,
-      id_: json['_id'] as String?,
+      id_: json['id_'] as String?,
       amount: json['amount'] as String?,
       id: json['id'] as int?,
       unitPrice: json['unitPrice'] as String?,
@@ -25,7 +25,7 @@ RentModel _$RentModelFromJson(Map<String, dynamic> json) => RentModel(
 
 Map<String, dynamic> _$RentModelToJson(RentModel instance) => <String, dynamic>{
       'isInsurance': instance.isInsurance,
-      '_id': instance.id_,
+      'id_': instance.id_,
       'amount': instance.amount,
       'id': instance.id,
       'unitPrice': instance.unitPrice,

@@ -18,6 +18,7 @@ enum Status {
   loginInitial,
   notLogged,
   loading,
+  success,
   logged,
   meUser,
   userInfoUpdated,

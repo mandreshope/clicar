@@ -23,7 +23,7 @@ class Customer extends Equatable {
   final String? numberPhonePro;
   final String? numberPhone;
   final String? mail;
-  final List<dynamic>? documents;
+  final dynamic documents; //TODO TYPE OF DOCUMENTS
   final String? createBy;
   final String? numberCustomer;
   final String? dateCreated;

@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:clicar/app/data/models/auth/forgot_password_model.dart';
 import 'package:clicar/app/data/models/auth/login_model.dart';
 import 'package:clicar/app/data/models/auth/register_model.dart';
 import 'package:clicar/app/data/models/contract/contract_model.dart';
+import 'package:clicar/app/data/models/upload_file/upload_file_model.dart';
 import 'package:clicar/app/data/models/user/user_model.dart';
+import 'package:clicar/app/domain/usecases/contract/sign_contract_usecase.dart';
 
 abstract class RemoteSource {
   Future<LoginModel> login({
@@ -27,7 +31,6 @@ abstract class RemoteSource {
   });
   Future<UserModel> me();
   Future<UserModel> userInfoUpdate({
-    required String token,
     required String role,
     required bool deleted,
     required String id,
@@ -36,5 +39,8 @@ abstract class RemoteSource {
     required String username,
     required String email,
   });
-  Future<ContractModel> search({required keyWord});
+  Future<List<ContractModel>> searchContract({required keyWord});
+  Future<UploadFileModel> uploadSingleFile({required File file});
+  Future<ContractModel> signContract(
+      {required SignContractParams signContractParams});
 }

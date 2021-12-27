@@ -4,7 +4,6 @@ import 'package:clicar/app/core/utils/theme.dart';
 import 'package:clicar/app/presentation/pages/login/bloc/auth_bloc.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/circular_progress_widget.dart';
-import 'package:clicar/di/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clicar/app/core/utils/extension.dart';

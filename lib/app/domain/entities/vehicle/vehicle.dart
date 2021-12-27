@@ -27,7 +27,7 @@ class Vehicle extends Equatable {
   final Registration? registration;
   final Sale? sale;
   final Insurance? insurance;
-  final List<dynamic>? documents;
+  final dynamic documents; //TODO TYPE OF DOCUMENTS
   final String? createdBy;
   final String? createdAt;
   final int? v;

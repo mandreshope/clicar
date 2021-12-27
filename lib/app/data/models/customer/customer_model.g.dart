@@ -30,7 +30,7 @@ CustomerModel _$CustomerModelFromJson(Map<String, dynamic> json) =>
       numberPhonePro: json['numberPhonePro'] as String?,
       numberPhone: json['numberPhone'] as String?,
       mail: json['mail'] as String?,
-      documents: json['documents'] as List<dynamic>?,
+      documents: json['documents'],
       createBy: json['createBy'] as String?,
       numberCustomer: json['numberCustomer'] as String?,
       dateCreated: json['dateCreated'] as String?,

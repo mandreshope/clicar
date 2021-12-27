@@ -65,9 +65,7 @@ class UserRepositoryImpl implements UserRepository {
     if (await networkInfo.isConnected) {
       if (localDataSource.isExpiredToken() == false) {
         try {
-          final result = await localDataSource.getLastToken();
           final remoteData = await remoteDataSource.userInfoUpdate(
-              token: result.token,
               role: role,
               deleted: deleted,
               id: id,

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:clicar/app/core/errors/exceptions.dart';
 import 'package:clicar/app/core/http/http_client.dart';
@@ -7,9 +8,11 @@ import 'package:clicar/app/data/models/auth/forgot_password_model.dart';
 import 'package:clicar/app/data/models/auth/login_model.dart';
 import 'package:clicar/app/data/models/auth/register_model.dart';
 import 'package:clicar/app/data/models/contract/contract_model.dart';
+import 'package:clicar/app/data/models/upload_file/upload_file_model.dart';
 import 'package:clicar/app/data/models/user/user_model.dart';
 import 'package:clicar/app/data/sources/remote/remote_config.dart';
 import 'package:clicar/app/data/sources/remote/remote_source.dart';
+import 'package:clicar/app/domain/usecases/contract/sign_contract_usecase.dart';
 import 'package:clicar/di/injection_container.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -168,7 +171,6 @@ class RemoteSourceImpl extends RemoteSource {
 
   @override
   Future<UserModel> userInfoUpdate({
-    required String token,
     required String role,
     required bool deleted,
     required String id,
@@ -213,8 +215,8 @@ class RemoteSourceImpl extends RemoteSource {
   }
 
   @override
-  Future<ContractModel> search({required keyWord}) async {
-    final url = Uri.parse(RemoteEndpoint.userInfoUpdate);
+  Future<List<ContractModel>> searchContract({required keyWord}) async {
+    final url = Uri.parse(RemoteEndpoint.searchContract);
     final response = await client.post(
       url,
       body: jsonEncode({
@@ -223,7 +225,51 @@ class RemoteSourceImpl extends RemoteSource {
     );
     if (response.statusCode == 200) {
       _refreshToken(response.headers);
-      return ContractModel.fromJson(_parseBody(response.body));
+      Map<String, dynamic> map = _parseBody(response.body);
+
+      return List.from(map['data'])
+          .map((x) => ContractModel.fromJson(x))
+          .toList();
+    } else {
+      throw ServerException(
+        statusCode: response.statusCode,
+        message: response.reasonPhrase ?? 'Server Error',
+        body: response.body,
+      );
+    }
+  }
+
+  @override
+  Future<UploadFileModel> uploadSingleFile({required File file}) async {
+    final url = Uri.parse(RemoteEndpoint.searchContract);
+
+    final request = client.upload('POST', url);
+    request.files
+        .add(client.multipartFile.fromBytes('picture', file.readAsBytesSync()));
+    final response = await request.send();
+    if (response.statusCode == 200) {
+      _refreshToken(response.headers);
+      return UploadFileModel.fromJson(json.decode(response.body));
+    } else {
+      throw ServerException(
+        statusCode: response.statusCode,
+        message: response.reasonPhrase ?? 'Server Error',
+        body: response.body,
+      );
+    }
+  }
+
+  @override
+  Future<ContractModel> signContract(
+      {required SignContractParams signContractParams}) async {
+    final url = Uri.parse(RemoteEndpoint.searchContract);
+    final response = await client.post(
+      url,
+      body: jsonEncode(signContractParams.toMap()),
+    );
+    if (response.statusCode == 200) {
+      _refreshToken(response.headers);
+      return ContractModel.fromJson(_parseBody(response.body)['contract']);
     } else {
       throw ServerException(
         statusCode: response.statusCode,

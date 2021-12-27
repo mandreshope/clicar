@@ -5,13 +5,15 @@ import 'package:clicar/app/domain/repositories/contract/contract_repository.dart
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
-class SearchContractUseCase implements UseCase<Contract, SearchContractParams> {
+class SearchContractUseCase
+    implements UseCase<List<Contract>, SearchContractParams> {
   final ContractRepository repository;
 
   SearchContractUseCase({required this.repository});
 
   @override
-  Future<Either<Failure, Contract>> call(SearchContractParams params) async {
+  Future<Either<Failure, List<Contract>>> call(
+      SearchContractParams params) async {
     return await repository.search(keyWord: params.keyWord);
   }
 }

@@ -26,7 +26,7 @@ class CustomerModel extends Customer {
   final String? numberPhonePro;
   final String? numberPhone;
   final String? mail;
-  final List<dynamic>? documents;
+  final dynamic documents;
   final String? createBy;
   final String? numberCustomer;
   final String? dateCreated;

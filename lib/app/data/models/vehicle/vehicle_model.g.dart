@@ -42,7 +42,7 @@ VehicleModel _$VehicleModelFromJson(Map<String, dynamic> json) => VehicleModel(
       insurance: json['insurance'] == null
           ? null
           : InsuranceModel.fromJson(json['insurance'] as Map<String, dynamic>),
-      documents: json['documents'] as List<dynamic>?,
+      documents: json['documents'],
       createdBy: json['createdBy'] as String?,
       createdAt: json['createdAt'] as String?,
       v: json['v'] as int?,

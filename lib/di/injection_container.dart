@@ -1,16 +1,19 @@
 import 'package:clicar/app/core/http/http_client.dart';
 import 'package:clicar/app/core/usecases/fetch_token_usecase.dart';
+import 'package:clicar/app/data/repositories/contract/contract_repository_impl.dart';
+import 'package:clicar/app/domain/repositories/contract/contract_repository.dart';
 import 'package:clicar/app/domain/usecases/auth/change_password_usecase.dart';
 import 'package:clicar/app/domain/usecases/auth/forgot_password_usecase.dart';
 import 'package:clicar/app/domain/usecases/auth/logout_usecase.dart';
+import 'package:clicar/app/domain/usecases/contract/search_contract_usecase.dart';
 import 'package:clicar/app/domain/usecases/user/me_usecase.dart';
 import 'package:clicar/app/domain/usecases/auth/register_usecase.dart';
 import 'package:clicar/app/domain/usecases/user/user_info_update_usecase.dart';
 import 'package:clicar/app/presentation/pages/account/bloc/user_info/user_info_bloc.dart';
 import 'package:clicar/app/presentation/pages/forgot_password/bloc/forgot_password_bloc.dart';
-import 'package:clicar/app/presentation/pages/home/bloc/home/home_bloc.dart';
 import 'package:clicar/app/presentation/pages/home/bloc/user/user_bloc.dart';
 import 'package:clicar/app/presentation/pages/login/bloc/auth_bloc.dart';
+import 'package:clicar/app/presentation/pages/signature/bloc/signature_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -39,7 +42,7 @@ Future<void> init() async {
       forgotPasswordUseCase: sl(), changePasswordUseCase: sl()));
   sl.registerFactory(() => UserBloc(meUseCase: sl()));
   sl.registerFactory(() => UserInfoBloc(userInfoUpdateUseCase: sl()));
-  sl.registerFactory(() => HomeBloc());
+  sl.registerFactory(() => SignatureBloc(searchContractUseCase: sl()));
 
   ///Use cases
   sl.registerLazySingleton(() => LoginUseCase(repository: sl()));
@@ -50,6 +53,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => ChangePasswordUseCase(repository: sl()));
   sl.registerLazySingleton(() => MeUseCase(repository: sl()));
   sl.registerLazySingleton(() => UserInfoUpdateUseCase(repository: sl()));
+  sl.registerLazySingleton(() => SearchContractUseCase(repository: sl()));
 
   ///Repositories
   sl.registerLazySingleton<AuthRepository>(
@@ -58,6 +62,10 @@ Future<void> init() async {
   );
   sl.registerLazySingleton<UserRepository>(
     () => UserRepositoryImpl(
+        networkInfo: sl(), localDataSource: sl(), remoteDataSource: sl()),
+  );
+  sl.registerLazySingleton<ContractRepository>(
+    () => ContractRepositoryImpl(
         networkInfo: sl(), localDataSource: sl(), remoteDataSource: sl()),
   );
 

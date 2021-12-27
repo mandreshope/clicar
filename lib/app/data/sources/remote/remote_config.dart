@@ -9,4 +9,6 @@ abstract class RemoteEndpoint {
   static String changePassword = RemoteConfig.baseUrl + "/auth/changePassword";
   static String me = RemoteConfig.baseUrl + "/user/me";
   static String userInfoUpdate = RemoteConfig.baseUrl + "/user/edit";
+  static String searchContract = RemoteConfig.baseUrl + "/contrat/find";
+  static String signContract = RemoteConfig.baseUrl + "/contrat/sign";
 }

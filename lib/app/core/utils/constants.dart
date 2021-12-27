@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:path_provider/path_provider.dart';
 
 /// debug tools
 String get logTrace =>
@@ -28,3 +29,9 @@ const assetsImages = "assets/images/";
 /// message
 const String tokenExpiredMessage =
     "Votre session a expiré. Veuillez vous reconnecter";
+
+Future<String> get localPath async {
+  final directory = await getApplicationDocumentsDirectory();
+
+  return directory.path;
+}

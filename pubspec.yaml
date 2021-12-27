@@ -58,6 +58,8 @@ dependencies:
   # path
   path_provider: ^2.0.8
   image_picker: ^0.8.4+4
+  # interlanization
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

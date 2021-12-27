@@ -2,6 +2,7 @@ import 'package:clicar/app/data/models/contract/info_model.dart';
 import 'package:clicar/app/data/models/contract/rate_model.dart';
 import 'package:clicar/app/data/models/contract/reglement_model.dart';
 import 'package:clicar/app/data/models/contract/search_model.dart';
+import 'package:clicar/app/data/models/contract/signature_model.dart';
 import 'package:clicar/app/data/models/customer/customer_model.dart';
 import 'package:clicar/app/data/models/driver/driver_model.dart';
 import 'package:clicar/app/data/models/vehicle/vehicle_model.dart';
@@ -38,6 +39,7 @@ class ContractModel extends Contract {
   final String? createdBy;
   final String? createdAt;
   final int? v;
+  final SignatureModel? signature;
 
   const ContractModel({
     this.id,
@@ -64,6 +66,7 @@ class ContractModel extends Contract {
     this.createdBy,
     this.createdAt,
     this.v,
+    this.signature,
   }) : super(
           id: id,
           note: note,
@@ -89,6 +92,7 @@ class ContractModel extends Contract {
           createdBy: createdBy,
           createdAt: createdAt,
           v: v,
+          signature: signature,
         );
 
   factory ContractModel.fromJson(Map<String, dynamic> json) =>

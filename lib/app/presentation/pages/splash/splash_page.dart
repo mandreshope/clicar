@@ -18,9 +18,7 @@ class SplashPage extends StatelessWidget {
         return next.status == Status.notLogged || next.status == Status.logged;
       },
       listener: (context, state) {
-        print("#### STATE CHANGED");
         if (state.status == Status.logged) {
-          print(">>>>>>>>>>>>>>>>>>>>> LOGGED");
           Navigator.pushNamedAndRemoveUntil(
             context,
             AppRoutes.home,

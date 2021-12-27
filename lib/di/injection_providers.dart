@@ -1,6 +1,7 @@
 import 'package:clicar/app/presentation/pages/forgot_password/bloc/forgot_password_bloc.dart';
 import 'package:clicar/app/presentation/pages/home/bloc/user/user_bloc.dart';
 import 'package:clicar/app/presentation/pages/login/bloc/auth_bloc.dart';
+import 'package:clicar/app/presentation/pages/signature/bloc/accept_contract/accept_contract_bloc.dart';
 import 'package:clicar/app/presentation/pages/signature/bloc/signature_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +18,7 @@ List<SingleChildWidget> providers = [
   BlocProvider(
       create: (context) => sl<UserInfoBloc>()..add(OnInitUserInfoEvent())),
   BlocProvider(create: (context) => sl<SignatureBloc>()),
+  BlocProvider(create: (context) => sl<AcceptContractBloc>()),
 ];
 
 class GlobalBlocObserver extends BlocObserver {

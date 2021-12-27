@@ -1,20 +1,21 @@
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
 import 'package:clicar/app/domain/entities/contract/contract.dart';
-import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 
 class SearchContractResult extends StatelessWidget {
   final Contract contract;
-  const SearchContractResult({required this.contract, Key? key})
-      : super(key: key);
+  final VoidCallback? onTap;
+  const SearchContractResult({
+    required this.contract,
+    Key? key,
+    this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.of(context).pushNamed(AppRoutes.signatureSummary);
-      },
+      onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
         child: Column(
@@ -49,7 +50,9 @@ class SearchContractResult extends StatelessWidget {
               ),
             ),
             Text(
-              contract.info?.departureDate ?? "",
+              contract.info?.departureDate != null
+                  ? "EDL prévu le ${DateTime.parse(contract.info!.departureDate!).formatDateyMd}"
+                  : "-",
               style: TextStyle(
                 fontSize: CustomTheme.subtitle2.sp(context),
                 fontWeight: FontWeight.bold,

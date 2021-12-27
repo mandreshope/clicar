@@ -17,22 +17,19 @@ class SignContractUseCase implements UseCase<Contract, SignContractParams> {
 }
 
 class SignContractParams extends Equatable {
-  final String type;
   final String numberContrat;
   final Signature signature;
 
   const SignContractParams({
-    required this.type,
     required this.numberContrat,
     required this.signature,
   });
 
   @override
-  List<Object> get props => [type, numberContrat, signature];
+  List<Object> get props => [numberContrat, signature];
 
   Map<String, dynamic> toMap() {
     return {
-      'type': type,
       'numberContrat': numberContrat,
       'signature': signature.toMap(),
     };

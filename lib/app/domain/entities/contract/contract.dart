@@ -3,6 +3,7 @@ import 'package:clicar/app/domain/entities/contract/info.dart';
 import 'package:clicar/app/domain/entities/contract/rate.dart';
 import 'package:clicar/app/domain/entities/contract/reglement.dart';
 import 'package:clicar/app/domain/entities/contract/search.dart';
+import 'package:clicar/app/domain/entities/contract/signature.dart';
 import 'package:clicar/app/domain/entities/customer/customer.dart';
 import 'package:clicar/app/domain/entities/driver/driver.dart';
 import 'package:clicar/app/domain/entities/vehicle/vehicle.dart';
@@ -33,6 +34,7 @@ class Contract extends Equatable {
   final String? createdBy;
   final String? createdAt;
   final int? v;
+  final Signature? signature;
 
   const Contract({
     this.id,
@@ -59,6 +61,7 @@ class Contract extends Equatable {
     this.createdBy,
     this.createdAt,
     this.v,
+    this.signature,
   });
 
   @override
@@ -87,5 +90,6 @@ class Contract extends Equatable {
         createdBy,
         createdAt,
         v,
+        signature,
       ];
 }

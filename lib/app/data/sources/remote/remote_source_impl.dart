@@ -16,6 +16,7 @@ import 'package:clicar/app/domain/usecases/contract/sign_contract_usecase.dart';
 import 'package:clicar/di/injection_container.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class RemoteSourceImpl extends RemoteSource {
   late HttpClient client;
@@ -241,20 +242,23 @@ class RemoteSourceImpl extends RemoteSource {
 
   @override
   Future<UploadFileModel> uploadSingleFile({required File file}) async {
-    final url = Uri.parse(RemoteEndpoint.searchContract);
+    final url = Uri.parse(RemoteEndpoint.uploadSingleFile);
 
-    final request = client.upload('POST', url);
-    request.files
-        .add(client.multipartFile.fromBytes('picture', file.readAsBytesSync()));
-    final response = await request.send();
+    var request = http.MultipartRequest('POST', url);
+    request.files.add(await http.MultipartFile.fromPath('file', file.path));
+
+    http.StreamedResponse response = await request.send();
+
     if (response.statusCode == 200) {
       _refreshToken(response.headers);
-      return UploadFileModel.fromJson(json.decode(response.body));
+      final respStr = await response.stream.bytesToString();
+      debugPrint(respStr);
+      return UploadFileModel.fromJson(json.decode(respStr));
     } else {
       throw ServerException(
         statusCode: response.statusCode,
         message: response.reasonPhrase ?? 'Server Error',
-        body: response.body,
+        body: '',
       );
     }
   }
@@ -262,14 +266,18 @@ class RemoteSourceImpl extends RemoteSource {
   @override
   Future<ContractModel> signContract(
       {required SignContractParams signContractParams}) async {
-    final url = Uri.parse(RemoteEndpoint.searchContract);
+    final url = Uri.parse(RemoteEndpoint.signContract);
     final response = await client.post(
       url,
       body: jsonEncode(signContractParams.toMap()),
     );
     if (response.statusCode == 200) {
       _refreshToken(response.headers);
-      return ContractModel.fromJson(_parseBody(response.body)['contract']);
+      final body = _parseBody(response.body);
+
+      ///TODO RETURN ALL ID TO OBJECT IN CONTRACT DATA
+      /*final contract = body['contract'];*/
+      return ContractModel.fromJson({});
     } else {
       throw ServerException(
         statusCode: response.statusCode,

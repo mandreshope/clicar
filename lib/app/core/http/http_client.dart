@@ -6,8 +6,6 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HttpClient extends BaseClient {
-  get multipartFile => http.MultipartFile;
-
   dynamic upload(String method, Uri url) {
     debugPrint("$logTrace $method : $url\n");
     return http.MultipartRequest(method, url);

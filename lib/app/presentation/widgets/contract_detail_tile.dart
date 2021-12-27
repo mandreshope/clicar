@@ -2,12 +2,12 @@ import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
 import 'package:flutter/material.dart';
 
-class ContractDetailCard extends StatelessWidget {
+class ContractDetailTile extends StatelessWidget {
   final String label;
   final String value;
   final Color? valueTextColor;
   final FontWeight? fontWeight;
-  const ContractDetailCard({
+  const ContractDetailTile({
     required this.label,
     required this.value,
     this.fontWeight,

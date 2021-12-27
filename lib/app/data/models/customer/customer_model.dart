@@ -2,7 +2,7 @@ import 'package:clicar/app/domain/entities/customer/customer.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'customer_model.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable()
 class CustomerModel extends Customer {
   final String? id;
   final dynamic dateUpdate;

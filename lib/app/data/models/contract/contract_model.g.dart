@@ -49,6 +49,9 @@ ContractModel _$ContractModelFromJson(Map<String, dynamic> json) =>
       createdBy: json['createdBy'] as String?,
       createdAt: json['createdAt'] as String?,
       v: json['v'] as int?,
+      signature: json['signature'] == null
+          ? null
+          : SignatureModel.fromJson(json['signature'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ContractModelToJson(ContractModel instance) =>
@@ -78,4 +81,5 @@ Map<String, dynamic> _$ContractModelToJson(ContractModel instance) =>
       'createdBy': instance.createdBy,
       'createdAt': instance.createdAt,
       'v': instance.v,
+      'signature': instance.signature?.toJson(),
     };

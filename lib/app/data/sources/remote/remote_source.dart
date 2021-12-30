@@ -48,4 +48,8 @@ abstract class RemoteSource {
     required String photo,
     required String id,
   });
+  Future<bool> userChangePassword({
+    required String password,
+    required String id,
+  });
 }

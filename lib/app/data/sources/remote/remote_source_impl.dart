@@ -313,4 +313,28 @@ class RemoteSourceImpl extends RemoteSource {
       );
     }
   }
+
+  @override
+  Future<bool> userChangePassword(
+      {required String password, required String id}) async {
+    final url = Uri.parse(RemoteEndpoint.userInfoUpdate);
+    final response = await client.patch(
+      url,
+      body: jsonEncode({
+        'password': password,
+        "_id": id,
+        "id": id,
+      }),
+    );
+    if (response.statusCode == 200) {
+      _refreshToken(response.headers);
+      return true;
+    } else {
+      throw ServerException(
+        statusCode: response.statusCode,
+        message: response.reasonPhrase ?? 'Server Error',
+        body: response.body,
+      );
+    }
+  }
 }

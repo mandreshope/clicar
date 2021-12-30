@@ -25,5 +25,5 @@ class UserAddPhotoParams extends Equatable {
   });
 
   @override
-  List<Object> get props => [photo];
+  List<Object> get props => [photo, id];
 }

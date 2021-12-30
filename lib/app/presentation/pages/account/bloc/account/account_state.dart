@@ -13,3 +13,10 @@ class UserAddPhotoSuccessState extends BaseState {
     required String message,
   }) : super(status: status, message: message);
 }
+
+class UserChangePasswordSuccessState extends BaseState {
+  const UserChangePasswordSuccessState({
+    required Status status,
+    required String message,
+  }) : super(status: status, message: message);
+}

@@ -203,7 +203,10 @@ class AccountPage extends StatelessWidget {
                                         ?.sp(context),
                                   ),
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pushNamed(AppRoutes.userChangePassword);
+                                },
                               ),
                               const SizedBox(
                                 height: CustomTheme.spacer,

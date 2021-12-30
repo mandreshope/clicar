@@ -1,5 +1,6 @@
 import 'package:clicar/app/presentation/pages/account/account_page.dart';
 import 'package:clicar/app/presentation/pages/account/user_info_page.dart';
+import 'package:clicar/app/presentation/pages/account/user_password_page.dart';
 import 'package:clicar/app/presentation/pages/forgot_password/change_password_page.dart';
 import 'package:clicar/app/presentation/pages/forgot_password/forgot_password_page.dart';
 import 'package:clicar/app/presentation/pages/home/home_page.dart';
@@ -33,6 +34,7 @@ abstract class AppRoutes {
   static const signatureDraw = '/signature-draw';
   static const signatureSuccess = '/signature-success';
   static const signatureDetail = 'signature-detail';
+  static const userChangePassword = 'user-change-password';
 
   static Map<String, Widget Function(BuildContext)> routes = {
     AppRoutes.login: (BuildContext context) => LoginPage(),
@@ -55,5 +57,6 @@ abstract class AppRoutes {
         const SignatureSuccessPage(),
     AppRoutes.signatureDetail: (BuildContext context) =>
         const SignatureDetailPage(),
+    AppRoutes.userChangePassword: (BuildContext context) => UserPasswordPage(),
   };
 }

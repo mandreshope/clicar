@@ -25,3 +25,15 @@ class UserAddPhotoEvent extends AccountEvent {
   @override
   List<Object> get props => [id];
 }
+
+class UserChangePasswordEvent extends AccountEvent {
+  final String id;
+  final String password;
+  const UserChangePasswordEvent({
+    required this.id,
+    required this.password,
+  });
+
+  @override
+  List<Object> get props => [id, password];
+}

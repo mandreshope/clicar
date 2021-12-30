@@ -140,4 +140,11 @@ class UserRepositoryImpl implements UserRepository {
       return Left(NoConnectionFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, bool>> changePassword(
+      {required String password, required String id}) {
+    // TODO: implement changePassword
+    throw UnimplementedError();
+  }
 }

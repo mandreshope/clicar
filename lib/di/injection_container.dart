@@ -13,6 +13,7 @@ import 'package:clicar/app/domain/usecases/upload_file/upload_single_file_usecas
 import 'package:clicar/app/domain/usecases/user/me_usecase.dart';
 import 'package:clicar/app/domain/usecases/auth/register_usecase.dart';
 import 'package:clicar/app/domain/usecases/user/user_add_photo_usecase.dart';
+import 'package:clicar/app/domain/usecases/user/user_change_password.dart';
 import 'package:clicar/app/domain/usecases/user/user_info_update_usecase.dart';
 import 'package:clicar/app/presentation/pages/account/bloc/account/account_bloc.dart';
 import 'package:clicar/app/presentation/pages/account/bloc/user_info/user_info_bloc.dart';
@@ -54,8 +55,10 @@ Future<void> init() async {
       uploadSingleFileUseCase: sl(),
       signContractUseCase: sl()));
   sl.registerFactory(() => AcceptContractBloc());
-  sl.registerFactory(() =>
-      AccountBloc(uploadSingleFileUseCase: sl(), userAddPhotoUseCase: sl()));
+  sl.registerFactory(() => AccountBloc(
+      uploadSingleFileUseCase: sl(),
+      userAddPhotoUseCase: sl(),
+      userChangePasswordUseCase: sl()));
 
   ///Use cases
   sl.registerLazySingleton(() => LoginUseCase(repository: sl()));
@@ -70,6 +73,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => SignContractUseCase(repository: sl()));
   sl.registerLazySingleton(() => UploadSingleFileUseCase(repository: sl()));
   sl.registerLazySingleton(() => UserAddPhotoUseCase(repository: sl()));
+  sl.registerLazySingleton(() => UserChangePasswordUseCase(repository: sl()));
 
   ///Repositories
   sl.registerLazySingleton<AuthRepository>(

@@ -9,6 +9,7 @@ import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/domain/entities/upload_file/upload_file.dart';
 import 'package:clicar/app/domain/usecases/upload_file/upload_single_file_usecase.dart';
 import 'package:clicar/app/domain/usecases/user/user_add_photo_usecase.dart';
+import 'package:clicar/app/domain/usecases/user/user_change_password.dart';
 import 'package:equatable/equatable.dart';
 
 part 'account_event.dart';
@@ -17,13 +18,17 @@ part 'account_state.dart';
 class AccountBloc extends Bloc<AccountEvent, BaseState> {
   final UploadSingleFileUseCase uploadSingleFileUseCase;
   final UserAddPhotoUseCase userAddPhotoUseCase;
+  final UserChangePasswordUseCase userChangePasswordUseCase;
   UploadFile? uploadFile;
+
   AccountBloc({
     required this.uploadSingleFileUseCase,
     required this.userAddPhotoUseCase,
+    required this.userChangePasswordUseCase,
   }) : super(const BaseState(status: Status.initial, message: 'initial')) {
     on<UploadUserPhotoFileEvent>(_uploadUserPhotoFileEvent);
     on<UserAddPhotoEvent>(_userAddPhotoEvent);
+    on<UserChangePasswordEvent>(_userChangePasswordEvent);
   }
 
   Future<void> _uploadUserPhotoFileEvent(
@@ -84,6 +89,38 @@ class AccountBloc extends Bloc<AccountEvent, BaseState> {
         },
         (success) {
           emit(const UserAddPhotoSuccessState(
+              status: Status.success, message: 'success'));
+        },
+      );
+    } catch (_) {
+      emit(ErrorState(status: Status.error, message: _.toString()));
+    }
+  }
+
+  Future<void> _userChangePasswordEvent(
+      UserChangePasswordEvent event, Emitter emit) async {
+    emit(const BaseState(status: Status.loading, message: 'loading ⌛'));
+    try {
+      final sign = await userChangePasswordUseCase(
+          UserChangePasswordParams(password: event.password, id: event.id));
+      sign.fold(
+        (failure) {
+          if (failure is NoConnectionFailure) {
+            emit(const ErrorState(
+                status: Status.error, message: 'No connextion error'));
+          } else if (failure is ServerFailure) {
+            emit(ErrorState(status: Status.error, message: failure.message));
+          } else if (failure is TokenExpiredFailure) {
+            emit(const ErrorState(
+                status: Status.tokenExpired,
+                message: 'token expired 🔑🔑🔑🔑🔑🪙🪙🔑🔑🔑'));
+          } else {
+            emit(const ErrorState(
+                status: Status.error, message: 'Unknown error'));
+          }
+        },
+        (success) {
+          emit(const UserChangePasswordSuccessState(
               status: Status.success, message: 'success'));
         },
       );

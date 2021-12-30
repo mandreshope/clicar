@@ -17,4 +17,8 @@ abstract class UserRepository {
     required String photo,
     required String id,
   });
+  Future<Either<Failure, bool>> changePassword({
+    required String password,
+    required String id,
+  });
 }

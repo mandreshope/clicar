@@ -40,7 +40,12 @@ abstract class RemoteSource {
     required String email,
   });
   Future<List<ContractModel>> searchContract({required keyWord});
-  Future<UploadFileModel> uploadSingleFile({required File file});
+  Future<UploadFileModel> uploadSingleFile(
+      {required File file, required String fileDestination});
   Future<ContractModel> signContract(
       {required SignContractParams signContractParams});
+  Future<bool> userAddPhoto({
+    required String photo,
+    required String id,
+  });
 }

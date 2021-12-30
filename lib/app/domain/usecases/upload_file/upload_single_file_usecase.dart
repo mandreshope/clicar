@@ -16,17 +16,19 @@ class UploadSingleFileUseCase
   @override
   Future<Either<Failure, UploadFile>> call(
       UploadSingleFileParams params) async {
-    return await repository.single(file: params.file);
+    return await repository.single(
+        file: params.file, fileDestination: params.fileDestination);
   }
 }
 
 class UploadSingleFileParams extends Equatable {
   final File file;
-
+  final String fileDestination;
   const UploadSingleFileParams({
     required this.file,
+    required this.fileDestination,
   });
 
   @override
-  List<Object> get props => [file];
+  List<Object> get props => [file, fileDestination];
 }

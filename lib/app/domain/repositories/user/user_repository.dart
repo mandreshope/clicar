@@ -13,4 +13,8 @@ abstract class UserRepository {
     required String email,
   });
   Future<Either<Failure, User>> me();
+  Future<Either<Failure, bool>> addPhoto({
+    required String photo,
+    required String id,
+  });
 }

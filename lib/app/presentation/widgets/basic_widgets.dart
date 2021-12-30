@@ -1,6 +1,7 @@
 import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
+import 'package:clicar/app/data/sources/remote/remote_config.dart';
 import 'package:flutter/material.dart';
 
 class PrimaryButton extends StatelessWidget {
@@ -366,10 +367,12 @@ class BottomLogo extends StatelessWidget {
 class Avatar extends StatelessWidget {
   final double? height;
   final double? width;
+  final String? url;
   const Avatar({
     Key? key,
     this.height,
     this.width,
+    this.url,
   }) : super(key: key);
 
   @override
@@ -381,13 +384,30 @@ class Avatar extends StatelessWidget {
         borderRadius: BorderRadius.circular(100.w(context)),
         color: CustomTheme.greyColor,
       ),
-      child: const Center(
-        child: Icon(
-          Icons.person,
-          size: 30,
-          color: Colors.grey,
-        ),
-      ),
+      child: url != null
+          ? ClipRRect(
+              borderRadius: BorderRadius.circular(100.w(context)),
+              child: Image.network(
+                "${RemoteConfig.baseUrl}$url",
+                fit: BoxFit.cover,
+                errorBuilder: (context, _, __) {
+                  return const Center(
+                    child: Icon(
+                      Icons.person,
+                      size: 30,
+                      color: Colors.grey,
+                    ),
+                  );
+                },
+              ),
+            )
+          : const Center(
+              child: Icon(
+                Icons.person,
+                size: 30,
+                color: Colors.grey,
+              ),
+            ),
     );
   }
 }
@@ -433,7 +453,6 @@ class SuccessIcon extends StatelessWidget {
       height: height ?? 50,
       child: Image.asset(
         "${assetsImages}success.png",
-        color: CustomTheme.secondaryColor,
         fit: BoxFit.contain,
       ),
     );

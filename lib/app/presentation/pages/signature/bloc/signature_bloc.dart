@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:clicar/app/core/errors/failures.dart';
 import 'package:clicar/app/core/states/base_state.dart';
 import 'package:clicar/app/core/states/error_state.dart';
+import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/domain/entities/contract/contract.dart';
 import 'package:clicar/app/domain/entities/upload_file/upload_file.dart';
@@ -86,8 +87,8 @@ class SignatureBloc extends Bloc<SignatureEvent, BaseState> {
       UploadSignatureFileEvent event, Emitter emit) async {
     emit(const BaseState(status: Status.loading, message: 'loading ⌛'));
     try {
-      final upload = await uploadSingleFileUseCase(
-          UploadSingleFileParams(file: event.file));
+      final upload = await uploadSingleFileUseCase(UploadSingleFileParams(
+          file: event.file, fileDestination: "signatures"));
       upload.fold(
         (failure) {
           emit(SelectedContractState(
@@ -119,7 +120,7 @@ class SignatureBloc extends Bloc<SignatureEvent, BaseState> {
       /*final urlPhoto =
               "${RemoteConfig.baseUrl}/uploadFile/file/signatures/${success.filename}";*/
       /// add baseUrl to display this path
-      final urlPhoto = "/uploadFile/file/signatures/${uploadFile.filename}";
+      final urlPhoto = "$signatureServerFilePath${uploadFile.filename}";
       final payload = SignContractParams(
         numberContrat: event.contract.numberContrat!,
         signature: Signature(

@@ -241,8 +241,9 @@ class RemoteSourceImpl extends RemoteSource {
   }
 
   @override
-  Future<UploadFileModel> uploadSingleFile({required File file}) async {
-    final url = Uri.parse(RemoteEndpoint.uploadSingleFile);
+  Future<UploadFileModel> uploadSingleFile(
+      {required File file, required String fileDestination}) async {
+    final url = Uri.parse(RemoteEndpoint.uploadSingleFile + fileDestination);
 
     var request = http.MultipartRequest('POST', url);
     request.files.add(await http.MultipartFile.fromPath('file', file.path));
@@ -278,6 +279,32 @@ class RemoteSourceImpl extends RemoteSource {
       ///TODO RETURN ALL ID TO OBJECT IN CONTRACT DATA
       /*final contract = body['contract'];*/
       return ContractModel.fromJson({});
+    } else {
+      throw ServerException(
+        statusCode: response.statusCode,
+        message: response.reasonPhrase ?? 'Server Error',
+        body: response.body,
+      );
+    }
+  }
+
+  @override
+  Future<bool> userAddPhoto({
+    required String photo,
+    required String id,
+  }) async {
+    final url = Uri.parse(RemoteEndpoint.userInfoUpdate);
+    final response = await client.patch(
+      url,
+      body: jsonEncode({
+        'photo': photo,
+        "_id": id,
+        "id": id,
+      }),
+    );
+    if (response.statusCode == 200) {
+      _refreshToken(response.headers);
+      return true;
     } else {
       throw ServerException(
         statusCode: response.statusCode,

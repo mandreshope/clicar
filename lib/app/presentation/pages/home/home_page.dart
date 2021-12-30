@@ -67,7 +67,9 @@ class _HomePageState extends State<HomePage> {
                   builder: (context, state) {
                     return Column(
                       children: [
-                        const Avatar(),
+                        Avatar(
+                          url: state is MeUserState ? state.user.photo : null,
+                        ),
                         const SizedBox(
                           height: 15,
                         ),

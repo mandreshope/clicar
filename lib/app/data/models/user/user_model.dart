@@ -16,6 +16,7 @@ class UserModel extends User {
   final String? password;
   final String? createdBy;
   final String? createdAt;
+  final String? photo;
 
   const UserModel({
     this.role,
@@ -28,6 +29,7 @@ class UserModel extends User {
     this.password,
     this.createdBy,
     this.createdAt,
+    this.photo,
   }) : super(
           role: role,
           deleted: deleted,
@@ -39,6 +41,7 @@ class UserModel extends User {
           password: password,
           createdBy: createdBy,
           createdAt: createdAt,
+          photo: photo,
         );
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>

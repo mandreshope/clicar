@@ -11,6 +11,5 @@ abstract class RemoteEndpoint {
   static String userInfoUpdate = RemoteConfig.baseUrl + "/user/edit";
   static String searchContract = RemoteConfig.baseUrl + "/contrat/find";
   static String signContract = RemoteConfig.baseUrl + "/contrat/sign";
-  static String uploadSingleFile =
-      RemoteConfig.baseUrl + "/uploadFile/upload/signatures";
+  static String uploadSingleFile = RemoteConfig.baseUrl + "/uploadFile/upload/";
 }

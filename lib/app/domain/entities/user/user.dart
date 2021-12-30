@@ -11,6 +11,7 @@ class User extends Equatable {
   final String? password;
   final String? createdBy;
   final String? createdAt;
+  final String? photo;
 
   const User({
     this.role,
@@ -23,6 +24,7 @@ class User extends Equatable {
     this.password,
     this.createdBy,
     this.createdAt,
+    this.photo,
   });
 
   @override
@@ -37,5 +39,6 @@ class User extends Equatable {
         password,
         createdBy,
         createdAt,
+        photo,
       ];
 }

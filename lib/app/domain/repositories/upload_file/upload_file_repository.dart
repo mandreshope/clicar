@@ -5,5 +5,6 @@ import 'package:clicar/app/domain/entities/upload_file/upload_file.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class UploadFileRepository {
-  Future<Either<Failure, UploadFile>> single({required File file});
+  Future<Either<Failure, UploadFile>> single(
+      {required File file, required String fileDestination});
 }

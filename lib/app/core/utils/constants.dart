@@ -26,6 +26,9 @@ const String cachedToken = "CACHED_TOKEN";
 /// assets
 const assetsImages = "assets/images/";
 
+const signatureServerFilePath = "/uploadFile/file/signatures/";
+const userPhotoServerFilePath = "/uploadFile/file/profiles/";
+
 /// message
 const String tokenExpiredMessage =
     "Votre session a expiré. Veuillez vous reconnecter";

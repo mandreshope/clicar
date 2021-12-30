@@ -20,12 +20,13 @@ class UploadFileRepositoryImpl implements UploadFileRepository {
   });
 
   @override
-  Future<Either<Failure, UploadFile>> single({required File file}) async {
+  Future<Either<Failure, UploadFile>> single(
+      {required File file, required String fileDestination}) async {
     if (await networkInfo.isConnected) {
       if (localDataSource.isExpiredToken() == false) {
         try {
-          final remoteData =
-              await remoteDataSource.uploadSingleFile(file: file);
+          final remoteData = await remoteDataSource.uploadSingleFile(
+              file: file, fileDestination: fileDestination);
           return Right(remoteData);
         } on ServerException catch (_) {
           return Left(ServerFailure(

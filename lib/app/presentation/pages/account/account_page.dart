@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:clicar/app/core/states/base_state.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/responsive.dart';
@@ -7,8 +9,13 @@ import 'package:clicar/app/presentation/pages/login/bloc/auth_bloc.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/auth_listener_widget.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
+import 'package:clicar/app/presentation/widgets/circular_progress_widget.dart';
+import 'package:clicar/app/presentation/widgets/snack_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+
+import 'bloc/account/account_bloc.dart';
 
 class AccountPage extends StatelessWidget {
   const AccountPage({Key? key}) : super(key: key);
@@ -33,7 +40,9 @@ class AccountPage extends StatelessWidget {
                   builder: (context, state) {
                     return Column(
                       children: [
-                        const Avatar(),
+                        Avatar(
+                          url: state is MeUserState ? state.user.photo : null,
+                        ),
                         const SizedBox(
                           height: 15,
                         ),
@@ -92,17 +101,94 @@ class AccountPage extends StatelessWidget {
                               const SizedBox(
                                 height: 30,
                               ),
-                              SecondaryButton(
-                                width: double.infinity,
-                                child: Text(
-                                  'Importer une photo',
-                                  style: CustomTheme.mainBtnTextStyle.copyWith(
-                                    fontSize: CustomTheme
-                                        .mainBtnTextStyle.fontSize
-                                        ?.sp(context),
-                                  ),
-                                ),
-                                onPressed: () {},
+                              BlocBuilder<AccountBloc, BaseState>(
+                                buildWhen: (prevState, currState) {
+                                  if (currState.status ==
+                                      Status.uploadFileSuccess) {
+                                    SnackBarWidget.show(
+                                      context: context,
+                                      message: "Uploaded",
+                                      isError: false,
+                                    );
+                                    context.read<AccountBloc>().add(
+                                        UserAddPhotoEvent(
+                                            id: context
+                                                    .read<UserBloc>()
+                                                    .currentUser
+                                                    ?.id ??
+                                                ''));
+                                  } else if (currState
+                                      is UserAddPhotoSuccessState) {
+                                    SnackBarWidget.show(
+                                      context: context,
+                                      message:
+                                          "La photo de profil a été modifiée.",
+                                      isError: false,
+                                    );
+                                    context.read<UserBloc>().add(MeUserEvent());
+                                  } else if (currState.status ==
+                                      Status.uploadFileFailed) {
+                                    SnackBarWidget.show(
+                                      context: context,
+                                      message: currState.message,
+                                      isError: true,
+                                    );
+                                  }
+                                  return prevState != currState;
+                                },
+                                builder: (context, state) {
+                                  return Visibility(
+                                    visible: state.status == Status.loading,
+                                    child: SecondaryButton(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const CircularProgress(
+                                            color: CustomTheme.primaryColor,
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            'Importation...',
+                                            style: CustomTheme.mainBtnTextStyle
+                                                .copyWith(
+                                              fontSize: CustomTheme
+                                                  .mainBtnTextStyle.fontSize
+                                                  ?.sp(context),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    replacement: SecondaryButton(
+                                      width: double.infinity,
+                                      child: Text(
+                                        'Importer une photo',
+                                        style: CustomTheme.mainBtnTextStyle
+                                            .copyWith(
+                                          fontSize: CustomTheme
+                                              .mainBtnTextStyle.fontSize
+                                              ?.sp(context),
+                                        ),
+                                      ),
+                                      onPressed: () async {
+                                        final ImagePicker _picker =
+                                            ImagePicker();
+                                        // Pick an image
+                                        final XFile? image =
+                                            await _picker.pickImage(
+                                                source: ImageSource.gallery);
+                                        if (image != null) {
+                                          context.read<AccountBloc>().add(
+                                              UploadUserPhotoFileEvent(
+                                                  file: File(image.path)));
+                                        }
+                                      },
+                                    ),
+                                  );
+                                },
                               ),
                               const SizedBox(
                                 height: CustomTheme.spacer,
@@ -110,7 +196,7 @@ class AccountPage extends StatelessWidget {
                               SecondaryButton(
                                 width: double.infinity,
                                 child: Text(
-                                  'Changer de mote de passe',
+                                  'Changer de mot de passe',
                                   style: CustomTheme.mainBtnTextStyle.copyWith(
                                     fontSize: CustomTheme
                                         .mainBtnTextStyle.fontSize

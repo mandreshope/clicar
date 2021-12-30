@@ -14,6 +14,7 @@ part 'user_state.dart';
 
 class UserBloc extends Bloc<UserEvent, BaseState> {
   final MeUseCase meUseCase;
+  User? currentUser;
   UserBloc({
     required this.meUseCase,
   }) : super(const BaseState(status: Status.initial, message: 'UserInitial')) {
@@ -41,6 +42,7 @@ class UserBloc extends Bloc<UserEvent, BaseState> {
           }
         },
         (success) {
+          currentUser = success;
           emit(MeUserState(
             user: success,
             status: Status.meUser,

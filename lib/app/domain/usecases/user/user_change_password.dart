@@ -12,19 +12,24 @@ class UserChangePasswordUseCase
 
   @override
   Future<Either<Failure, bool>> call(UserChangePasswordParams params) async {
-    return await repository.addPhoto(photo: params.password, id: params.id);
+    return await repository.changePassword(
+        newPassword: params.newPassword,
+        password: params.password,
+        id: params.id);
   }
 }
 
 class UserChangePasswordParams extends Equatable {
   final String password;
   final String id;
+  final String newPassword;
 
   const UserChangePasswordParams({
     required this.password,
     required this.id,
+    required this.newPassword,
   });
 
   @override
-  List<Object> get props => [password, id];
+  List<Object> get props => [password, id, newPassword];
 }

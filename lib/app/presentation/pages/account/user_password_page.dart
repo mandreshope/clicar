@@ -21,6 +21,7 @@ class UserPasswordPage extends StatelessWidget {
   UserPasswordPage({Key? key}) : super(key: key);
 
   final TextEditingController password = TextEditingController();
+  final TextEditingController newPassword = TextEditingController();
   final TextEditingController cpassword = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
@@ -149,13 +150,32 @@ class UserPasswordPage extends StatelessWidget {
                                   ),
                                   TextFieldFilled(
                                     controller: password,
-                                    labelText: 'Mot de passe',
+                                    labelText: 'Ancien mot de passe',
                                     textInputType:
                                         TextInputType.visiblePassword,
                                     obscureText: true,
                                     validator: (value) {
                                       if (value == null) {
-                                        return 'Veuillez saisir votre mot de passe';
+                                        return 'Veuillez saisir votre ancien mot de passe';
+                                      } else if (value.isValidatePassword() ==
+                                          false) {
+                                        return 'Veuillez saisir au moin 6 caractères';
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                  const SizedBox(
+                                    height: CustomTheme.spacer,
+                                  ),
+                                  TextFieldFilled(
+                                    controller: newPassword,
+                                    labelText: 'Nouveau mot de passe',
+                                    textInputType:
+                                        TextInputType.visiblePassword,
+                                    obscureText: true,
+                                    validator: (value) {
+                                      if (value == null) {
+                                        return 'Veuillez saisir votre nouveau mot de passe';
                                       } else if (value.isValidatePassword() ==
                                           false) {
                                         return 'Veuillez saisir au moin 6 caractères';
@@ -168,14 +188,14 @@ class UserPasswordPage extends StatelessWidget {
                                   ),
                                   TextFieldFilled(
                                     controller: cpassword,
-                                    labelText: 'Confirmation mot de passe',
+                                    labelText: 'Nouveau mot de passe confirmer',
                                     textInputType:
                                         TextInputType.visiblePassword,
                                     obscureText: true,
                                     validator: (value) {
                                       if (value == null) {
-                                        return 'Veuillez saisir votre confirmation mot de passe';
-                                      } else if (value != password.text) {
+                                        return 'Veuillez saisir votre confirmation nouveau mot de passe';
+                                      } else if (value != newPassword.text) {
                                         return 'les mots de passe saisis ne correspondent pas';
                                       }
                                       return null;
@@ -184,20 +204,20 @@ class UserPasswordPage extends StatelessWidget {
                                   const SizedBox(
                                     height: CustomTheme.spacer,
                                   ),
-                                  BlocBuilder<UserInfoBloc, BaseState>(
+                                  BlocBuilder<AccountBloc, BaseState>(
                                     buildWhen: (prevState, currState) {
-                                      if (currState is UserInfoUpdatedState) {
+                                      if (currState
+                                          is UserChangePasswordSuccessState) {
                                         SnackBarWidget.show(
                                           isError: false,
                                           message:
-                                              "Infos mis à jour avec succès",
+                                              "Mot de passe à jour avec succès",
                                           context: context,
                                         );
                                         context
                                             .read<UserBloc>()
                                             .add(MeUserEvent());
-                                      }
-                                      if (currState.status ==
+                                      } else if (currState.status ==
                                           Status.tokenExpired) {
                                         SnackBarWidget.show(
                                           isError: true,
@@ -220,7 +240,8 @@ class UserPasswordPage extends StatelessWidget {
                                     },
                                     builder: (context, state) {
                                       return Visibility(
-                                        visible: state.status == Status.loading,
+                                        visible: state
+                                            is UserChangePasswordLoadinState,
                                         child: PrimaryButton(
                                           height: 50.0,
                                           width: 40.w(context),
@@ -241,11 +262,14 @@ class UserPasswordPage extends StatelessWidget {
                                               if (id == null) {
                                                 return;
                                               }
-                                              //TODO: WAITING API
-                                              /*context.read<AccountBloc>().add(
-                                                  UserChangePasswordEvent(
+                                              context.read<AccountBloc>().add(
+                                                    UserChangePasswordEvent(
                                                       password: password.text,
-                                                      id: id));*/
+                                                      newPassword:
+                                                          newPassword.text,
+                                                      id: id,
+                                                    ),
+                                                  );
                                             }
                                           },
                                           child: Text(

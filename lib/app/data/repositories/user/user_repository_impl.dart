@@ -142,9 +142,41 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> changePassword(
-      {required String password, required String id}) {
-    // TODO: implement changePassword
-    throw UnimplementedError();
+  Future<Either<Failure, bool>> changePassword({
+    required String password,
+    required String id,
+    required String newPassword,
+  }) async {
+    if (await networkInfo.isConnected) {
+      if (localDataSource.isExpiredToken() == false) {
+        try {
+          final remoteData = await remoteDataSource.userChangePassword(
+              newPassword: newPassword, password: password, id: id);
+          return Right(remoteData);
+        } on ServerException catch (_) {
+          return Left(ServerFailure(
+            message: _.message,
+            statusCode: _.statusCode,
+            body: _.body,
+          ));
+        } on SocketException catch (_) {
+          return Left(ServerFailure(
+            message: _.toString(),
+            body: '',
+            statusCode: 0,
+          ));
+        } catch (_) {
+          return Left(ServerFailure(
+            message: _.toString(),
+            body: '',
+            statusCode: 0,
+          ));
+        }
+      } else {
+        return Left(TokenExpiredFailure());
+      }
+    } else {
+      return Left(NoConnectionFailure());
+    }
   }
 }

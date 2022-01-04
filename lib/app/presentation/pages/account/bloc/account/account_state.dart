@@ -20,3 +20,10 @@ class UserChangePasswordSuccessState extends BaseState {
     required String message,
   }) : super(status: status, message: message);
 }
+
+class UserChangePasswordLoadinState extends BaseState {
+  const UserChangePasswordLoadinState({
+    required Status status,
+    required String message,
+  }) : super(status: status, message: message);
+}

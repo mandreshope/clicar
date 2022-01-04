@@ -20,5 +20,6 @@ abstract class UserRepository {
   Future<Either<Failure, bool>> changePassword({
     required String password,
     required String id,
+    required String newPassword,
   });
 }

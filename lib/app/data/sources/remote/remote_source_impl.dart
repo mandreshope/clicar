@@ -97,7 +97,7 @@ class RemoteSourceImpl extends RemoteSource {
       throw ServerException(
         statusCode: response.statusCode,
         message: response.reasonPhrase ?? 'Server Error',
-        body: response.body,
+        body: jsonDecode(response.body),
       );
     }
   }
@@ -315,15 +315,19 @@ class RemoteSourceImpl extends RemoteSource {
   }
 
   @override
-  Future<bool> userChangePassword(
-      {required String password, required String id}) async {
+  Future<bool> userChangePassword({
+    required String password,
+    required String id,
+    required String newPassword,
+  }) async {
     final url = Uri.parse(RemoteEndpoint.userInfoUpdate);
     final response = await client.patch(
       url,
       body: jsonEncode({
-        'password': password,
         "_id": id,
         "id": id,
+        "password": password,
+        "newPassword": newPassword,
       }),
     );
     if (response.statusCode == 200) {
@@ -333,7 +337,7 @@ class RemoteSourceImpl extends RemoteSource {
       throw ServerException(
         statusCode: response.statusCode,
         message: response.reasonPhrase ?? 'Server Error',
-        body: response.body,
+        body: jsonDecode(response.body),
       );
     }
   }

@@ -99,17 +99,27 @@ class AccountBloc extends Bloc<AccountEvent, BaseState> {
 
   Future<void> _userChangePasswordEvent(
       UserChangePasswordEvent event, Emitter emit) async {
-    emit(const BaseState(status: Status.loading, message: 'loading ⌛'));
+    emit(const UserChangePasswordLoadinState(
+        status: Status.loading, message: 'loading ⌛'));
     try {
-      final sign = await userChangePasswordUseCase(
-          UserChangePasswordParams(password: event.password, id: event.id));
+      final sign = await userChangePasswordUseCase(UserChangePasswordParams(
+        password: event.password,
+        id: event.id,
+        newPassword: event.newPassword,
+      ));
       sign.fold(
         (failure) {
           if (failure is NoConnectionFailure) {
             emit(const ErrorState(
                 status: Status.error, message: 'No connextion error'));
           } else if (failure is ServerFailure) {
-            emit(ErrorState(status: Status.error, message: failure.message));
+            if (failure.message.contains("Forbidden")) {
+              emit(const ErrorState(
+                  status: Status.error,
+                  message: "Your old password is not correct"));
+            } else {
+              emit(ErrorState(status: Status.error, message: failure.message));
+            }
           } else if (failure is TokenExpiredFailure) {
             emit(const ErrorState(
                 status: Status.tokenExpired,

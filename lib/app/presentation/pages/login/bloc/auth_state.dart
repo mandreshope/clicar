@@ -9,3 +9,23 @@ class AuthState extends BaseState {
           message: message,
         );
 }
+
+class RegisterLoadingState extends BaseState {
+  const RegisterLoadingState({
+    required Status status,
+    required String message,
+  }) : super(
+          status: status,
+          message: message,
+        );
+}
+
+class LoginLoadingState extends BaseState {
+  const LoginLoadingState({
+    required Status status,
+    required String message,
+  }) : super(
+          status: status,
+          message: message,
+        );
+}

@@ -29,11 +29,13 @@ class UserAddPhotoEvent extends AccountEvent {
 class UserChangePasswordEvent extends AccountEvent {
   final String id;
   final String password;
+  final String newPassword;
   const UserChangePasswordEvent({
     required this.id,
     required this.password,
+    required this.newPassword,
   });
 
   @override
-  List<Object> get props => [id, password];
+  List<Object> get props => [id, password, newPassword];
 }

@@ -131,7 +131,7 @@ class LoginPage extends StatelessWidget {
                                 },
                                 builder: (context, state) {
                                   return Visibility(
-                                    visible: state.status == Status.loading,
+                                    visible: state is LoginLoadingState,
                                     child: PrimaryButton(
                                       height: 50.0,
                                       width: 40.w(context),

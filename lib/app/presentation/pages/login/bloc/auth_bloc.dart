@@ -52,7 +52,7 @@ class AuthBloc extends Bloc<AuthEvent, BaseState> {
   }
 
   Future<void> _userLoginEvent(UserLoginEvent event, emit) async {
-    emit(const BaseState(status: Status.loading, message: 'loading ⌛'));
+    emit(const LoginLoadingState(status: Status.loading, message: 'loading ⌛'));
     try {
       final result = await loginUseCase(
         LoginParams(
@@ -79,7 +79,8 @@ class AuthBloc extends Bloc<AuthEvent, BaseState> {
   }
 
   Future<void> _userRegisterEvent(event, emit) async {
-    emit(const BaseState(status: Status.loading, message: 'loading ⌛'));
+    emit(const RegisterLoadingState(
+        status: Status.loading, message: 'loading ⌛'));
     try {
       final result = await registerUseCase(RegisterParams(
         username: event.username,
@@ -94,7 +95,34 @@ class AuthBloc extends Bloc<AuthEvent, BaseState> {
           emit(const ErrorState(
               status: Status.error, message: 'No connextion error'));
         } else if (failure is ServerFailure) {
-          emit(ErrorState(status: Status.error, message: failure.message));
+          if (failure.body is Map) {
+            if ((failure.body as Map).containsKey("email") &&
+                (failure.body as Map).containsKey("username")) {
+              String emailMsg = failure.body["email"];
+              String usernameMsg = failure.body["username"];
+              if (emailMsg.isNotEmpty) {
+                emit(ErrorState(
+                  status: Status.error,
+                  message: failure.body["email"],
+                ));
+              } else if (usernameMsg.isNotEmpty) {
+                emit(ErrorState(
+                  status: Status.error,
+                  message: failure.body["username"],
+                ));
+              }
+            } else {
+              emit(ErrorState(
+                status: Status.error,
+                message: failure.message,
+              ));
+            }
+          } else {
+            emit(ErrorState(
+              status: Status.error,
+              message: failure.message,
+            ));
+          }
         } else {
           emit(
               const ErrorState(status: Status.error, message: 'Unknown error'));

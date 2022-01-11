@@ -1,6 +1,14 @@
 import 'package:clicar/app/presentation/pages/account/account_page.dart';
 import 'package:clicar/app/presentation/pages/account/user_info_page.dart';
 import 'package:clicar/app/presentation/pages/account/user_password_page.dart';
+import 'package:clicar/app/presentation/pages/edl/edl_defects_exterior_page.dart';
+import 'package:clicar/app/presentation/pages/edl/edl_departure_page.dart';
+import 'package:clicar/app/presentation/pages/edl/edl_fuel_level_page.dart';
+import 'package:clicar/app/presentation/pages/edl/edl_mileage_page.dart';
+import 'package:clicar/app/presentation/pages/edl/edl_photo_picker_page.dart';
+import 'package:clicar/app/presentation/pages/edl/edl_summary_checklist.dart';
+import 'package:clicar/app/presentation/pages/edl/edl_summary_page.dart';
+import 'package:clicar/app/presentation/pages/edl/edl_retour_page.dart';
 import 'package:clicar/app/presentation/pages/forgot_password/change_password_page.dart';
 import 'package:clicar/app/presentation/pages/forgot_password/forgot_password_page.dart';
 import 'package:clicar/app/presentation/pages/home/home_page.dart';
@@ -33,8 +41,16 @@ abstract class AppRoutes {
   static const signatureConfirm = '/signature-confirm';
   static const signatureDraw = '/signature-draw';
   static const signatureSuccess = '/signature-success';
-  static const signatureDetail = 'signature-detail';
-  static const userChangePassword = 'user-change-password';
+  static const signatureDetail = '/signature-detail';
+  static const userChangePassword = '/user-change-password';
+  static const edlDeparture = '/edl-departure';
+  static const edlSummary = '/edl-summary';
+  static const edlRetour = '/edl-retour';
+  static const edlPhotoPicker = '/edl-photo-picker';
+  static const edlDefectsExterior = '/edl-defects-exterior';
+  static const edlFuelLevel = '/edl-fuel-level';
+  static const edlMileage = '/edl-mileage';
+  static const edlSummaryChecklist = '/edl-summary-checklist';
 
   static Map<String, Widget Function(BuildContext)> routes = {
     AppRoutes.login: (BuildContext context) => LoginPage(),
@@ -58,5 +74,16 @@ abstract class AppRoutes {
     AppRoutes.signatureDetail: (BuildContext context) =>
         const SignatureDetailPage(),
     AppRoutes.userChangePassword: (BuildContext context) => UserPasswordPage(),
+    AppRoutes.edlDeparture: (BuildContext context) => EdlDeparturePage(),
+    AppRoutes.edlRetour: (BuildContext context) => EdlRetourPage(),
+    AppRoutes.edlSummary: (BuildContext context) => const EdlSummaryPage(),
+    AppRoutes.edlPhotoPicker: (BuildContext context) =>
+        const EdlPhotoPickerPage(),
+    AppRoutes.edlDefectsExterior: (BuildContext context) =>
+        const EdlDefectsExteriorPage(),
+    AppRoutes.edlFuelLevel: (BuildContext context) => const EdlFuelLevelPage(),
+    AppRoutes.edlMileage: (BuildContext context) => const EdlMileagePage(),
+    AppRoutes.edlSummaryChecklist: (BuildContext context) =>
+        const EdlSummaryChecklistPage(),
   };
 }

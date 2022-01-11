@@ -3,6 +3,7 @@ import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
 import 'package:clicar/app/data/sources/remote/remote_config.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class PrimaryButton extends StatelessWidget {
   final Widget child;
@@ -178,18 +179,22 @@ class TextFieldFilled extends StatelessWidget {
   final TextEditingController? controller;
   final TextInputType? textInputType;
   final bool? obscureText;
-  final String labelText;
+  final String? labelText;
   final String? Function(String?)? validator;
   final FocusNode? focusNode;
+  final List<TextInputFormatter>? inputFormatters;
+  final TextAlign? textAlign;
   const TextFieldFilled({
     Key? key,
-    required this.labelText,
+    this.textAlign,
+    this.labelText,
     this.initialValue,
     this.textInputType,
     this.controller,
     this.obscureText,
     this.validator,
     this.focusNode,
+    this.inputFormatters,
   }) : super(key: key);
 
   @override
@@ -202,6 +207,7 @@ class TextFieldFilled extends StatelessWidget {
           children: [
             TextFormField(
               focusNode: focusNode,
+              inputFormatters: inputFormatters,
               onChanged: (v) {
                 state.didChange(v);
               },
@@ -213,6 +219,7 @@ class TextFieldFilled extends StatelessWidget {
               },
               controller: controller,
               keyboardType: textInputType,
+              textAlign: textAlign ?? TextAlign.start,
               obscureText: obscureText ?? false,
               decoration: InputDecoration(
                 errorBorder: OutlineInputBorder(

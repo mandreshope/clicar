@@ -38,7 +38,7 @@ dependencies:
   # Service locator
   get_it: ^7.2.0
   # Bloc for state management
-  flutter_bloc: ^8.0.0
+  flutter_bloc: ^8.0.1
   rxdart: ^0.27.3
   # Value equality
   equatable: ^2.0.3
@@ -47,7 +47,7 @@ dependencies:
   # Remote API
   http: ^0.13.4
   # Local cache
-  shared_preferences: ^2.0.11
+  shared_preferences: ^2.0.12
   # Json annotator
   json_annotation: ^4.4.0
   # Jwt decoder
@@ -55,6 +55,7 @@ dependencies:
   # design
   expandable: ^5.0.1
   signature: ^5.0.0
+  screenshot: ^1.2.3
   # path
   path_provider: ^2.0.8
   image_picker: ^0.8.4+4

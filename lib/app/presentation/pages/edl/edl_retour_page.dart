@@ -13,8 +13,8 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SignaturePage extends StatelessWidget {
-  SignaturePage({Key? key}) : super(key: key);
+class EdlRetourPage extends StatelessWidget {
+  EdlRetourPage({Key? key}) : super(key: key);
 
   final TextEditingController search = TextEditingController();
   final ExpandableController expandableController = ExpandableController();

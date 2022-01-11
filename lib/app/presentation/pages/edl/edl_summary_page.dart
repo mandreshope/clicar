@@ -9,8 +9,8 @@ import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SignatureSummaryPage extends StatelessWidget {
-  const SignatureSummaryPage({Key? key}) : super(key: key);
+class EdlSummaryPage extends StatelessWidget {
+  const EdlSummaryPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +27,7 @@ class SignatureSummaryPage extends StatelessWidget {
                 return prevState != currState;
               },
               builder: (context, state) {
+                final departureBloc = context.read<SignatureBloc>();
                 return DraggableScrollableSheet(
                   initialChildSize: 1.0,
                   minChildSize: 1.0,
@@ -61,10 +62,7 @@ class SignatureSummaryPage extends StatelessWidget {
                                     child: Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                        context
-                                                .read<SignatureBloc>()
-                                                .contract
-                                                .numberContrat ??
+                                        departureBloc.contract.numberContrat ??
                                             "-",
                                         style: TextStyle(
                                           fontSize: CustomTheme
@@ -91,37 +89,18 @@ class SignatureSummaryPage extends StatelessWidget {
                                   ),
                                   const Divider(),
                                   ContractDetailCard(
-                                    contract: context
-                                        .read<SignatureBloc>()
-                                        .contract
-                                        .numberContrat,
-                                    intutile: context
-                                        .read<SignatureBloc>()
-                                        .contract
-                                        .driver
-                                        ?.address,
-                                    vehicle: context
-                                        .read<SignatureBloc>()
-                                        .contract
-                                        .vehicle
-                                        ?.mark,
-                                    typeLocation: context
-                                        .read<SignatureBloc>()
-                                        .contract
-                                        .rate
-                                        ?.rent
-                                        ?.first
-                                        .locationType,
-                                    departureDate: context
-                                        .read<SignatureBloc>()
-                                        .contract
-                                        .info
-                                        ?.departureDate,
-                                    returnDate: context
-                                        .read<SignatureBloc>()
-                                        .contract
-                                        .info
-                                        ?.returnDate,
+                                    contract:
+                                        departureBloc.contract.numberContrat,
+                                    intutile:
+                                        departureBloc.contract.driver?.address,
+                                    vehicle:
+                                        departureBloc.contract.vehicle?.mark,
+                                    typeLocation: departureBloc.contract.rate
+                                        ?.rent?.first.locationType,
+                                    departureDate: departureBloc
+                                        .contract.info?.departureDate,
+                                    returnDate:
+                                        departureBloc.contract.info?.returnDate,
                                   ),
                                   const SizedBox(
                                     height: CustomTheme.spacer,
@@ -132,11 +111,11 @@ class SignatureSummaryPage extends StatelessWidget {
                                   PrimaryButton(
                                     width: 40.w(context),
                                     onPressed: () {
-                                      Navigator.of(context).pushNamed(
-                                          AppRoutes.signatureConfirm);
+                                      Navigator.of(context)
+                                          .pushNamed(AppRoutes.edlPhotoPicker);
                                     },
                                     child: Text(
-                                      'Signer',
+                                      'état des lieux'.toUpperCase(),
                                       style: TextStyle(
                                         fontSize:
                                             CustomTheme.button.sp(context),

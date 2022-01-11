@@ -180,7 +180,7 @@ class LoginPage extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              const SizedBox(
+                              /*const SizedBox(
                                 height: 10.0,
                               ),
                               InkWell(
@@ -196,7 +196,7 @@ class LoginPage extends StatelessWidget {
                                     fontSize: CustomTheme.bodyText1.sp(context),
                                   ),
                                 ),
-                              ),
+                              ),*/
                             ],
                           ),
                         ),

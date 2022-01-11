@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:clicar/app/core/states/base_state.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
-import 'package:clicar/app/presentation/pages/signature/widgets/contract_detail_card.dart';
+import 'package:clicar/app/presentation/widgets/contract_detail_card.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/auth_listener_widget.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';

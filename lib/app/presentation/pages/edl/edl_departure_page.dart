@@ -13,8 +13,8 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SignaturePage extends StatelessWidget {
-  SignaturePage({Key? key}) : super(key: key);
+class EdlDeparturePage extends StatelessWidget {
+  EdlDeparturePage({Key? key}) : super(key: key);
 
   final TextEditingController search = TextEditingController();
   final ExpandableController expandableController = ExpandableController();
@@ -57,7 +57,7 @@ class SignaturePage extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
-                          const TitleWithSeparator(title: "Signature"),
+                          TitleWithSeparator(title: "Départ".toUpperCase()),
                           const SizedBox(
                             height: 30,
                           ),
@@ -85,7 +85,8 @@ class SignaturePage extends StatelessWidget {
                                       header: Padding(
                                           padding: const EdgeInsets.all(20),
                                           child: Text(
-                                            'Contrats à signer'.toUpperCase(),
+                                            'Etats des lieux en attente'
+                                                .toUpperCase(),
                                             style: CustomTheme.mainBtnTextStyle
                                                 .copyWith(
                                               color: CustomTheme.primaryColor,
@@ -146,8 +147,10 @@ class SignaturePage extends StatelessWidget {
 
                                                             Navigator.of(
                                                                     context)
-                                                                .pushNamed(AppRoutes
-                                                                    .signatureSummary);
+                                                                .pushNamed(
+                                                              AppRoutes
+                                                                  .edlSummary,
+                                                            );
                                                           },
                                                           contract: contract))
                                                   .toList(),

@@ -156,7 +156,10 @@ class _HomePageState extends State<HomePage> {
                                         ?.sp(context),
                                   ),
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pushNamed(AppRoutes.edlDeparture);
+                                },
                               ),
                               const SizedBox(
                                 height: CustomTheme.spacer,
@@ -171,7 +174,10 @@ class _HomePageState extends State<HomePage> {
                                         ?.sp(context),
                                   ),
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pushNamed(AppRoutes.edlRetour);
+                                },
                               ),
                               const SizedBox(
                                 height: CustomTheme.spacer,
@@ -186,7 +192,14 @@ class _HomePageState extends State<HomePage> {
                                         ?.sp(context),
                                   ),
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  // TODO: implement Joindre des documents
+                                  SnackBarWidget.show(
+                                    isError: true,
+                                    message: "this feature is coming soon",
+                                    context: context,
+                                  );
+                                },
                               ),
                               const SizedBox(
                                 height: CustomTheme.spacer,
@@ -201,7 +214,14 @@ class _HomePageState extends State<HomePage> {
                                         ?.sp(context),
                                   ),
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  // TODO: implement Consulter les statistiques
+                                  SnackBarWidget.show(
+                                    isError: true,
+                                    message: "this feature is coming soon",
+                                    context: context,
+                                  );
+                                },
                               ),
                               const SizedBox(
                                 height: CustomTheme.spacer,

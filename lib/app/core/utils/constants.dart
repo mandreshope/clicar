@@ -1,3 +1,5 @@
+import 'package:clicar/app/core/utils/currency_formatter.dart';
+import 'package:clicar/app/core/utils/integer_formatter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -19,6 +21,14 @@ String get firstCurrentStackTrace => StackTrace.current
 Object? navigatorArgs(BuildContext context) {
   return ModalRoute.of(context)!.settings.arguments;
 }
+
+final CustomTextInputFormatter formatterDecimal = CustomTextInputFormatter(
+  separator: " ",
+  decimalSeparator: ",",
+);
+final IntegerTextInputFormatter formatterInteger = IntegerTextInputFormatter(
+  separator: " ",
+);
 
 /// sharedPref keys
 const String cachedToken = "CACHED_TOKEN";

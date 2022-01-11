@@ -34,6 +34,7 @@ class SignatureSuccessPage extends StatelessWidget {
                   ),
                   child: BlocBuilder<SignatureBloc, BaseState>(
                     builder: (context, state) {
+                      final signatureBloc = context.read<SignatureBloc>();
                       return Column(
                         children: [
                           const TitleWithSeparator(title: "Signature"),
@@ -48,35 +49,21 @@ class SignatureSuccessPage extends StatelessWidget {
                             height: CustomTheme.extraSpacer,
                           ),
                           Text(
-                            context
-                                    .read<SignatureBloc>()
-                                    .contract
-                                    .numberContrat ??
-                                "-",
+                            signatureBloc.contract.numberContrat ?? "-",
                             style: TextStyle(
                               color: CustomTheme.primaryColor,
                               fontSize: CustomTheme.headline1.sp(context),
                             ),
                           ),
                           Text(
-                            context
-                                    .read<SignatureBloc>()
-                                    .contract
-                                    .driver
-                                    ?.address ??
-                                "-",
+                            signatureBloc.contract.driver?.address ?? "-",
                             style: TextStyle(
                               color: CustomTheme.primaryColor,
                               fontSize: CustomTheme.headline1.sp(context),
                             ),
                           ),
                           Text(
-                            context
-                                    .read<SignatureBloc>()
-                                    .contract
-                                    .vehicle
-                                    ?.immat1 ??
-                                "-",
+                            signatureBloc.contract.vehicle?.immat1 ?? "-",
                             style: TextStyle(
                               color: CustomTheme.primaryColor,
                               fontSize: CustomTheme.headline1.sp(context),
@@ -99,6 +86,8 @@ class SignatureSuccessPage extends StatelessWidget {
                           ),
                           BlocBuilder<AcceptContractBloc, BaseState>(
                             builder: (context, state) {
+                              final acceptContractBloc =
+                                  context.read<AcceptContractBloc>();
                               return PrimaryButton(
                                 width: 40.w(context),
                                 onPressed: () async {
@@ -108,10 +97,11 @@ class SignatureSuccessPage extends StatelessWidget {
                                     barrierColor: Colors.transparent,
                                     builder: (BuildContext context) =>
                                         const ConfirmDialog(
-                                            title:
-                                                "Voulez-vous continuer avec l'EDL ?"),
+                                      title:
+                                          "Voulez-vous continuer avec l'EDL ?",
+                                    ),
                                   );
-                                  context.read<AcceptContractBloc>().add(
+                                  acceptContractBloc.add(
                                       const AcceptContractEvent(
                                           isAccepted: false));
                                   if (confirm == true) {

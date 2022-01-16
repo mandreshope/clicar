@@ -1,14 +1,19 @@
 import 'package:clicar/app/core/http/http_client.dart';
 import 'package:clicar/app/core/usecases/fetch_token_usecase.dart';
 import 'package:clicar/app/data/repositories/contract/contract_repository_impl.dart';
+import 'package:clicar/app/data/repositories/edl/edl_repository_impl.dart';
 import 'package:clicar/app/data/repositories/upload_file/upload_file_repository_impl.dart';
 import 'package:clicar/app/domain/repositories/contract/contract_repository.dart';
+import 'package:clicar/app/domain/repositories/edl/edl_repository.dart';
 import 'package:clicar/app/domain/repositories/upload_file/upload_file_repository.dart';
 import 'package:clicar/app/domain/usecases/auth/change_password_usecase.dart';
 import 'package:clicar/app/domain/usecases/auth/forgot_password_usecase.dart';
 import 'package:clicar/app/domain/usecases/auth/logout_usecase.dart';
 import 'package:clicar/app/domain/usecases/contract/search_contract_usecase.dart';
 import 'package:clicar/app/domain/usecases/contract/sign_contract_usecase.dart';
+import 'package:clicar/app/domain/usecases/edl/edl_departure_usecase.dart';
+import 'package:clicar/app/domain/usecases/edl/edl_retour_usecase.dart';
+import 'package:clicar/app/domain/usecases/upload_file/upload_multi_file_usecase.dart';
 import 'package:clicar/app/domain/usecases/upload_file/upload_single_file_usecase.dart';
 import 'package:clicar/app/domain/usecases/user/me_usecase.dart';
 import 'package:clicar/app/domain/usecases/auth/register_usecase.dart';
@@ -17,6 +22,7 @@ import 'package:clicar/app/domain/usecases/user/user_change_password.dart';
 import 'package:clicar/app/domain/usecases/user/user_info_update_usecase.dart';
 import 'package:clicar/app/presentation/pages/account/bloc/account/account_bloc.dart';
 import 'package:clicar/app/presentation/pages/account/bloc/user_info/user_info_bloc.dart';
+import 'package:clicar/app/presentation/pages/edl/bloc/edl_bloc.dart';
 import 'package:clicar/app/presentation/pages/forgot_password/bloc/forgot_password_bloc.dart';
 import 'package:clicar/app/presentation/pages/home/bloc/user/user_bloc.dart';
 import 'package:clicar/app/presentation/pages/login/bloc/auth_bloc.dart';
@@ -59,6 +65,13 @@ Future<void> init() async {
       uploadSingleFileUseCase: sl(),
       userAddPhotoUseCase: sl(),
       userChangePasswordUseCase: sl()));
+  sl.registerFactory(() => EdlBloc(
+      searchContractUseCase: sl(),
+      uploadSingleFileUseCase: sl(),
+      signContractUseCase: sl(),
+      uploadMultiFileUseCase: sl(),
+      edlDepartureUseCase: sl(),
+      edlRetourUseCase: sl()));
 
   ///Use cases
   sl.registerLazySingleton(() => LoginUseCase(repository: sl()));
@@ -74,6 +87,9 @@ Future<void> init() async {
   sl.registerLazySingleton(() => UploadSingleFileUseCase(repository: sl()));
   sl.registerLazySingleton(() => UserAddPhotoUseCase(repository: sl()));
   sl.registerLazySingleton(() => UserChangePasswordUseCase(repository: sl()));
+  sl.registerLazySingleton(() => UploadMultiFileUseCase(repository: sl()));
+  sl.registerLazySingleton(() => EdlDepartureUseCase(repository: sl()));
+  sl.registerLazySingleton(() => EdlRetourUseCase(repository: sl()));
 
   ///Repositories
   sl.registerLazySingleton<AuthRepository>(
@@ -90,6 +106,10 @@ Future<void> init() async {
   );
   sl.registerLazySingleton<UploadFileRepository>(
     () => UploadFileRepositoryImpl(
+        networkInfo: sl(), localDataSource: sl(), remoteDataSource: sl()),
+  );
+  sl.registerLazySingleton<EdlRepository>(
+    () => EdlRepositoryImpl(
         networkInfo: sl(), localDataSource: sl(), remoteDataSource: sl()),
   );
 

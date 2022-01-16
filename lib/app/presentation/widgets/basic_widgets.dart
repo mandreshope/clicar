@@ -184,6 +184,8 @@ class TextFieldFilled extends StatelessWidget {
   final FocusNode? focusNode;
   final List<TextInputFormatter>? inputFormatters;
   final TextAlign? textAlign;
+  final int? maxLines;
+  final int? minLines;
   const TextFieldFilled({
     Key? key,
     this.textAlign,
@@ -195,6 +197,8 @@ class TextFieldFilled extends StatelessWidget {
     this.validator,
     this.focusNode,
     this.inputFormatters,
+    this.maxLines,
+    this.minLines,
   }) : super(key: key);
 
   @override
@@ -217,6 +221,8 @@ class TextFieldFilled extends StatelessWidget {
               onFieldSubmitted: (v) {
                 state.save();
               },
+              minLines: minLines ?? 1,
+              maxLines: maxLines ?? 1,
               controller: controller,
               keyboardType: textInputType,
               textAlign: textAlign ?? TextAlign.start,
@@ -420,13 +426,15 @@ class Avatar extends StatelessWidget {
 }
 
 class ContainerRoundedGrey extends StatelessWidget {
-  final Widget child;
+  final Widget? child;
   final double? width;
   final double? height;
+  final Decoration? decoration;
   const ContainerRoundedGrey({
-    required this.child,
+    this.child,
     this.width,
     this.height,
+    this.decoration,
     Key? key,
   }) : super(key: key);
 
@@ -435,14 +443,16 @@ class ContainerRoundedGrey extends StatelessWidget {
     return Container(
       height: height,
       width: width,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(CustomTheme.defaultBorderRadius),
-        border: Border.all(
-          color: Colors.grey,
-          width: 0.5,
-        ),
-        color: CustomTheme.greyColor,
-      ),
+      decoration: decoration ??
+          BoxDecoration(
+            borderRadius:
+                BorderRadius.circular(CustomTheme.defaultBorderRadius),
+            border: Border.all(
+              color: Colors.grey,
+              width: 0.5,
+            ),
+            color: CustomTheme.greyColor,
+          ),
       child: child,
     );
   }

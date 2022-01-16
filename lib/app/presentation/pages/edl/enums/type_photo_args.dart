@@ -1,0 +1,4 @@
+enum TypePhotoArgs {
+  interior,
+  exterior,
+}

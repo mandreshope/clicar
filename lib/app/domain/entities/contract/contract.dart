@@ -1,3 +1,6 @@
+import 'package:clicar/app/data/models/contract/condition_at_start_model.dart';
+import 'package:clicar/app/domain/entities/contract/condition_at_end.dart';
+import 'package:clicar/app/domain/entities/contract/condition_at_start.dart';
 import 'package:clicar/app/domain/entities/contract/history_reglement.dart';
 import 'package:clicar/app/domain/entities/contract/info.dart';
 import 'package:clicar/app/domain/entities/contract/rate.dart';
@@ -35,6 +38,8 @@ class Contract extends Equatable {
   final String? createdAt;
   final int? v;
   final Signature? signature;
+  final ConditionAtStart? conditionAtStart;
+  final ConditionAtEnd? conditionAtEnd;
 
   const Contract({
     this.id,
@@ -62,6 +67,8 @@ class Contract extends Equatable {
     this.createdAt,
     this.v,
     this.signature,
+    this.conditionAtStart,
+    this.conditionAtEnd,
   });
 
   @override
@@ -91,5 +98,7 @@ class Contract extends Equatable {
         createdAt,
         v,
         signature,
+        conditionAtStart,
+        conditionAtEnd
       ];
 }

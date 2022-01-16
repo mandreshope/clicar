@@ -42,6 +42,8 @@ abstract class RemoteSource {
   Future<List<ContractModel>> searchContract({required keyWord});
   Future<UploadFileModel> uploadSingleFile(
       {required File file, required String fileDestination});
+  Future<List<UploadFileModel>> uploadMultiFile(
+      {required List<File> files, required String fileDestination});
   Future<ContractModel> signContract(
       {required SignContractParams signContractParams});
   Future<bool> userAddPhoto({
@@ -53,4 +55,6 @@ abstract class RemoteSource {
     required String password,
     required String id,
   });
+  Future<ContractModel> edlDeparture({required Map<String, dynamic> data});
+  Future<ContractModel> edlRetour({required Map<String, dynamic> data});
 }

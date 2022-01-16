@@ -2,8 +2,8 @@ import 'package:clicar/app/core/states/base_state.dart';
 import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
+import 'package:clicar/app/presentation/pages/edl/bloc/edl_bloc.dart';
 import 'package:clicar/app/presentation/pages/edl/cubit/gauge_cubit.dart';
-import 'package:clicar/app/presentation/pages/signature/bloc/signature_bloc.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
 import 'package:clicar/app/presentation/widgets/scaffold_body.dart';
@@ -34,7 +34,7 @@ class EdlSummaryChecklistPage extends StatelessWidget {
       body: BlocProvider(
         create: (context) => GaugeCubit(),
         child: ScaffoldBody(
-          child: BlocBuilder<SignatureBloc, BaseState>(
+          child: BlocBuilder<EdlBloc, BaseState>(
             buildWhen: (prevState, currState) {
               if (currState.status == Status.error) {
                 SnackBarWidget.show(

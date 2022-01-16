@@ -5,28 +5,29 @@ import 'package:clicar/app/core/errors/failures.dart';
 import 'package:clicar/app/core/network/network_info.dart';
 import 'package:clicar/app/data/sources/local/local_source.dart';
 import 'package:clicar/app/data/sources/remote/remote_source.dart';
+import 'package:clicar/app/domain/entities/contract/contract.dart';
 import 'package:clicar/app/domain/entities/upload_file/upload_file.dart';
+import 'package:clicar/app/domain/repositories/edl/edl_repository.dart';
 import 'package:clicar/app/domain/repositories/upload_file/upload_file_repository.dart';
 import 'package:dartz/dartz.dart';
 
-class UploadFileRepositoryImpl implements UploadFileRepository {
+class EdlRepositoryImpl implements EdlRepository {
   final RemoteSource remoteDataSource;
   final LocalSource localDataSource;
   final NetworkInfo networkInfo;
-  UploadFileRepositoryImpl({
+  EdlRepositoryImpl({
     required this.localDataSource,
     required this.networkInfo,
     required this.remoteDataSource,
   });
 
   @override
-  Future<Either<Failure, UploadFile>> single(
-      {required File file, required String fileDestination}) async {
+  Future<Either<Failure, Contract>> departure(
+      {required Map<String, dynamic> data}) async {
     if (await networkInfo.isConnected) {
       if (localDataSource.isExpiredToken() == false) {
         try {
-          final remoteData = await remoteDataSource.uploadSingleFile(
-              file: file, fileDestination: fileDestination);
+          final remoteData = await remoteDataSource.edlDeparture(data: data);
           return Right(remoteData);
         } on ServerException catch (_) {
           return Left(ServerFailure(
@@ -56,13 +57,12 @@ class UploadFileRepositoryImpl implements UploadFileRepository {
   }
 
   @override
-  Future<Either<Failure, List<UploadFile>>> multi(
-      {required List<File> files, required String fileDestination}) async {
+  Future<Either<Failure, Contract>> retour(
+      {required Map<String, dynamic> data}) async {
     if (await networkInfo.isConnected) {
       if (localDataSource.isExpiredToken() == false) {
         try {
-          final remoteData = await remoteDataSource.uploadMultiFile(
-              files: files, fileDestination: fileDestination);
+          final remoteData = await remoteDataSource.edlRetour(data: data);
           return Right(remoteData);
         } on ServerException catch (_) {
           return Left(ServerFailure(

@@ -1,6 +1,8 @@
 import 'package:clicar/app/core/states/base_state.dart';
+import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
+import 'package:clicar/app/presentation/pages/edl/bloc/edl_bloc.dart';
 import 'package:clicar/app/presentation/pages/signature/bloc/signature_bloc.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
@@ -29,7 +31,7 @@ class EdlPhotoPickerPage extends StatelessWidget {
         ],
       ),
       body: ScaffoldBody(
-        child: BlocBuilder<SignatureBloc, BaseState>(
+        child: BlocBuilder<EdlBloc, BaseState>(
           buildWhen: (prevState, currState) {
             if (currState.status == Status.error) {
               SnackBarWidget.show(
@@ -38,6 +40,7 @@ class EdlPhotoPickerPage extends StatelessWidget {
             return prevState != currState;
           },
           builder: (context, state) {
+            final edlBloc = context.read<EdlBloc>();
             return SingleChildScrollView(
               child: Column(
                 children: [
@@ -69,13 +72,24 @@ class EdlPhotoPickerPage extends StatelessWidget {
                           height: CustomTheme.spacer,
                         ),
                         SecondaryButton(
-                          onPressed: () {},
+                          onPressed: edlBloc.uploadPhotosExterior.isNotEmpty
+                              ? null
+                              : () {
+                                  Navigator.of(context)
+                                      .pushNamed(AppRoutes.edlPhotoExterior)
+                                      .then((value) => null);
+                                },
                           height: 100,
                           width: double.infinity,
-                          child: const Icon(
-                            Icons.camera_alt,
-                            color: Colors.grey,
-                          ),
+                          child: edlBloc.uploadPhotosExterior.isNotEmpty
+                              ? Image.asset(
+                                  "${assetsImages}success.png",
+                                  width: 30.0,
+                                )
+                              : const Icon(
+                                  Icons.camera_alt,
+                                  color: Colors.grey,
+                                ),
                         ),
                         const SizedBox(
                           height: CustomTheme.extraSpacer,
@@ -97,13 +111,23 @@ class EdlPhotoPickerPage extends StatelessWidget {
                           height: CustomTheme.spacer,
                         ),
                         SecondaryButton(
-                          onPressed: () {},
+                          onPressed: edlBloc.uploadPhotosInterior.isNotEmpty
+                              ? null
+                              : () {
+                                  Navigator.of(context)
+                                      .pushNamed(AppRoutes.edlPhotoInterior);
+                                },
                           height: 100,
                           width: double.infinity,
-                          child: const Icon(
-                            Icons.camera_alt,
-                            color: Colors.grey,
-                          ),
+                          child: edlBloc.uploadPhotosInterior.isNotEmpty
+                              ? Image.asset(
+                                  "${assetsImages}success.png",
+                                  width: 30.0,
+                                )
+                              : const Icon(
+                                  Icons.camera_alt,
+                                  color: Colors.grey,
+                                ),
                         ),
                         const SizedBox(
                           height: CustomTheme.spacer,
@@ -111,8 +135,17 @@ class EdlPhotoPickerPage extends StatelessWidget {
                         PrimaryButton(
                           width: 40.w(context),
                           onPressed: () {
-                            Navigator.of(context)
-                                .pushNamed(AppRoutes.edlDefectsExterior);
+                            if (edlBloc.uploadPhotosExterior.isNotEmpty &&
+                                edlBloc.uploadPhotosInterior.isNotEmpty) {
+                              /* Navigator.of(context)
+                                  .pushNamed(AppRoutes.edlDefectsExterior);*/
+                              edlBloc.add(EdlPhotosEvent());
+                            } else {
+                              SnackBarWidget.show(
+                                  context: context,
+                                  message: "Veuillez ajouter des photos",
+                                  isError: true);
+                            }
                           },
                           child: Text(
                             'Suivant'.toUpperCase(),

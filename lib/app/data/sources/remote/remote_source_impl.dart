@@ -245,6 +245,8 @@ class RemoteSourceImpl extends RemoteSource {
       {required File file, required String fileDestination}) async {
     final url = Uri.parse(RemoteEndpoint.uploadSingleFile + fileDestination);
 
+    debugPrint("$url");
+
     var request = http.MultipartRequest('POST', url);
     request.files.add(await http.MultipartFile.fromPath('file', file.path));
 
@@ -338,6 +340,82 @@ class RemoteSourceImpl extends RemoteSource {
         statusCode: response.statusCode,
         message: response.reasonPhrase ?? 'Server Error',
         body: jsonDecode(response.body),
+      );
+    }
+  }
+
+  @override
+  Future<List<UploadFileModel>> uploadMultiFile(
+      {required List<File> files, required String fileDestination}) async {
+    final url = Uri.parse(RemoteEndpoint.uploadMultiFile + fileDestination);
+
+    debugPrint("$url");
+
+    var request = http.MultipartRequest('POST', url);
+
+    for (var file in files) {
+      request.files.add(await http.MultipartFile.fromPath('files', file.path));
+    }
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      _refreshToken(response.headers);
+      final respStr = await response.stream.bytesToString();
+      debugPrint(respStr);
+
+      Iterable iterable = json.decode(respStr);
+      return iterable.map((e) => UploadFileModel.fromJson(e)).toList();
+    } else {
+      throw ServerException(
+        statusCode: response.statusCode,
+        message: response.reasonPhrase ?? 'Server Error',
+        body: '',
+      );
+    }
+  }
+
+  @override
+  Future<ContractModel> edlDeparture(
+      {required Map<String, dynamic> data}) async {
+    final url = Uri.parse(RemoteEndpoint.edlDeparture);
+    final response = await client.post(
+      url,
+      body: jsonEncode(data),
+    );
+    if (response.statusCode == 200) {
+      _refreshToken(response.headers);
+      final body = _parseBody(response.body);
+
+      final contract = body['contract'];
+      return ContractModel.fromJson(contract);
+    } else {
+      throw ServerException(
+        statusCode: response.statusCode,
+        message: response.reasonPhrase ?? 'Server Error',
+        body: response.body,
+      );
+    }
+  }
+
+  @override
+  Future<ContractModel> edlRetour({required Map<String, dynamic> data}) async {
+    final url = Uri.parse(RemoteEndpoint.edlRetour);
+    final response = await client.post(
+      url,
+      body: jsonEncode(data),
+    );
+    if (response.statusCode == 200) {
+      _refreshToken(response.headers);
+      final body = _parseBody(response.body);
+
+      final contract = body['contract'];
+      return ContractModel.fromJson(contract);
+    } else {
+      throw ServerException(
+        statusCode: response.statusCode,
+        message: response.reasonPhrase ?? 'Server Error',
+        body: response.body,
       );
     }
   }

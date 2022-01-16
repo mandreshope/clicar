@@ -76,11 +76,11 @@ dev_dependencies:
   flutter_localizations:
     sdk: flutter
   # For testing.
-  mockito: ^5.0.16
+  mockito: ^5.0.17
   # Code generator
-  build_runner: ^2.1.5
+  build_runner: ^2.1.7
   # Code generator from models (to json and from json)
-  json_serializable: ^6.1.1
+  json_serializable: ^6.1.3
   #Integration tests
   flutter_driver:
     sdk: flutter

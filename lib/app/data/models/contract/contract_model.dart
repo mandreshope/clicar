@@ -1,3 +1,5 @@
+import 'package:clicar/app/data/models/contract/condition_at_end_model.dart';
+import 'package:clicar/app/data/models/contract/condition_at_start_model.dart';
 import 'package:clicar/app/data/models/contract/info_model.dart';
 import 'package:clicar/app/data/models/contract/rate_model.dart';
 import 'package:clicar/app/data/models/contract/reglement_model.dart';
@@ -40,6 +42,8 @@ class ContractModel extends Contract {
   final String? createdAt;
   final int? v;
   final SignatureModel? signature;
+  final ConditionAtStartModel? conditionAtStart;
+  final ConditionAtEndModel? conditionAtEnd;
 
   const ContractModel({
     this.id,
@@ -67,6 +71,8 @@ class ContractModel extends Contract {
     this.createdAt,
     this.v,
     this.signature,
+    this.conditionAtStart,
+    this.conditionAtEnd,
   }) : super(
           id: id,
           note: note,
@@ -93,6 +99,8 @@ class ContractModel extends Contract {
           createdAt: createdAt,
           v: v,
           signature: signature,
+          conditionAtEnd: conditionAtEnd,
+          conditionAtStart: conditionAtStart,
         );
 
   factory ContractModel.fromJson(Map<String, dynamic> json) =>

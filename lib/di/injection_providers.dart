@@ -1,4 +1,5 @@
 import 'package:clicar/app/presentation/pages/account/bloc/account/account_bloc.dart';
+import 'package:clicar/app/presentation/pages/edl/bloc/edl_bloc.dart';
 import 'package:clicar/app/presentation/pages/forgot_password/bloc/forgot_password_bloc.dart';
 import 'package:clicar/app/presentation/pages/home/bloc/user/user_bloc.dart';
 import 'package:clicar/app/presentation/pages/login/bloc/auth_bloc.dart';
@@ -21,6 +22,7 @@ List<SingleChildWidget> providers = [
   BlocProvider(create: (context) => sl<SignatureBloc>()),
   BlocProvider(create: (context) => sl<AcceptContractBloc>()),
   BlocProvider(create: (context) => sl<AccountBloc>()),
+  BlocProvider(create: (context) => sl<EdlBloc>()),
 ];
 
 class GlobalBlocObserver extends BlocObserver {

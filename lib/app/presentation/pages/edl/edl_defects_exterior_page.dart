@@ -3,6 +3,7 @@ import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
 import 'package:clicar/app/presentation/pages/edl/cubit/draggable_cubit.dart';
+import 'package:clicar/app/presentation/pages/edl/enums/defects_exterior_note_args.dart';
 import 'package:clicar/app/presentation/pages/edl/widgets/drag.dart';
 import 'package:clicar/app/presentation/pages/signature/bloc/signature_bloc.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
@@ -228,7 +229,7 @@ class _EdlDefectsExteriorPageState extends State<EdlDefectsExteriorPage> {
                                     children: [
                                       Center(
                                         child: Image.asset(
-                                          "${assetsImages}defauts_berline.png",
+                                          "${assetsImages}citadine_defeacts_exterior.png",
                                         ),
                                       ),
                                       ...context
@@ -261,8 +262,10 @@ class _EdlDefectsExteriorPageState extends State<EdlDefectsExteriorPage> {
                           PrimaryButton(
                             width: 40.w(context),
                             onPressed: () {
-                              Navigator.of(context)
-                                  .pushNamed(AppRoutes.edlFuelLevel);
+                              Navigator.of(context).pushNamed(
+                                AppRoutes.edlDefectsExteriorNote,
+                                arguments: DefectsExteriorNoteArgs.departure,
+                              );
                             },
                             child: Text(
                               'Suivant'.toUpperCase(),

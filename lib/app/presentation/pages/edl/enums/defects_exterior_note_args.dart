@@ -1,0 +1,4 @@
+enum DefectsExteriorNoteArgs {
+  departure,
+  retour,
+}

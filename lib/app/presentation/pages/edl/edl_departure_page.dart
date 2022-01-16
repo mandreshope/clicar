@@ -1,7 +1,7 @@
 import 'package:clicar/app/core/states/base_state.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
-import 'package:clicar/app/presentation/pages/signature/bloc/signature_bloc.dart';
+import 'package:clicar/app/presentation/pages/edl/bloc/edl_bloc.dart';
 import 'package:clicar/app/presentation/widgets/search_contract_result.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/auth_listener_widget.dart';
@@ -36,7 +36,7 @@ class EdlDeparturePage extends StatelessWidget {
           ],
         ),
         body: ScaffoldBody(
-          child: BlocBuilder<SignatureBloc, BaseState>(
+          child: BlocBuilder<EdlBloc, BaseState>(
             buildWhen: (prevState, currState) {
               if (currState.status == Status.error) {
                 SnackBarWidget.show(
@@ -103,7 +103,7 @@ class EdlDeparturePage extends StatelessWidget {
                                           SearchTextFieldUnderlined(
                                             controller: search,
                                             onChanged: (v) {
-                                              context.read<SignatureBloc>().add(
+                                              context.read<EdlBloc>().add(
                                                   SearchContractEvent(
                                                       keyWord: search.text));
                                             },
@@ -135,7 +135,7 @@ class EdlDeparturePage extends StatelessWidget {
                                                                 .toggle();
                                                             final signatureBloc =
                                                                 context.read<
-                                                                    SignatureBloc>();
+                                                                    EdlBloc>();
                                                             signatureBloc
                                                                     .contract =
                                                                 contract;

@@ -1,10 +1,14 @@
 import 'package:clicar/app/presentation/pages/account/account_page.dart';
 import 'package:clicar/app/presentation/pages/account/user_info_page.dart';
 import 'package:clicar/app/presentation/pages/account/user_password_page.dart';
+import 'package:clicar/app/presentation/pages/edl/edl_defects_exterior_note_page.dart';
 import 'package:clicar/app/presentation/pages/edl/edl_defects_exterior_page.dart';
 import 'package:clicar/app/presentation/pages/edl/edl_departure_page.dart';
 import 'package:clicar/app/presentation/pages/edl/edl_fuel_level_page.dart';
 import 'package:clicar/app/presentation/pages/edl/edl_mileage_page.dart';
+import 'package:clicar/app/presentation/pages/edl/edl_photo_exterior_page.dart';
+import 'package:clicar/app/presentation/pages/edl/edl_photo_interior_page.dart';
+import 'package:clicar/app/presentation/pages/edl/edl_photo_list_page.dart';
 import 'package:clicar/app/presentation/pages/edl/edl_photo_picker_page.dart';
 import 'package:clicar/app/presentation/pages/edl/edl_summary_checklist.dart';
 import 'package:clicar/app/presentation/pages/edl/edl_summary_page.dart';
@@ -51,6 +55,10 @@ abstract class AppRoutes {
   static const edlFuelLevel = '/edl-fuel-level';
   static const edlMileage = '/edl-mileage';
   static const edlSummaryChecklist = '/edl-summary-checklist';
+  static const edlPhotoExterior = '/edl-photo-exterior';
+  static const edlPhotoInterior = '/edl-photo-interior';
+  static const edlPhotoList = '/edl-photo-list';
+  static const edlDefectsExteriorNote = '/edl-defects-exterior-note';
 
   static Map<String, Widget Function(BuildContext)> routes = {
     AppRoutes.login: (BuildContext context) => LoginPage(),
@@ -85,5 +93,12 @@ abstract class AppRoutes {
     AppRoutes.edlMileage: (BuildContext context) => const EdlMileagePage(),
     AppRoutes.edlSummaryChecklist: (BuildContext context) =>
         const EdlSummaryChecklistPage(),
+    AppRoutes.edlPhotoExterior: (BuildContext context) =>
+        const EdlPhotoExteriorPage(),
+    AppRoutes.edlPhotoInterior: (BuildContext context) =>
+        const EdlPhotoInteriorPage(),
+    AppRoutes.edlPhotoList: (BuildContext context) => const EdlPhotoListPage(),
+    AppRoutes.edlDefectsExteriorNote: (BuildContext context) =>
+        const EdlDefectsExteriorNotePage(),
   };
 }

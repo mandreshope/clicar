@@ -38,6 +38,7 @@ const assetsImages = "assets/images/";
 
 const signatureServerFilePath = "/uploadFile/file/signatures/";
 const userPhotoServerFilePath = "/uploadFile/file/profiles/";
+const edlServerFilePath = "/uploadFile/file/edl/";
 
 /// message
 const String tokenExpiredMessage =

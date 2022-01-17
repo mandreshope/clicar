@@ -4,6 +4,7 @@ import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
 import 'package:clicar/app/presentation/pages/edl/bloc/edl_bloc.dart';
 import 'package:clicar/app/presentation/pages/edl/cubit/gauge_cubit.dart';
+import 'package:clicar/app/presentation/pages/edl/cubit/mileage_cubit.dart';
 import 'package:clicar/app/presentation/pages/edl/enums/type_edl.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
@@ -35,10 +36,17 @@ class EdlMileagePage extends StatelessWidget {
             )*/
         ],
       ),
-      body: BlocProvider(
-        create: (context) => GaugeCubit(
-            gaugeInitial: GaugeInitial(
-                value: edlBloc.contract.conditionAtStart?.km ?? 0)),
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => GaugeCubit(
+                gaugeInitial: GaugeInitial(
+                    value: edlBloc.contract.conditionAtStart?.km ?? 0)),
+          ),
+          BlocProvider(
+            create: (context) => MileageCubit(),
+          ),
+        ],
         child: ScaffoldBody(
           child: BlocBuilder<EdlBloc, BaseState>(
             buildWhen: (prevState, currState) {
@@ -95,6 +103,24 @@ class EdlMileagePage extends StatelessWidget {
                             textAlign: TextAlign.center,
                             inputFormatters: [formatterInteger],
                             controller: mileage,
+                            onChanged: (v) {
+                              int retourMileage =
+                                  formatterInteger.parse(v) ?? 0;
+                              int departureMileage =
+                                  edlBloc.contract.conditionAtStart?.km ?? 0;
+                              int kmInclus = formatterInteger.parse(edlBloc
+                                          .contract
+                                          .rate
+                                          ?.rent
+                                          ?.first
+                                          .kmInclus ??
+                                      "") ??
+                                  0;
+                              context.read<MileageCubit>().change(
+                                  departMileage: departureMileage,
+                                  retourMileage: retourMileage,
+                                  kmInclus: kmInclus);
+                            },
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Kilométrage obligatoire';
@@ -102,6 +128,86 @@ class EdlMileagePage extends StatelessWidget {
                               return null;
                             },
                           ),
+                          if (edlBloc.typeEdl == TypeEdl.retour) ...[
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "Kilomètre départ : ",
+                                  style: TextStyle(
+                                      fontSize:
+                                          CustomTheme.subtitle1.sp(context),
+                                      color: CustomTheme.primaryColor,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  "${edlBloc.contract.conditionAtStart?.km} km",
+                                  style: TextStyle(
+                                    fontSize: CustomTheme.subtitle1.sp(context),
+                                    color: CustomTheme.primaryColor,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "${edlBloc.contract.rate?.rent?.first.kmInclus} km ",
+                                  style: TextStyle(
+                                    fontSize: CustomTheme.subtitle1.sp(context),
+                                    color: CustomTheme.primaryColor,
+                                  ),
+                                ),
+                                Text(
+                                  "inclus",
+                                  style: TextStyle(
+                                      fontSize:
+                                          CustomTheme.subtitle1.sp(context),
+                                      color: CustomTheme.primaryColor,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                            BlocBuilder<MileageCubit, MileageState>(
+                              builder: (context, state) {
+                                return Visibility(
+                                  visible:
+                                      (state as MileageChangeState).isExceed,
+                                  child: Text(
+                                    "Attention, dépassement du nombre de kilomètre inclus +${state.exceedValue} km",
+                                    style: TextStyle(
+                                      fontSize: CustomTheme
+                                          .mainBtnTextStyle.fontSize
+                                          ?.sp(context),
+                                      color: Colors.red,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                );
+                              },
+                            ),
+                            const SizedBox(
+                              height: CustomTheme.spacer,
+                            ),
+                            SecondaryButton(
+                              height: 40.0,
+                              padding: MaterialStateProperty.all(
+                                  const EdgeInsets.all(0.0)),
+                              width: double.infinity,
+                              child: Text(
+                                "Facture: 50€ frais de carburant".toUpperCase(),
+                                style: TextStyle(
+                                  fontSize: CustomTheme
+                                      .mainBtnTextStyle.fontSize
+                                      ?.sp(context),
+                                  color: CustomTheme.primaryColor,
+                                ),
+                              ),
+                            ),
+                          ],
                           const SizedBox(
                             height: CustomTheme.spacer,
                           ),

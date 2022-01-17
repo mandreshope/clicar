@@ -7,14 +7,13 @@ import 'package:clicar/app/presentation/pages/edl/enums/type_edl.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
 import 'package:clicar/app/presentation/widgets/circular_progress_widget.dart';
-import 'package:clicar/app/presentation/widgets/percent_slider.dart';
 import 'package:clicar/app/presentation/widgets/scaffold_body.dart';
 import 'package:clicar/app/presentation/widgets/snack_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class EdlFuelLevelPage extends StatelessWidget {
-  const EdlFuelLevelPage({Key? key}) : super(key: key);
+class EdlBilledInfoPage extends StatelessWidget {
+  const EdlBilledInfoPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -87,98 +86,6 @@ class EdlFuelLevelPage extends StatelessWidget {
                           ),
                           const SizedBox(
                             height: CustomTheme.spacer,
-                          ),
-                          if (edlBloc.typeEdl == TypeEdl.retour) ...[
-                            Row(
-                              children: [
-                                Text(
-                                  "Carburant départ",
-                                  style: TextStyle(
-                                    fontSize: CustomTheme
-                                        .mainBtnTextStyle.fontSize
-                                        ?.sp(context),
-                                    color: Colors.green,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 10.0,
-                                ),
-                                Text(
-                                  "${edlBloc.contract.conditionAtStart?.fuelQuantity} %",
-                                  style: TextStyle(
-                                    fontSize: CustomTheme
-                                        .mainBtnTextStyle.fontSize
-                                        ?.sp(context),
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.green,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: CustomTheme.spacer,
-                            ),
-                          ],
-                          BlocBuilder<GaugeCubit, GaugeState>(
-                            builder: (context, state) {
-                              final gaugeCubit = context.read<GaugeCubit>();
-                              return Column(
-                                children: [
-                                  SizedBox(
-                                    width: 100.w(context),
-                                    height: 400,
-                                    child: PercentSlider(
-                                      min: 0,
-                                      value: state is GaugeChangeState
-                                          ? state.value
-                                          : 0,
-                                      onChange: (v) {
-                                        gaugeCubit.change(v);
-                                      },
-                                    ),
-                                  ),
-                                  if (edlBloc.typeEdl == TypeEdl.retour) ...[
-                                    Visibility(
-                                      visible: state is GaugeChangeState
-                                          ? state.value <
-                                              (edlBloc.contract.conditionAtStart
-                                                      ?.fuelQuantity ??
-                                                  0)
-                                          : false,
-                                      child: Text(
-                                        "Attention, il y a moins de carburant qu'au départ du véhicule",
-                                        style: TextStyle(
-                                          fontSize: CustomTheme
-                                              .mainBtnTextStyle.fontSize
-                                              ?.sp(context),
-                                          color: Colors.red,
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: CustomTheme.spacer,
-                                    ),
-                                    SecondaryButton(
-                                      height: 40.0,
-                                      padding: MaterialStateProperty.all(
-                                          const EdgeInsets.all(0.0)),
-                                      width: double.infinity,
-                                      child: Text(
-                                        "Facture: 50€ frais de carburant"
-                                            .toUpperCase(),
-                                        style: TextStyle(
-                                          fontSize: CustomTheme
-                                              .mainBtnTextStyle.fontSize
-                                              ?.sp(context),
-                                          color: CustomTheme.primaryColor,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ],
-                              );
-                            },
                           ),
                           const SizedBox(
                             height: CustomTheme.spacer,

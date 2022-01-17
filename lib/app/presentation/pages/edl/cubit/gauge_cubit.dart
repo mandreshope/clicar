@@ -7,7 +7,9 @@ part './gauge_state.dart';
 
 class GaugeCubit extends Cubit<GaugeState> {
   final GaugeInitial gaugeInitial;
-  GaugeCubit({required this.gaugeInitial}) : super(gaugeInitial);
+  GaugeCubit({required this.gaugeInitial}) : super(gaugeInitial) {
+    emit(GaugeChangeState(value: gaugeInitial.value));
+  }
 
   void change(int value) {
     emit(GaugeChangeState(value: value));

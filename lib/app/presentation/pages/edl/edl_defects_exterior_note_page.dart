@@ -60,7 +60,7 @@ class _EdlDefectsExteriorNotePageState
                 message: "Les remarques sont envoyées",
                 isError: false,
               );
-              Navigator.of(context).pushNamed(AppRoutes.edlFuelLevel);
+              Navigator.of(context).pushNamed(AppRoutes.edlBilledInfo);
             }
             if (currState is EdlRetourNoteSuccessState) {
               SnackBarWidget.show(
@@ -68,7 +68,7 @@ class _EdlDefectsExteriorNotePageState
                 message: "Les remarques sont envoyées",
                 isError: false,
               );
-              Navigator.of(context).pushNamed(AppRoutes.edlFuelLevel);
+              Navigator.of(context).pushNamed(AppRoutes.edlBilledInfo);
             } else if (currState.status == Status.error) {
               SnackBarWidget.show(
                   context: context, message: currState.message, isError: true);

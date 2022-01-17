@@ -186,6 +186,7 @@ class TextFieldFilled extends StatelessWidget {
   final TextAlign? textAlign;
   final int? maxLines;
   final int? minLines;
+  final Function(String)? onChanged;
   const TextFieldFilled({
     Key? key,
     this.textAlign,
@@ -199,6 +200,7 @@ class TextFieldFilled extends StatelessWidget {
     this.inputFormatters,
     this.maxLines,
     this.minLines,
+    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -214,6 +216,9 @@ class TextFieldFilled extends StatelessWidget {
               inputFormatters: inputFormatters,
               onChanged: (v) {
                 state.didChange(v);
+                if (onChanged != null) {
+                  onChanged!(v);
+                }
               },
               onSaved: (v) {
                 state.save();

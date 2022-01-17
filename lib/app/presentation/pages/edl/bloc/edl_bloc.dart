@@ -15,6 +15,7 @@ import 'package:clicar/app/domain/usecases/edl/edl_departure_usecase.dart';
 import 'package:clicar/app/domain/usecases/edl/edl_retour_usecase.dart';
 import 'package:clicar/app/domain/usecases/upload_file/upload_multi_file_usecase.dart';
 import 'package:clicar/app/domain/usecases/upload_file/upload_single_file_usecase.dart';
+import 'package:clicar/app/presentation/pages/edl/enums/type_edl.dart';
 import 'package:clicar/app/presentation/pages/edl/widgets/camera_pos.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -32,8 +33,10 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
   final EdlDepartureUseCase edlDepartureUseCase;
   final EdlRetourUseCase edlRetourUseCase;
 
+  TypeEdl typeEdl = TypeEdl.departure;
+
   Contract contract = const Contract();
-  UploadFile uploadFile = const UploadFile();
+  UploadFile uploadSignatureFile = const UploadFile();
   List<UploadFile> uploadPhotosExterior = [];
   List<UploadFile> uploadPhotosInterior = [];
   UploadFile uploadDefectsExterior = const UploadFile();
@@ -118,7 +121,6 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
     on<SelectContractEvent>(_selectContractEvent);
     on<UploadPhotosExteriorEvent>(_uploadPhotosExteriorEvent);
     on<UploadPhotosInteriorEvent>(_uploadPhotosInteriorEvent);
-    on<SignEdlEvent>(_signEdlEvent);
     on<SelectCameraPosEvent>(_selectCameraPosEvent);
     on<SelectCameraInteriorPosEvent>(_selectCameraInteriorPosEvent);
     on<AddFileOfCameraPosEvent>(_addFileOfCameraPosEvent);
@@ -128,6 +130,20 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
     on<EdlPhotoDefectsEvent>(_edlPhotoDefectsEvent);
     on<EdlFuelLevelEvent>(_edlFuelLevelEvent);
     on<EdlMileageEvent>(_edlMileageEvent);
+    on<EdlDepartureNoteEvent>(_edlDepartureNoteEvent);
+    on<EdlRetourNoteEvent>(_edlRetourNoteEvent);
+    on<EdlDepartureSignEvent>(_edlDepartureSignEvent);
+    on<EdlRetourSignEvent>(_edlRetourSignEvent);
+    on<UploadSignatureFileEvent>(_uploadSignatureFileEvent);
+  }
+
+  void reset() {
+    debugPrint(logTrace);
+    contract = const Contract();
+    uploadSignatureFile = const UploadFile();
+    uploadPhotosExterior = [];
+    uploadPhotosInterior = [];
+    uploadDefectsExterior = const UploadFile();
   }
 
   Future<void> _searchContractEvent(
@@ -253,56 +269,9 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         },
         (success) async {
           uploadDefectsExterior = success;
-          emit(const UploadPhotosInteriorSuccess(
+          emit(const UploadPhotoDefectsExteriorSuccessState(
             status: Status.uploadFileSuccess,
             message: "upload file success",
-          ));
-        },
-      );
-    } catch (_) {
-      emit(ErrorState(status: Status.error, message: _.toString()));
-    }
-  }
-
-  Future<void> _signEdlEvent(SignEdlEvent event, Emitter emit) async {
-    emit(const BaseState(status: Status.loading, message: 'loading ⌛'));
-    try {
-      //https://api-new.clicar.fr/uploadFile/file/signatures/41-418338_success1640557427707.png
-      /*final urlPhoto =
-              "${RemoteConfig.baseUrl}/uploadFile/file/signatures/${success.filename}";*/
-      /// add baseUrl to display this path
-      final urlPhoto = "$signatureServerFilePath${uploadFile.filename}";
-      final payload = SignContractParams(
-        numberContrat: event.contract.numberContrat!,
-        signature: Signature(
-          signature: urlPhoto,
-          signatureDate: DateTime.now().formatDatePayload,
-          isAccepted: event.isAccepted,
-        ),
-      );
-      final sign = await signContractUseCase(payload);
-      sign.fold(
-        (failure) {
-          if (failure is NoConnectionFailure) {
-            emit(const ErrorState(
-                status: Status.error, message: 'No connextion error'));
-          } else if (failure is ServerFailure) {
-            emit(ErrorState(status: Status.error, message: failure.message));
-          } else if (failure is TokenExpiredFailure) {
-            emit(const ErrorState(
-                status: Status.tokenExpired,
-                message: 'token expired 🔑🔑🔑🔑🔑🪙🪙🔑🔑🔑'));
-          } else {
-            emit(const ErrorState(
-                status: Status.error, message: 'Unknown error'));
-          }
-        },
-        (success) {
-          emit(SelectedContractState(
-            status: Status.signed,
-            message: "uploadFileSuccess",
-            isAccepted: event.isAccepted,
-            isSigned: true,
           ));
         },
       );
@@ -410,6 +379,7 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
           }
         },
         (success) {
+          contract = success;
           emit(const EdlPhotosSuccessState(
             status: Status.success,
             message: "",
@@ -422,8 +392,338 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
   }
 
   Future<void> _edlPhotoDefectsEvent(
-      EdlPhotoDefectsEvent event, Emitter emit) async {}
-  Future<void> _edlFuelLevelEvent(
-      EdlFuelLevelEvent event, Emitter emit) async {}
-  Future<void> _edlMileageEvent(EdlMileageEvent event, Emitter emit) async {}
+      EdlPhotoDefectsEvent event, Emitter emit) async {
+    emit(const BaseState(status: Status.loading, message: 'loading ⌛'));
+    try {
+      //https://api-new.clicar.fr/uploadFile/file/signatures/41-418338_success1640557427707.png
+      /*final urlPhoto =
+              "${RemoteConfig.baseUrl}/uploadFile/file/signatures/${success.filename}";*/
+      /// add baseUrl to display this path
+
+      final urlPhoto = "$edlServerFilePath${uploadDefectsExterior.filename}";
+
+      final data = {
+        "numberContrat": "${contract.numberContrat}",
+        "conditionDate": DateTime.now().formatDatePayload,
+        // "conditions": [imgUrl1, imgUrl2],
+        //"comment": "quelconque commentaire",
+        //"km": "2000",
+        //"fuelQuantity": "15",
+        "faults": [urlPhoto],
+      };
+      final result = await edlDepartureUseCase(EdlDepartureParams(data: data));
+      result.fold(
+        (failure) {
+          if (failure is NoConnectionFailure) {
+            emit(const ErrorState(
+                status: Status.error, message: 'No connextion error'));
+          } else if (failure is ServerFailure) {
+            emit(ErrorState(status: Status.error, message: failure.message));
+          } else if (failure is TokenExpiredFailure) {
+            emit(const ErrorState(
+                status: Status.tokenExpired,
+                message: 'token expired 🔑🔑🔑🔑🔑🪙🪙🔑🔑🔑'));
+          } else {
+            emit(const ErrorState(
+                status: Status.error, message: 'Unknown error'));
+          }
+        },
+        (success) {
+          contract = success;
+          emit(const EdlPhotoDefectsSuccessState(
+            status: Status.success,
+            message: "",
+          ));
+        },
+      );
+    } catch (_) {
+      emit(ErrorState(status: Status.error, message: _.toString()));
+    }
+  }
+
+  Future<void> _edlFuelLevelEvent(EdlFuelLevelEvent event, Emitter emit) async {
+    emit(const BaseState(status: Status.loading, message: 'loading ⌛'));
+    try {
+      final data = {
+        "numberContrat": "${contract.numberContrat}",
+        "conditionDate": DateTime.now().formatDatePayload,
+        // "conditions": [imgUrl1, imgUrl2],
+        //"comment": "quelconque commentaire",
+        //"km": "2000",
+        "fuelQuantity": event.fuel,
+        // "faults": [imgUrl1, imgUrl2],
+      };
+      final result = await edlDepartureUseCase(EdlDepartureParams(data: data));
+      result.fold(
+        (failure) {
+          if (failure is NoConnectionFailure) {
+            emit(const ErrorState(
+                status: Status.error, message: 'No connextion error'));
+          } else if (failure is ServerFailure) {
+            emit(ErrorState(status: Status.error, message: failure.message));
+          } else if (failure is TokenExpiredFailure) {
+            emit(const ErrorState(
+                status: Status.tokenExpired,
+                message: 'token expired 🔑🔑🔑🔑🔑🪙🪙🔑🔑🔑'));
+          } else {
+            emit(const ErrorState(
+                status: Status.error, message: 'Unknown error'));
+          }
+        },
+        (success) {
+          contract = success;
+          emit(const EdlFuelLevelSuccessState(
+            status: Status.success,
+            message: "",
+          ));
+        },
+      );
+    } catch (_) {
+      emit(ErrorState(status: Status.error, message: _.toString()));
+    }
+  }
+
+  Future<void> _edlMileageEvent(EdlMileageEvent event, Emitter emit) async {
+    emit(const BaseState(status: Status.loading, message: 'loading ⌛'));
+    try {
+      final data = {
+        "numberContrat": "${contract.numberContrat}",
+        "conditionDate": DateTime.now().formatDatePayload,
+        // "conditions": [imgUrl1, imgUrl2],
+        //"comment": "quelconque commentaire",
+        "km": event.mileage,
+        //"fuelQuantity": "15",
+        // "faults": [imgUrl1, imgUrl2],
+      };
+      final result = await edlDepartureUseCase(EdlDepartureParams(data: data));
+      result.fold(
+        (failure) {
+          if (failure is NoConnectionFailure) {
+            emit(const ErrorState(
+                status: Status.error, message: 'No connextion error'));
+          } else if (failure is ServerFailure) {
+            emit(ErrorState(status: Status.error, message: failure.message));
+          } else if (failure is TokenExpiredFailure) {
+            emit(const ErrorState(
+                status: Status.tokenExpired,
+                message: 'token expired 🔑🔑🔑🔑🔑🪙🪙🔑🔑🔑'));
+          } else {
+            emit(const ErrorState(
+                status: Status.error, message: 'Unknown error'));
+          }
+        },
+        (success) {
+          contract = success;
+          emit(const EdlMileageSuccessState(
+            status: Status.success,
+            message: "",
+          ));
+        },
+      );
+    } catch (_) {
+      emit(ErrorState(status: Status.error, message: _.toString()));
+    }
+  }
+
+  Future<void> _edlDepartureNoteEvent(
+      EdlDepartureNoteEvent event, Emitter emit) async {
+    emit(const BaseState(status: Status.loading, message: 'loading ⌛'));
+    try {
+      final data = {
+        "numberContrat": "${contract.numberContrat}",
+        "conditionDate": DateTime.now().formatDatePayload,
+        // "conditions": [imgUrl1, imgUrl2],
+        "comment": event.note,
+        //"km": "1000",
+        //"fuelQuantity": "15",
+        // "faults": [imgUrl1, imgUrl2],
+      };
+      final result = await edlDepartureUseCase(EdlDepartureParams(data: data));
+      result.fold(
+        (failure) {
+          if (failure is NoConnectionFailure) {
+            emit(const ErrorState(
+                status: Status.error, message: 'No connextion error'));
+          } else if (failure is ServerFailure) {
+            emit(ErrorState(status: Status.error, message: failure.message));
+          } else if (failure is TokenExpiredFailure) {
+            emit(const ErrorState(
+                status: Status.tokenExpired,
+                message: 'token expired 🔑🔑🔑🔑🔑🪙🪙🔑🔑🔑'));
+          } else {
+            emit(const ErrorState(
+                status: Status.error, message: 'Unknown error'));
+          }
+        },
+        (success) {
+          contract = success;
+          emit(const EdlDepartureNoteSuccessState(
+            status: Status.success,
+            message: "",
+          ));
+        },
+      );
+    } catch (_) {
+      emit(ErrorState(status: Status.error, message: _.toString()));
+    }
+  }
+
+  Future<void> _edlRetourNoteEvent(
+      EdlRetourNoteEvent event, Emitter emit) async {
+    emit(const BaseState(status: Status.loading, message: 'loading ⌛'));
+    try {
+      final data = {
+        "numberContrat": "${contract.numberContrat}",
+        "conditionDate": DateTime.now().formatDatePayload,
+        // "conditions": [imgUrl1, imgUrl2],
+        "comment": event.note,
+        //"km": "1000",
+        //"fuelQuantity": "15",
+        // "faults": [imgUrl1, imgUrl2],
+      };
+      final result = await edlDepartureUseCase(EdlDepartureParams(data: data));
+      result.fold(
+        (failure) {
+          if (failure is NoConnectionFailure) {
+            emit(const ErrorState(
+                status: Status.error, message: 'No connextion error'));
+          } else if (failure is ServerFailure) {
+            emit(ErrorState(status: Status.error, message: failure.message));
+          } else if (failure is TokenExpiredFailure) {
+            emit(const ErrorState(
+                status: Status.tokenExpired,
+                message: 'token expired 🔑🔑🔑🔑🔑🪙🪙🔑🔑🔑'));
+          } else {
+            emit(const ErrorState(
+                status: Status.error, message: 'Unknown error'));
+          }
+        },
+        (success) {
+          contract = success;
+          emit(const EdlDepartureNoteSuccessState(
+            status: Status.success,
+            message: "",
+          ));
+        },
+      );
+    } catch (_) {
+      emit(ErrorState(status: Status.error, message: _.toString()));
+    }
+  }
+
+  Future<void> _edlDepartureSignEvent(
+      EdlDepartureSignEvent event, Emitter emit) async {
+    emit(const BaseState(status: Status.loading, message: 'loading ⌛'));
+    try {
+      final urlPhoto = "$edlServerFilePath${uploadSignatureFile.filename}";
+      final data = {
+        "numberContrat": "${contract.numberContrat}",
+        "signatureDate": DateTime.now().formatDatePayload,
+        "signature": urlPhoto,
+        "isAccepted": event.isAccepted,
+      };
+      final result = await edlDepartureUseCase(EdlDepartureParams(data: data));
+      result.fold(
+        (failure) {
+          if (failure is NoConnectionFailure) {
+            emit(const ErrorState(
+                status: Status.error, message: 'No connextion error'));
+          } else if (failure is ServerFailure) {
+            emit(ErrorState(status: Status.error, message: failure.message));
+          } else if (failure is TokenExpiredFailure) {
+            emit(const ErrorState(
+                status: Status.tokenExpired,
+                message: 'token expired 🔑🔑🔑🔑🔑🪙🪙🔑🔑🔑'));
+          } else {
+            emit(const ErrorState(
+                status: Status.error, message: 'Unknown error'));
+          }
+        },
+        (success) {
+          contract = success;
+          emit(SelectedContractState(
+            status: Status.signed,
+            message: "signed",
+            isAccepted: event.isAccepted,
+            isSigned: true,
+          ));
+        },
+      );
+    } catch (_) {
+      emit(ErrorState(status: Status.error, message: _.toString()));
+    }
+  }
+
+  Future<void> _edlRetourSignEvent(
+      EdlRetourSignEvent event, Emitter emit) async {
+    emit(const BaseState(status: Status.loading, message: 'loading ⌛'));
+    try {
+      final urlPhoto = "$edlServerFilePath${uploadSignatureFile.filename}";
+      final data = {
+        "numberContrat": "${contract.numberContrat}",
+        "signatureDate": DateTime.now().formatDatePayload,
+        "signature": urlPhoto,
+        "isAccepted": event.isAccepted,
+      };
+      final result = await edlRetourUseCase(EdlRetourParams(data: data));
+      result.fold(
+        (failure) {
+          if (failure is NoConnectionFailure) {
+            emit(const ErrorState(
+                status: Status.error, message: 'No connextion error'));
+          } else if (failure is ServerFailure) {
+            emit(ErrorState(status: Status.error, message: failure.message));
+          } else if (failure is TokenExpiredFailure) {
+            emit(const ErrorState(
+                status: Status.tokenExpired,
+                message: 'token expired 🔑🔑🔑🔑🔑🪙🪙🔑🔑🔑'));
+          } else {
+            emit(const ErrorState(
+                status: Status.error, message: 'Unknown error'));
+          }
+        },
+        (success) {
+          contract = success;
+          emit(SelectedContractState(
+            status: Status.signed,
+            message: "signed",
+            isAccepted: event.isAccepted,
+            isSigned: true,
+          ));
+        },
+      );
+    } catch (_) {
+      emit(ErrorState(status: Status.error, message: _.toString()));
+    }
+  }
+
+  Future<void> _uploadSignatureFileEvent(
+      UploadSignatureFileEvent event, Emitter emit) async {
+    emit(const BaseState(status: Status.loading, message: 'loading ⌛'));
+    try {
+      final upload = await uploadSingleFileUseCase(UploadSingleFileParams(
+          file: event.file, fileDestination: "signatures"));
+      upload.fold(
+        (failure) {
+          emit(SelectedContractState(
+            status: Status.uploadFileFailed,
+            message: "upload file failed",
+            isAccepted: event.isAccepted,
+            isSigned: false,
+          ));
+        },
+        (success) async {
+          uploadSignatureFile = success;
+          emit(SelectedContractState(
+            status: Status.uploadFileSuccess,
+            message: "upload file success",
+            isAccepted: event.isAccepted,
+            isSigned: false,
+          ));
+        },
+      );
+    } catch (_) {
+      emit(ErrorState(status: Status.error, message: _.toString()));
+    }
+  }
 }

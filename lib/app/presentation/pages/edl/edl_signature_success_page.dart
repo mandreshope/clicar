@@ -1,8 +1,9 @@
 import 'package:clicar/app/core/states/base_state.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
+import 'package:clicar/app/presentation/pages/edl/bloc/edl_bloc.dart';
+import 'package:clicar/app/presentation/pages/edl/enums/type_edl.dart';
 import 'package:clicar/app/presentation/pages/signature/bloc/accept_contract/accept_contract_bloc.dart';
-import 'package:clicar/app/presentation/pages/signature/bloc/signature_bloc.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/auth_listener_widget.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
@@ -12,8 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SignatureSuccessPage extends StatelessWidget {
-  const SignatureSuccessPage({Key? key}) : super(key: key);
+class EdlSignatureSuccessPage extends StatelessWidget {
+  const EdlSignatureSuccessPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +33,16 @@ class SignatureSuccessPage extends StatelessWidget {
                     vertical: 05.h(context).sp(context),
                     horizontal: 10.w(context).sp(context),
                   ),
-                  child: BlocBuilder<SignatureBloc, BaseState>(
+                  child: BlocBuilder<EdlBloc, BaseState>(
                     builder: (context, state) {
-                      final signatureBloc = context.read<SignatureBloc>();
+                      final edlBloc = context.read<EdlBloc>();
                       return Column(
                         children: [
-                          const TitleWithSeparator(title: "Signature"),
+                          TitleWithSeparator(
+                            title: edlBloc.typeEdl == TypeEdl.departure
+                                ? "Départ".toUpperCase()
+                                : "Retour".toUpperCase(),
+                          ),
                           const SizedBox(
                             height: CustomTheme.extraSpacer,
                           ),
@@ -49,21 +54,21 @@ class SignatureSuccessPage extends StatelessWidget {
                             height: CustomTheme.extraSpacer,
                           ),
                           Text(
-                            signatureBloc.contract.numberContrat ?? "-",
+                            edlBloc.contract.numberContrat ?? "-",
                             style: TextStyle(
                               color: CustomTheme.primaryColor,
                               fontSize: CustomTheme.headline1.sp(context),
                             ),
                           ),
                           Text(
-                            signatureBloc.contract.driver?.address ?? "-",
+                            edlBloc.contract.driver?.address ?? "-",
                             style: TextStyle(
                               color: CustomTheme.primaryColor,
                               fontSize: CustomTheme.headline1.sp(context),
                             ),
                           ),
                           Text(
-                            signatureBloc.contract.vehicle?.immat1 ?? "-",
+                            edlBloc.contract.vehicle?.immat1 ?? "-",
                             style: TextStyle(
                               color: CustomTheme.primaryColor,
                               fontSize: CustomTheme.headline1.sp(context),
@@ -91,31 +96,12 @@ class SignatureSuccessPage extends StatelessWidget {
                               return PrimaryButton(
                                 width: 40.w(context),
                                 onPressed: () async {
-                                  final bool? confirm = await showDialog<bool?>(
-                                    context: context,
-                                    barrierDismissible: false,
-                                    barrierColor: Colors.transparent,
-                                    builder: (BuildContext context) =>
-                                        const ConfirmDialog(
-                                      title:
-                                          "Voulez-vous continuer avec l'EDL ?",
-                                    ),
-                                  );
+                                  edlBloc.reset();
                                   acceptContractBloc.add(
                                       const AcceptContractEvent(
                                           isAccepted: false));
-                                  if (confirm == true) {
-                                    Navigator.of(context)
-                                        .pushNamedAndRemoveUntil(
-                                      AppRoutes.edlDeparture,
-                                      (route) =>
-                                          route.settings.name == AppRoutes.home,
-                                    );
-                                  } else {
-                                    Navigator.of(context)
-                                        .pushNamedAndRemoveUntil(
-                                            AppRoutes.home, (route) => false);
-                                  }
+                                  Navigator.of(context).pushNamedAndRemoveUntil(
+                                      AppRoutes.home, (route) => false);
                                 },
                                 child: Text(
                                   'Terminer',

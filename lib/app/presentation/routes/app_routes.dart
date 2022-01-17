@@ -10,6 +10,10 @@ import 'package:clicar/app/presentation/pages/edl/edl_photo_exterior_page.dart';
 import 'package:clicar/app/presentation/pages/edl/edl_photo_interior_page.dart';
 import 'package:clicar/app/presentation/pages/edl/edl_photo_list_page.dart';
 import 'package:clicar/app/presentation/pages/edl/edl_photo_picker_page.dart';
+import 'package:clicar/app/presentation/pages/edl/edl_signature_confirm_page.dart';
+import 'package:clicar/app/presentation/pages/edl/edl_signature_detail_page.dart';
+import 'package:clicar/app/presentation/pages/edl/edl_signature_draw_page.dart';
+import 'package:clicar/app/presentation/pages/edl/edl_signature_success_page.dart';
 import 'package:clicar/app/presentation/pages/edl/edl_summary_checklist.dart';
 import 'package:clicar/app/presentation/pages/edl/edl_summary_page.dart';
 import 'package:clicar/app/presentation/pages/edl/edl_retour_page.dart';
@@ -59,6 +63,10 @@ abstract class AppRoutes {
   static const edlPhotoInterior = '/edl-photo-interior';
   static const edlPhotoList = '/edl-photo-list';
   static const edlDefectsExteriorNote = '/edl-defects-exterior-note';
+  static const edlSignatureConfim = '/edl-signature-confim';
+  static const edlSignatureDraw = '/edl-signature-Draw';
+  static const edlSignatureDetail = '/edl-signature-detail';
+  static const edlSignatureSuccess = '/edl-signature-success';
 
   static Map<String, Widget Function(BuildContext)> routes = {
     AppRoutes.login: (BuildContext context) => LoginPage(),
@@ -90,7 +98,7 @@ abstract class AppRoutes {
     AppRoutes.edlDefectsExterior: (BuildContext context) =>
         const EdlDefectsExteriorPage(),
     AppRoutes.edlFuelLevel: (BuildContext context) => const EdlFuelLevelPage(),
-    AppRoutes.edlMileage: (BuildContext context) => const EdlMileagePage(),
+    AppRoutes.edlMileage: (BuildContext context) => EdlMileagePage(),
     AppRoutes.edlSummaryChecklist: (BuildContext context) =>
         const EdlSummaryChecklistPage(),
     AppRoutes.edlPhotoExterior: (BuildContext context) =>
@@ -99,6 +107,14 @@ abstract class AppRoutes {
         const EdlPhotoInteriorPage(),
     AppRoutes.edlPhotoList: (BuildContext context) => const EdlPhotoListPage(),
     AppRoutes.edlDefectsExteriorNote: (BuildContext context) =>
-        const EdlDefectsExteriorNotePage(),
+        EdlDefectsExteriorNotePage(),
+    AppRoutes.edlSignatureConfim: (BuildContext context) =>
+        const EdlSignatureConfimPage(),
+    AppRoutes.edlSignatureDraw: (BuildContext context) =>
+        EdlSignatureDrawPage(),
+    AppRoutes.edlSignatureDetail: (BuildContext context) =>
+        const EdlSignatureDetailPage(),
+    AppRoutes.edlSignatureSuccess: (BuildContext context) =>
+        const EdlSignatureSuccessPage(),
   };
 }

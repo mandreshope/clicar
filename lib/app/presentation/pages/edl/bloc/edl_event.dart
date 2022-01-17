@@ -113,43 +113,64 @@ class UploadPhotoDefectsExteriorEvent extends EdlEvent {
   List<Object> get props => [file];
 }
 
-class UploadDefectsExteriorEvent extends EdlEvent {
-  final List<File> files;
-
-  const UploadDefectsExteriorEvent({
-    required this.files,
-  });
-
-  @override
-  List<Object> get props => [files];
-}
-
 class EdlPhotoDefectsEvent extends EdlEvent {
   @override
   List<Object> get props => [];
 }
 
-class EdlMileageEvent extends EdlEvent {
+class EdlDepartureNoteEvent extends EdlEvent {
+  final String note;
+  const EdlDepartureNoteEvent({required this.note});
   @override
-  List<Object> get props => [];
+  List<Object> get props => [note];
+}
+
+class EdlRetourNoteEvent extends EdlEvent {
+  final String note;
+  const EdlRetourNoteEvent({required this.note});
+  @override
+  List<Object> get props => [note];
+}
+
+class EdlMileageEvent extends EdlEvent {
+  final int mileage;
+  const EdlMileageEvent({required this.mileage});
+  @override
+  List<Object> get props => [mileage];
 }
 
 class EdlFuelLevelEvent extends EdlEvent {
+  final int fuel;
+  const EdlFuelLevelEvent({required this.fuel});
   @override
-  List<Object> get props => [];
+  List<Object> get props => [fuel];
 }
 
-class SignEdlEvent extends EdlEvent {
-  final Contract contract;
+class EdlDepartureSignEvent extends EdlEvent {
   final bool isAccepted;
-  final UploadFile uploadFile;
+  const EdlDepartureSignEvent({required this.isAccepted});
+  @override
+  List<Object> get props => [isAccepted];
+}
 
-  const SignEdlEvent({
+class EdlRetourSignEvent extends EdlEvent {
+  final bool isAccepted;
+  const EdlRetourSignEvent({required this.isAccepted});
+  @override
+  List<Object> get props => [isAccepted];
+}
+
+class UploadSignatureFileEvent extends EdlEvent {
+  final Contract contract;
+  final File file;
+  final bool isAccepted;
+
+  const UploadSignatureFileEvent({
     required this.contract,
+    required this.file,
     required this.isAccepted,
-    required this.uploadFile,
   });
 
   @override
-  List<Object> get props => [contract, isAccepted, uploadFile];
+  List<Object> get props => [contract, file, isAccepted];
 }

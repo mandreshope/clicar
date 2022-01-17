@@ -1,13 +1,19 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:clicar/app/core/states/base_state.dart';
 import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
+import 'package:clicar/app/presentation/pages/edl/bloc/edl_bloc.dart';
 import 'package:clicar/app/presentation/pages/edl/cubit/draggable_cubit.dart';
 import 'package:clicar/app/presentation/pages/edl/enums/defects_exterior_note_args.dart';
+import 'package:clicar/app/presentation/pages/edl/enums/type_edl.dart';
 import 'package:clicar/app/presentation/pages/edl/widgets/drag.dart';
 import 'package:clicar/app/presentation/pages/signature/bloc/signature_bloc.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
+import 'package:clicar/app/presentation/widgets/circular_progress_widget.dart';
 import 'package:clicar/app/presentation/widgets/scaffold_body.dart';
 import 'package:clicar/app/presentation/widgets/snack_bar_widget.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +34,8 @@ class _EdlDefectsExteriorPageState extends State<EdlDefectsExteriorPage> {
 
   Offset _widgetOffset = Offset(0.0, 0.0);
 
+  final ValueNotifier imgByte = ValueNotifier<Uint8List?>(null);
+
   @override
   void initState() {
     super.initState();
@@ -44,9 +52,6 @@ class _EdlDefectsExteriorPageState extends State<EdlDefectsExteriorPage> {
 
     final Offset offset = renderBox.localToGlobal(Offset.zero);
     _widgetOffset = offset;
-    debugPrint('Offset: ${offset.dx}, ${offset.dy}');
-    debugPrint(
-        'Position: ${(offset.dx + size.width) / 2}, ${(offset.dy + size.height) / 2}');
   }
 
   @override
@@ -68,9 +73,26 @@ class _EdlDefectsExteriorPageState extends State<EdlDefectsExteriorPage> {
       body: ScaffoldBody(
         child: BlocProvider(
           create: (context) => DraggableCubit(),
-          child: BlocBuilder<SignatureBloc, BaseState>(
+          child: BlocBuilder<EdlBloc, BaseState>(
             buildWhen: (prevState, currState) {
-              if (currState.status == Status.error) {
+              if (currState is UploadPhotoDefectsExteriorSuccessState) {
+                SnackBarWidget.show(
+                  context: context,
+                  message: "Photos defects exterior uploaded",
+                  isError: false,
+                );
+                context.read<EdlBloc>().add(EdlPhotoDefectsEvent());
+              } else if (currState is EdlPhotoDefectsSuccessState) {
+                SnackBarWidget.show(
+                  context: context,
+                  message: "Contract updated",
+                  isError: false,
+                );
+                Navigator.of(context).pushNamed(
+                  AppRoutes.edlDefectsExteriorNote,
+                  arguments: DefectsExteriorNoteArgs.departure,
+                );
+              } else if (currState.status == Status.error) {
                 SnackBarWidget.show(
                     context: context,
                     message: currState.message,
@@ -79,6 +101,7 @@ class _EdlDefectsExteriorPageState extends State<EdlDefectsExteriorPage> {
               return prevState != currState;
             },
             builder: (context, state) {
+              final edlBloc = context.read<EdlBloc>();
               return SingleChildScrollView(
                 child: Column(
                   children: [
@@ -89,7 +112,11 @@ class _EdlDefectsExteriorPageState extends State<EdlDefectsExteriorPage> {
                       ),
                       child: Column(
                         children: [
-                          TitleWithSeparator(title: "Départ".toUpperCase()),
+                          TitleWithSeparator(
+                            title: edlBloc.typeEdl == TypeEdl.departure
+                                ? "Départ".toUpperCase()
+                                : "Retour".toUpperCase(),
+                          ),
                           const SizedBox(
                             height: 30,
                           ),
@@ -117,8 +144,8 @@ class _EdlDefectsExteriorPageState extends State<EdlDefectsExteriorPage> {
                                   Draggable(
                                     data: "${assetsImages}casse.png",
                                     feedback: SizedBox(
-                                      width: 30,
-                                      height: 30,
+                                      width: 20,
+                                      height: 20,
                                       child: Image.asset(
                                           "${assetsImages}casse.png"),
                                     ),
@@ -146,8 +173,8 @@ class _EdlDefectsExteriorPageState extends State<EdlDefectsExteriorPage> {
                                   Draggable(
                                     data: "${assetsImages}rayure.png",
                                     feedback: SizedBox(
-                                      width: 30,
-                                      height: 30,
+                                      width: 20,
+                                      height: 20,
                                       child: Image.asset(
                                           "${assetsImages}rayure.png"),
                                     ),
@@ -175,8 +202,8 @@ class _EdlDefectsExteriorPageState extends State<EdlDefectsExteriorPage> {
                                   Draggable(
                                     data: "${assetsImages}choc.png",
                                     feedback: SizedBox(
-                                      width: 30,
-                                      height: 30,
+                                      width: 20,
+                                      height: 20,
                                       child: Image.asset(
                                           "${assetsImages}choc.png"),
                                     ),
@@ -240,8 +267,8 @@ class _EdlDefectsExteriorPageState extends State<EdlDefectsExteriorPage> {
                                               left: e.offset.dx,
                                               top: e.offset.dy,
                                               child: SizedBox(
-                                                width: 30.0,
-                                                height: 30.0,
+                                                width: 20.0,
+                                                height: 20.0,
                                                 child: Image.asset(
                                                   e.url,
                                                 ),
@@ -259,19 +286,42 @@ class _EdlDefectsExteriorPageState extends State<EdlDefectsExteriorPage> {
                             height: CustomTheme.spacer,
                           ),
 
-                          PrimaryButton(
-                            width: 40.w(context),
-                            onPressed: () {
-                              Navigator.of(context).pushNamed(
-                                AppRoutes.edlDefectsExteriorNote,
-                                arguments: DefectsExteriorNoteArgs.departure,
-                              );
-                            },
-                            child: Text(
-                              'Suivant'.toUpperCase(),
-                              style: TextStyle(
-                                fontSize: CustomTheme.button.sp(context),
+                          Visibility(
+                            visible: state.status == Status.loading,
+                            child: PrimaryButton(
+                              height: 50.0,
+                              width: 40.w(context),
+                              child: const CircularProgress(
                                 color: Colors.white,
+                              ),
+                            ),
+                            replacement: PrimaryButton(
+                              width: 40.w(context),
+                              onPressed: () async {
+                                imgByte.value =
+                                    await screenshotController.capture();
+
+                                if (imgByte.value != null) {
+                                  ///convert pngBytes to file
+                                  final path = await localPath;
+                                  File file =
+                                      File('$path/edl_defects_exterior.png');
+                                  file.writeAsBytesSync(
+                                      List.from(imgByte.value!));
+
+                                  edlBloc.add(
+                                    UploadPhotoDefectsExteriorEvent(
+                                      file: file,
+                                    ),
+                                  );
+                                }
+                              },
+                              child: Text(
+                                'Suivant'.toUpperCase(),
+                                style: TextStyle(
+                                  fontSize: CustomTheme.button.sp(context),
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ),

@@ -7,6 +7,7 @@ import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
 import 'package:clicar/app/presentation/pages/account/bloc/account/account_bloc.dart';
 import 'package:clicar/app/presentation/pages/edl/bloc/edl_bloc.dart';
+import 'package:clicar/app/presentation/pages/edl/enums/type_edl.dart';
 import 'package:clicar/app/presentation/pages/edl/enums/type_photo_args.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
@@ -64,7 +65,11 @@ class _EdlPhotoExteriorPageState extends State<EdlPhotoExteriorPage> {
                     ),
                     child: Column(
                       children: [
-                        TitleWithSeparator(title: "Départ".toUpperCase()),
+                        TitleWithSeparator(
+                          title: edlBloc.typeEdl == TypeEdl.departure
+                              ? "Départ".toUpperCase()
+                              : "Retour".toUpperCase(),
+                        ),
                         /*Slider(
                             min: 0.0,
                             max: 2 * math.pi,

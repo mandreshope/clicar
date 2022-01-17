@@ -49,13 +49,6 @@ class UploadPhotosInteriorSuccess extends BaseState {
   }) : super(status: status, message: message);
 }
 
-class UploadPhotoDefectsExteriorSuccess extends BaseState {
-  const UploadPhotoDefectsExteriorSuccess({
-    required Status status,
-    required String message,
-  }) : super(status: status, message: message);
-}
-
 class AddFileOfCameraPosState extends BaseState {
   const AddFileOfCameraPosState({
     required Status status,
@@ -78,6 +71,60 @@ class SelectCameraPosState extends BaseState {
 
 class EdlPhotosSuccessState extends BaseState {
   const EdlPhotosSuccessState({required Status status, required String message})
+      : super(
+          status: status,
+          message: message,
+        );
+}
+
+class EdlPhotoDefectsSuccessState extends BaseState {
+  const EdlPhotoDefectsSuccessState(
+      {required Status status, required String message})
+      : super(
+          status: status,
+          message: message,
+        );
+}
+
+class EdlMileageSuccessState extends BaseState {
+  const EdlMileageSuccessState(
+      {required Status status, required String message})
+      : super(
+          status: status,
+          message: message,
+        );
+}
+
+class EdlDepartureNoteSuccessState extends BaseState {
+  const EdlDepartureNoteSuccessState(
+      {required Status status, required String message})
+      : super(
+          status: status,
+          message: message,
+        );
+}
+
+class EdlFuelLevelSuccessState extends BaseState {
+  const EdlFuelLevelSuccessState(
+      {required Status status, required String message})
+      : super(
+          status: status,
+          message: message,
+        );
+}
+
+class EdlRetourNoteSuccessState extends BaseState {
+  const EdlRetourNoteSuccessState(
+      {required Status status, required String message})
+      : super(
+          status: status,
+          message: message,
+        );
+}
+
+class UploadPhotoDefectsExteriorSuccessState extends BaseState {
+  const UploadPhotoDefectsExteriorSuccessState(
+      {required Status status, required String message})
       : super(
           status: status,
           message: message,

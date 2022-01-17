@@ -4,6 +4,7 @@ import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
 import 'package:clicar/app/presentation/pages/edl/bloc/edl_bloc.dart';
 import 'package:clicar/app/presentation/pages/edl/cubit/gauge_cubit.dart';
+import 'package:clicar/app/presentation/pages/edl/enums/type_edl.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
 import 'package:clicar/app/presentation/widgets/scaffold_body.dart';
@@ -45,6 +46,7 @@ class EdlSummaryChecklistPage extends StatelessWidget {
               return prevState != currState;
             },
             builder: (context, state) {
+              final edlBloc = context.read<EdlBloc>();
               return SingleChildScrollView(
                 child: Column(
                   children: [
@@ -55,7 +57,11 @@ class EdlSummaryChecklistPage extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
-                          TitleWithSeparator(title: "Départ".toUpperCase()),
+                          TitleWithSeparator(
+                            title: edlBloc.typeEdl == TypeEdl.departure
+                                ? "Départ".toUpperCase()
+                                : "Retour".toUpperCase(),
+                          ),
                           const SizedBox(
                             height: 30,
                           ),
@@ -193,10 +199,17 @@ class EdlSummaryChecklistPage extends StatelessWidget {
                                     color: CustomTheme.primaryColor,
                                   ),
                                 ),
-                                const Icon(
-                                  Icons.radio_button_off,
-                                  size: 30.0,
-                                  color: CustomTheme.secondaryColor,
+                                Visibility(
+                                  visible: edlBloc.contract.signature == null,
+                                  child: const Icon(
+                                    Icons.radio_button_off,
+                                    size: 30.0,
+                                    color: CustomTheme.secondaryColor,
+                                  ),
+                                  replacement: Image.asset(
+                                    "${assetsImages}success.png",
+                                    width: 30.0,
+                                  ),
                                 )
                               ],
                             ),
@@ -208,7 +221,7 @@ class EdlSummaryChecklistPage extends StatelessWidget {
                             width: 40.w(context),
                             onPressed: () {
                               Navigator.of(context)
-                                  .pushNamed(AppRoutes.signatureConfirm);
+                                  .pushNamed(AppRoutes.edlSignatureConfim);
                             },
                             child: Text(
                               'Signer'.toUpperCase(),

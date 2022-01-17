@@ -2,6 +2,7 @@ import 'package:clicar/app/core/states/base_state.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
 import 'package:clicar/app/presentation/pages/edl/bloc/edl_bloc.dart';
+import 'package:clicar/app/presentation/pages/edl/enums/type_edl.dart';
 import 'package:clicar/app/presentation/pages/signature/bloc/signature_bloc.dart';
 import 'package:clicar/app/presentation/widgets/contract_detail_card.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
@@ -27,7 +28,7 @@ class EdlSummaryPage extends StatelessWidget {
               return prevState != currState;
             },
             builder: (context, state) {
-              final departureBloc = context.read<EdlBloc>();
+              final edlBloc = context.read<EdlBloc>();
               return DraggableScrollableSheet(
                 initialChildSize: 1.0,
                 minChildSize: 1.0,
@@ -53,7 +54,11 @@ class EdlSummaryPage extends StatelessWidget {
                             ),
                             child: Column(
                               children: [
-                                const TitleWithSeparator(title: "Signature"),
+                                TitleWithSeparator(
+                                  title: edlBloc.typeEdl == TypeEdl.departure
+                                      ? "Départ".toUpperCase()
+                                      : "Retour".toUpperCase(),
+                                ),
                                 const SizedBox(
                                   height: 30,
                                 ),
@@ -62,8 +67,7 @@ class EdlSummaryPage extends StatelessWidget {
                                   child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      departureBloc.contract.numberContrat ??
-                                          "-",
+                                      edlBloc.contract.numberContrat ?? "-",
                                       style: TextStyle(
                                         fontSize: CustomTheme
                                             .mainBtnTextStyle.fontSize
@@ -89,17 +93,14 @@ class EdlSummaryPage extends StatelessWidget {
                                 ),
                                 const Divider(),
                                 ContractDetailCard(
-                                  contract:
-                                      departureBloc.contract.numberContrat,
-                                  intutile:
-                                      departureBloc.contract.driver?.address,
-                                  vehicle: departureBloc.contract.vehicle?.mark,
-                                  typeLocation: departureBloc
+                                  contract: edlBloc.contract.numberContrat,
+                                  intutile: edlBloc.contract.driver?.address,
+                                  vehicle: edlBloc.contract.vehicle?.mark,
+                                  typeLocation: edlBloc
                                       .contract.rate?.rent?.first.locationType,
-                                  departureDate: departureBloc
-                                      .contract.info?.departureDate,
-                                  returnDate:
-                                      departureBloc.contract.info?.returnDate,
+                                  departureDate:
+                                      edlBloc.contract.info?.departureDate,
+                                  returnDate: edlBloc.contract.info?.returnDate,
                                 ),
                                 const SizedBox(
                                   height: CustomTheme.spacer,

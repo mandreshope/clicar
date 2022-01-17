@@ -3,6 +3,7 @@ import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
 import 'package:clicar/app/presentation/pages/edl/bloc/edl_bloc.dart';
+import 'package:clicar/app/presentation/pages/edl/enums/type_edl.dart';
 import 'package:clicar/app/presentation/pages/edl/enums/type_photo_args.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
 import 'package:clicar/app/presentation/widgets/circular_progress_widget.dart';
@@ -74,7 +75,11 @@ class EdlPhotoListPage extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
-                        TitleWithSeparator(title: "Départ".toUpperCase()),
+                        TitleWithSeparator(
+                          title: edlBloc.typeEdl == TypeEdl.departure
+                              ? "Départ".toUpperCase()
+                              : "Retour".toUpperCase(),
+                        ),
                         const SizedBox(
                           height: 30,
                         ),

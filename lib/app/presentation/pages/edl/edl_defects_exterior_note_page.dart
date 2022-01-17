@@ -1,9 +1,12 @@
+import 'dart:typed_data';
+
 import 'package:clicar/app/core/states/base_state.dart';
 import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
 import 'package:clicar/app/presentation/pages/edl/bloc/edl_bloc.dart';
 import 'package:clicar/app/presentation/pages/edl/enums/defects_exterior_note_args.dart';
+import 'package:clicar/app/presentation/pages/edl/enums/type_edl.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
 import 'package:clicar/app/presentation/widgets/circular_progress_widget.dart';
@@ -13,7 +16,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EdlDefectsExteriorNotePage extends StatelessWidget {
-  const EdlDefectsExteriorNotePage({Key? key}) : super(key: key);
+  EdlDefectsExteriorNotePage({Key? key}) : super(key: key);
+
+  final TextEditingController departureNote = TextEditingController();
+  final TextEditingController retourNote = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -36,23 +42,21 @@ class EdlDefectsExteriorNotePage extends StatelessWidget {
       body: ScaffoldBody(
         child: BlocBuilder<EdlBloc, BaseState>(
           buildWhen: (prevState, currState) {
-            if (currState is UploadPhotosExteriorSuccess) {
+            if (currState is EdlDepartureNoteSuccessState) {
               SnackBarWidget.show(
                 context: context,
-                message: "Photos exterior uploaded",
+                message: "Les remarques sont envoyées",
                 isError: false,
               );
-              Navigator.of(context).pop();
-              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed(AppRoutes.edlFuelLevel);
             }
-            if (currState is UploadPhotosInteriorSuccess) {
+            if (currState is EdlRetourNoteSuccessState) {
               SnackBarWidget.show(
                 context: context,
-                message: "Photos interior uploaded",
+                message: "Les remarques sont envoyées",
                 isError: false,
               );
-              Navigator.of(context).pop();
-              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed(AppRoutes.edlFuelLevel);
             } else if (currState.status == Status.error) {
               SnackBarWidget.show(
                   context: context, message: currState.message, isError: true);
@@ -71,7 +75,11 @@ class EdlDefectsExteriorNotePage extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
-                        TitleWithSeparator(title: "Départ".toUpperCase()),
+                        TitleWithSeparator(
+                          title: edlBloc.typeEdl == TypeEdl.departure
+                              ? "Départ".toUpperCase()
+                              : "Retour".toUpperCase(),
+                        ),
                         const SizedBox(
                           height: 30,
                         ),
@@ -79,7 +87,7 @@ class EdlDefectsExteriorNotePage extends StatelessWidget {
                         SecondaryButton(
                           width: double.infinity,
                           child: Text(
-                            "photos extérieures".toUpperCase(),
+                            "défauts extérieures".toUpperCase(),
                             style: TextStyle(
                               fontSize: CustomTheme.mainBtnTextStyle.fontSize
                                   ?.sp(context),
@@ -96,6 +104,7 @@ class EdlDefectsExteriorNotePage extends StatelessWidget {
                           textInputType: TextInputType.multiline,
                           labelText: "Remarques départ",
                           maxLines: 5,
+                          controller: departureNote,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'note obligatoire';
@@ -107,21 +116,26 @@ class EdlDefectsExteriorNotePage extends StatelessWidget {
                           height: CustomTheme.spacer,
                         ),
 
-                        ///note retour
-                        TextFieldFilled(
-                          textInputType: TextInputType.multiline,
-                          labelText: "Remarques retour",
-                          maxLines: 5,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Remarques retour obligatoire';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(
-                          height: CustomTheme.spacer,
-                        ),
+                        if (defectsExteriorNoteArgs ==
+                            DefectsExteriorNoteArgs.retour) ...[
+                          ///note retour
+                          TextFieldFilled(
+                            textInputType: TextInputType.multiline,
+                            labelText: "Remarques retour",
+                            maxLines: 5,
+                            controller: retourNote,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Remarques retour obligatoire';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(
+                            height: CustomTheme.spacer,
+                          ),
+                        ],
+
                         Visibility(
                           visible: state.status == Status.loading,
                           child: PrimaryButton(
@@ -133,12 +147,18 @@ class EdlDefectsExteriorNotePage extends StatelessWidget {
                           ),
                           replacement: PrimaryButton(
                             width: 40.w(context),
-                            onPressed: () {
-                              Navigator.of(context)
-                                  .pushNamed(AppRoutes.edlFuelLevel);
+                            onPressed: () async {
+                              if (defectsExteriorNoteArgs ==
+                                  DefectsExteriorNoteArgs.departure) {
+                                edlBloc.add(EdlDepartureNoteEvent(
+                                    note: departureNote.text));
+                              } else {
+                                edlBloc.add(EdlRetourNoteEvent(
+                                    note: departureNote.text));
+                              }
                             },
                             child: Text(
-                              'Valider'.toUpperCase(),
+                              'Suivant'.toUpperCase(),
                               style: TextStyle(
                                 fontSize: CustomTheme.button.sp(context),
                                 color: Colors.white,

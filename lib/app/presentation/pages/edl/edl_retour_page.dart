@@ -1,7 +1,8 @@
 import 'package:clicar/app/core/states/base_state.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
-import 'package:clicar/app/presentation/pages/signature/bloc/signature_bloc.dart';
+import 'package:clicar/app/presentation/pages/edl/bloc/edl_bloc.dart';
+import 'package:clicar/app/presentation/pages/edl/enums/type_edl.dart';
 import 'package:clicar/app/presentation/widgets/search_contract_result.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/auth_listener_widget.dart';
@@ -13,11 +14,25 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class EdlRetourPage extends StatelessWidget {
-  EdlRetourPage({Key? key}) : super(key: key);
+class EdlRetourPage extends StatefulWidget {
+  const EdlRetourPage({Key? key}) : super(key: key);
 
+  @override
+  State<EdlRetourPage> createState() => _EdlRetourPageState();
+}
+
+class _EdlRetourPageState extends State<EdlRetourPage> {
   final TextEditingController search = TextEditingController();
+
   final ExpandableController expandableController = ExpandableController();
+
+  @override
+  void initState() {
+    super.initState();
+    final edlBloc = context.read<EdlBloc>();
+    edlBloc.typeEdl = TypeEdl.retour;
+  }
+
   @override
   Widget build(BuildContext context) {
     return AuthListenerWidget(
@@ -36,7 +51,7 @@ class EdlRetourPage extends StatelessWidget {
           ],
         ),
         body: ScaffoldBody(
-          child: BlocBuilder<SignatureBloc, BaseState>(
+          child: BlocBuilder<EdlBloc, BaseState>(
             buildWhen: (prevState, currState) {
               if (currState.status == Status.error) {
                 SnackBarWidget.show(
@@ -47,6 +62,7 @@ class EdlRetourPage extends StatelessWidget {
               return prevState != currState;
             },
             builder: (context, state) {
+              final edlBloc = context.read<EdlBloc>();
               return SingleChildScrollView(
                 child: Column(
                   children: [
@@ -57,7 +73,7 @@ class EdlRetourPage extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
-                          const TitleWithSeparator(title: "Signature"),
+                          TitleWithSeparator(title: "Retour".toUpperCase()),
                           const SizedBox(
                             height: 30,
                           ),
@@ -85,7 +101,8 @@ class EdlRetourPage extends StatelessWidget {
                                       header: Padding(
                                           padding: const EdgeInsets.all(20),
                                           child: Text(
-                                            'Contrats à signer'.toUpperCase(),
+                                            'Etats des lieux en attente'
+                                                .toUpperCase(),
                                             style: CustomTheme.mainBtnTextStyle
                                                 .copyWith(
                                               color: CustomTheme.primaryColor,
@@ -102,7 +119,7 @@ class EdlRetourPage extends StatelessWidget {
                                           SearchTextFieldUnderlined(
                                             controller: search,
                                             onChanged: (v) {
-                                              context.read<SignatureBloc>().add(
+                                              context.read<EdlBloc>().add(
                                                   SearchContractEvent(
                                                       keyWord: search.text));
                                             },
@@ -132,13 +149,10 @@ class EdlRetourPage extends StatelessWidget {
                                                             search.clear();
                                                             expandableController
                                                                 .toggle();
-                                                            final signatureBloc =
-                                                                context.read<
-                                                                    SignatureBloc>();
-                                                            signatureBloc
-                                                                    .contract =
+
+                                                            edlBloc.contract =
                                                                 contract;
-                                                            signatureBloc.add(
+                                                            edlBloc.add(
                                                                 SelectContractEvent(
                                                               contract:
                                                                   contract,
@@ -146,8 +160,10 @@ class EdlRetourPage extends StatelessWidget {
 
                                                             Navigator.of(
                                                                     context)
-                                                                .pushNamed(AppRoutes
-                                                                    .signatureSummary);
+                                                                .pushNamed(
+                                                              AppRoutes
+                                                                  .edlSummary,
+                                                            );
                                                           },
                                                           contract: contract))
                                                   .toList(),

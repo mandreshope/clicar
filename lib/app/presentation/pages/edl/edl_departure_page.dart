@@ -2,6 +2,7 @@ import 'package:clicar/app/core/states/base_state.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
 import 'package:clicar/app/presentation/pages/edl/bloc/edl_bloc.dart';
+import 'package:clicar/app/presentation/pages/edl/enums/type_edl.dart';
 import 'package:clicar/app/presentation/widgets/search_contract_result.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/auth_listener_widget.dart';
@@ -13,11 +14,25 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class EdlDeparturePage extends StatelessWidget {
-  EdlDeparturePage({Key? key}) : super(key: key);
+class EdlDeparturePage extends StatefulWidget {
+  const EdlDeparturePage({Key? key}) : super(key: key);
 
+  @override
+  State<EdlDeparturePage> createState() => _EdlDeparturePageState();
+}
+
+class _EdlDeparturePageState extends State<EdlDeparturePage> {
   final TextEditingController search = TextEditingController();
+
   final ExpandableController expandableController = ExpandableController();
+
+  @override
+  void initState() {
+    super.initState();
+    final edlBloc = context.read<EdlBloc>();
+    edlBloc.typeEdl = TypeEdl.departure;
+  }
+
   @override
   Widget build(BuildContext context) {
     return AuthListenerWidget(
@@ -47,6 +62,7 @@ class EdlDeparturePage extends StatelessWidget {
               return prevState != currState;
             },
             builder: (context, state) {
+              final edlBloc = context.read<EdlBloc>();
               return SingleChildScrollView(
                 child: Column(
                   children: [
@@ -57,7 +73,11 @@ class EdlDeparturePage extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
-                          TitleWithSeparator(title: "Départ".toUpperCase()),
+                          TitleWithSeparator(
+                            title: edlBloc.typeEdl == TypeEdl.departure
+                                ? "Départ".toUpperCase()
+                                : "Retour".toUpperCase(),
+                          ),
                           const SizedBox(
                             height: 30,
                           ),
@@ -133,13 +153,10 @@ class EdlDeparturePage extends StatelessWidget {
                                                             search.clear();
                                                             expandableController
                                                                 .toggle();
-                                                            final signatureBloc =
-                                                                context.read<
-                                                                    EdlBloc>();
-                                                            signatureBloc
-                                                                    .contract =
+
+                                                            edlBloc.contract =
                                                                 contract;
-                                                            signatureBloc.add(
+                                                            edlBloc.add(
                                                                 SelectContractEvent(
                                                               contract:
                                                                   contract,

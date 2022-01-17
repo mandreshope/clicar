@@ -54,6 +54,9 @@ class AddFileOfCameraPosState extends BaseState {
     required Status status,
     required String message,
   }) : super(status: status, message: message);
+
+  @override
+  List<Object> get props => [status, message];
 }
 
 class SelectCameraPosState extends BaseState {

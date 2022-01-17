@@ -202,7 +202,7 @@ class _EdlPhotoExteriorPageState extends State<EdlPhotoExteriorPage> {
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
-                                        children: edlBloc.cameraPosList
+                                        children: edlBloc.cameraPosList.reversed
                                             .map(
                                               (e) => e.alignment ==
                                                       Alignment.bottomCenter
@@ -266,6 +266,7 @@ class _EdlPhotoExteriorPageState extends State<EdlPhotoExteriorPage> {
                               child: Center(
                                 child: PrimaryButton(
                                   onPressed: () async {
+                                    final ImagePicker _picker = ImagePicker();
                                     if (edlBloc.cameraPosList
                                         .where((e) => e.hasPhoto == false)
                                         .isEmpty) {
@@ -275,10 +276,48 @@ class _EdlPhotoExteriorPageState extends State<EdlPhotoExteriorPage> {
                                       );
                                       return;
                                     }
-                                    final ImagePicker _picker = ImagePicker();
-                                    // Pick an image
-                                    final XFile? image = await _picker
-                                        .pickImage(source: ImageSource.gallery);
+                                    final XFile? image =
+                                        await showDialog<XFile?>(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      barrierColor: Colors.transparent,
+                                      builder: (BuildContext context) =>
+                                          SimpleDialog(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            CustomTheme.defaultBorderRadius,
+                                          ),
+                                        ),
+                                        children: [
+                                          ListTile(
+                                            onTap: () async {
+                                              // Pick an image
+                                              final XFile? image =
+                                                  await _picker.pickImage(
+                                                source: ImageSource.gallery,
+                                              );
+                                              Navigator.of(context).pop(image);
+                                            },
+                                            title: const Text(
+                                              "Importer une photo",
+                                            ),
+                                          ),
+                                          ListTile(
+                                            onTap: () async {
+                                              // Pick an image
+                                              final XFile? image =
+                                                  await _picker.pickImage(
+                                                      source:
+                                                          ImageSource.camera);
+                                              Navigator.of(context).pop(image);
+                                            },
+                                            title: const Text(
+                                                "Capturer une photo"),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+
                                     if (image != null) {
                                       edlBloc.add(AddFileOfCameraPosEvent(
                                           file: File(image.path)));

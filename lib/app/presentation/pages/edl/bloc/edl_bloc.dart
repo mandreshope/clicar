@@ -42,7 +42,7 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
   List<UploadFile> uploadPhotosInterior = [];
   UploadFile uploadDefectsExterior = const UploadFile();
 
-  int currentCameraPos = 3;
+  int currentCameraPos = 0;
   int currentCameraInteriorPos = 0;
 
   List<CameraPos> cameraInteriorPosList = [
@@ -66,6 +66,11 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
 
   List<CameraPos> cameraPosList = [
     CameraPos(
+      rotation: math.pi * 2,
+      isActive: true,
+      alignment: Alignment.centerLeft,
+    ),
+    CameraPos(
       rotation: math.pi / 3,
       isActive: false,
       alignment: Alignment.topCenter,
@@ -81,17 +86,12 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
       alignment: Alignment.topCenter,
     ),
     CameraPos(
-      rotation: math.pi * 2,
-      isActive: true,
-      alignment: Alignment.centerLeft,
-    ),
-    CameraPos(
       rotation: math.pi,
       isActive: false,
       alignment: Alignment.centerRight,
     ),
     CameraPos(
-      rotation: 5.4,
+      rotation: 4.1,
       isActive: false,
       alignment: Alignment.bottomCenter,
     ),
@@ -101,7 +101,7 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
       alignment: Alignment.bottomCenter,
     ),
     CameraPos(
-      rotation: 4.1,
+      rotation: 5.4,
       isActive: false,
       alignment: Alignment.bottomCenter,
     ),
@@ -379,10 +379,17 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
   void _addFileOfCameraPosEvent(AddFileOfCameraPosEvent event, Emitter emit) {
     cameraPosList[currentCameraPos].file = event.file;
     cameraPosList[currentCameraPos].hasPhoto = true;
+    if (currentCameraPos < (cameraPosList.length - 1)) {
+      cameraPosList[currentCameraPos + 1].isActive = true;
+    }
+    if (currentCameraPos < (cameraPosList.length - 1)) {
+      currentCameraPos++;
+    }
     emit(
-      const AddFileOfCameraPosState(
+      AddFileOfCameraPosState(
         status: Status.success,
-        message: "reload",
+        message:
+            "$currentCameraPos ${cameraPosList[currentCameraPos].file} reload",
       ),
     );
   }

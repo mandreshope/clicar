@@ -398,10 +398,17 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
       AddFileOfCameraInteriorPosEvent event, Emitter emit) {
     cameraInteriorPosList[currentCameraInteriorPos].file = event.file;
     cameraInteriorPosList[currentCameraInteriorPos].hasPhoto = true;
+    if (currentCameraInteriorPos < (cameraInteriorPosList.length - 1)) {
+      cameraInteriorPosList[currentCameraInteriorPos + 1].isActive = true;
+    }
+    if (currentCameraInteriorPos < (cameraInteriorPosList.length - 1)) {
+      currentCameraInteriorPos++;
+    }
     emit(
-      const AddFileOfCameraPosState(
+      AddFileOfCameraPosState(
         status: Status.success,
-        message: "reload",
+        message:
+            "$currentCameraInteriorPos ${cameraInteriorPosList[currentCameraInteriorPos].file} reload",
       ),
     );
   }

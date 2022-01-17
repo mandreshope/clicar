@@ -140,7 +140,7 @@ class EdlPhotoPickerPage extends StatelessWidget {
                         PrimaryButton(
                           width: 40.w(context),
                           onPressed: () {
-                            /*Navigator.of(context)
+                            /*  Navigator.of(context)
                                 .pushNamed(AppRoutes.edlDefectsExterior);*/
                             if (edlBloc.uploadPhotosExterior.isNotEmpty &&
                                 edlBloc.uploadPhotosInterior.isNotEmpty) {

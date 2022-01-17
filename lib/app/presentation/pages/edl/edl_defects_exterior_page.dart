@@ -7,7 +7,6 @@ import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
 import 'package:clicar/app/presentation/pages/edl/bloc/edl_bloc.dart';
 import 'package:clicar/app/presentation/pages/edl/cubit/draggable_cubit.dart';
-import 'package:clicar/app/presentation/pages/edl/enums/defects_exterior_note_args.dart';
 import 'package:clicar/app/presentation/pages/edl/enums/type_edl.dart';
 import 'package:clicar/app/presentation/pages/edl/widgets/drag.dart';
 import 'package:clicar/app/presentation/pages/signature/bloc/signature_bloc.dart';
@@ -90,7 +89,6 @@ class _EdlDefectsExteriorPageState extends State<EdlDefectsExteriorPage> {
                 );
                 Navigator.of(context).pushNamed(
                   AppRoutes.edlDefectsExteriorNote,
-                  arguments: DefectsExteriorNoteArgs.departure,
                 );
               } else if (currState.status == Status.error) {
                 SnackBarWidget.show(

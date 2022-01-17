@@ -5,8 +5,10 @@ abstract class GaugeState extends Equatable {
 }
 
 class GaugeInitial extends GaugeState {
+  final int value;
+  const GaugeInitial({required this.value});
   @override
-  List<Object> get props => [];
+  List<Object> get props => [value];
 }
 
 class GaugeChangeState extends GaugeState {

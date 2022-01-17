@@ -20,6 +20,7 @@ class EdlMileagePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final edlBloc = context.read<EdlBloc>();
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -35,7 +36,9 @@ class EdlMileagePage extends StatelessWidget {
         ],
       ),
       body: BlocProvider(
-        create: (context) => GaugeCubit(),
+        create: (context) => GaugeCubit(
+            gaugeInitial: GaugeInitial(
+                value: edlBloc.contract.conditionAtStart?.km ?? 0)),
         child: ScaffoldBody(
           child: BlocBuilder<EdlBloc, BaseState>(
             buildWhen: (prevState, currState) {
@@ -55,7 +58,6 @@ class EdlMileagePage extends StatelessWidget {
               return prevState != currState;
             },
             builder: (context, state) {
-              final edlBloc = context.read<EdlBloc>();
               return SingleChildScrollView(
                 child: Column(
                   children: [

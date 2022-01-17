@@ -8,6 +8,8 @@ class ConditionAtEnd extends Equatable {
   final String? comment;
   final int? km;
   final int? fuelQuantity;
+  final String? signature;
+  final String? signatureDate;
 
   const ConditionAtEnd({
     this.conditions,
@@ -17,6 +19,8 @@ class ConditionAtEnd extends Equatable {
     this.comment,
     this.km,
     this.fuelQuantity,
+    this.signature,
+    this.signatureDate,
   });
 
   @override
@@ -28,5 +32,7 @@ class ConditionAtEnd extends Equatable {
         comment,
         km,
         fuelQuantity,
+        signature,
+        signatureDate,
       ];
 }

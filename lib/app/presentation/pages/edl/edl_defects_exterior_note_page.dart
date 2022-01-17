@@ -5,7 +5,6 @@ import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
 import 'package:clicar/app/presentation/pages/edl/bloc/edl_bloc.dart';
-import 'package:clicar/app/presentation/pages/edl/enums/defects_exterior_note_args.dart';
 import 'package:clicar/app/presentation/pages/edl/enums/type_edl.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
@@ -15,16 +14,29 @@ import 'package:clicar/app/presentation/widgets/snack_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class EdlDefectsExteriorNotePage extends StatelessWidget {
-  EdlDefectsExteriorNotePage({Key? key}) : super(key: key);
+class EdlDefectsExteriorNotePage extends StatefulWidget {
+  const EdlDefectsExteriorNotePage({Key? key}) : super(key: key);
 
+  @override
+  State<EdlDefectsExteriorNotePage> createState() =>
+      _EdlDefectsExteriorNotePageState();
+}
+
+class _EdlDefectsExteriorNotePageState
+    extends State<EdlDefectsExteriorNotePage> {
   final TextEditingController departureNote = TextEditingController();
+
   final TextEditingController retourNote = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    final edlBloc = context.read<EdlBloc>();
+    departureNote.text = edlBloc.contract.conditionAtStart?.comment ?? "";
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final defectsExteriorNoteArgs =
-        navigatorArgs(context) as DefectsExteriorNoteArgs;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -116,8 +128,7 @@ class EdlDefectsExteriorNotePage extends StatelessWidget {
                           height: CustomTheme.spacer,
                         ),
 
-                        if (defectsExteriorNoteArgs ==
-                            DefectsExteriorNoteArgs.retour) ...[
+                        if (edlBloc.typeEdl == TypeEdl.retour) ...[
                           ///note retour
                           TextFieldFilled(
                             textInputType: TextInputType.multiline,
@@ -148,13 +159,12 @@ class EdlDefectsExteriorNotePage extends StatelessWidget {
                           replacement: PrimaryButton(
                             width: 40.w(context),
                             onPressed: () async {
-                              if (defectsExteriorNoteArgs ==
-                                  DefectsExteriorNoteArgs.departure) {
+                              if (edlBloc.typeEdl == TypeEdl.departure) {
                                 edlBloc.add(EdlDepartureNoteEvent(
                                     note: departureNote.text));
                               } else {
-                                edlBloc.add(EdlRetourNoteEvent(
-                                    note: departureNote.text));
+                                edlBloc.add(
+                                    EdlRetourNoteEvent(note: retourNote.text));
                               }
                             },
                             child: Text(

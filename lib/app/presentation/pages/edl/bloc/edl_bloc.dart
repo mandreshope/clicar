@@ -334,6 +334,7 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
     );
   }
 
+  ///add contract photos exterior & interior
   Future<void> _edlPhotosEvent(EdlPhotosEvent event, Emitter emit) async {
     emit(const BaseState(status: Status.loading, message: 'loading ⌛'));
     try {
@@ -361,7 +362,9 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         //"fuelQuantity": "15",
         //"faults": ["Défaut1", "Défaut2"]
       };
-      final result = await edlDepartureUseCase(EdlDepartureParams(data: data));
+      final result = typeEdl == TypeEdl.departure
+          ? await edlDepartureUseCase(EdlDepartureParams(data: data))
+          : await edlRetourUseCase(EdlRetourParams(data: data));
       result.fold(
         (failure) {
           if (failure is NoConnectionFailure) {
@@ -405,13 +408,11 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
       final data = {
         "numberContrat": "${contract.numberContrat}",
         "conditionDate": DateTime.now().formatDatePayload,
-        // "conditions": [imgUrl1, imgUrl2],
-        //"comment": "quelconque commentaire",
-        //"km": "2000",
-        //"fuelQuantity": "15",
         "faults": [urlPhoto],
       };
-      final result = await edlDepartureUseCase(EdlDepartureParams(data: data));
+      final result = typeEdl == TypeEdl.departure
+          ? await edlDepartureUseCase(EdlDepartureParams(data: data))
+          : await edlRetourUseCase(EdlRetourParams(data: data));
       result.fold(
         (failure) {
           if (failure is NoConnectionFailure) {
@@ -447,13 +448,11 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
       final data = {
         "numberContrat": "${contract.numberContrat}",
         "conditionDate": DateTime.now().formatDatePayload,
-        // "conditions": [imgUrl1, imgUrl2],
-        //"comment": "quelconque commentaire",
-        //"km": "2000",
         "fuelQuantity": event.fuel,
-        // "faults": [imgUrl1, imgUrl2],
       };
-      final result = await edlDepartureUseCase(EdlDepartureParams(data: data));
+      final result = typeEdl == TypeEdl.departure
+          ? await edlDepartureUseCase(EdlDepartureParams(data: data))
+          : await edlRetourUseCase(EdlRetourParams(data: data));
       result.fold(
         (failure) {
           if (failure is NoConnectionFailure) {
@@ -489,13 +488,11 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
       final data = {
         "numberContrat": "${contract.numberContrat}",
         "conditionDate": DateTime.now().formatDatePayload,
-        // "conditions": [imgUrl1, imgUrl2],
-        //"comment": "quelconque commentaire",
         "km": event.mileage,
-        //"fuelQuantity": "15",
-        // "faults": [imgUrl1, imgUrl2],
       };
-      final result = await edlDepartureUseCase(EdlDepartureParams(data: data));
+      final result = typeEdl == TypeEdl.departure
+          ? await edlDepartureUseCase(EdlDepartureParams(data: data))
+          : await edlRetourUseCase(EdlRetourParams(data: data));
       result.fold(
         (failure) {
           if (failure is NoConnectionFailure) {
@@ -575,13 +572,9 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
       final data = {
         "numberContrat": "${contract.numberContrat}",
         "conditionDate": DateTime.now().formatDatePayload,
-        // "conditions": [imgUrl1, imgUrl2],
         "comment": event.note,
-        //"km": "1000",
-        //"fuelQuantity": "15",
-        // "faults": [imgUrl1, imgUrl2],
       };
-      final result = await edlDepartureUseCase(EdlDepartureParams(data: data));
+      final result = await edlRetourUseCase(EdlRetourParams(data: data));
       result.fold(
         (failure) {
           if (failure is NoConnectionFailure) {

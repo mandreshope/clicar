@@ -12,6 +12,8 @@ class ConditionAtStartModel extends ConditionAtStart {
   final String? comment;
   final int? km;
   final int? fuelQuantity;
+  final String? signature;
+  final String? signatureDate;
 
   const ConditionAtStartModel({
     this.conditions,
@@ -21,6 +23,8 @@ class ConditionAtStartModel extends ConditionAtStart {
     this.comment,
     this.km,
     this.fuelQuantity,
+    this.signature,
+    this.signatureDate,
   }) : super(
           conditions: conditions,
           faults: faults,
@@ -29,6 +33,8 @@ class ConditionAtStartModel extends ConditionAtStart {
           comment: comment,
           km: km,
           fuelQuantity: fuelQuantity,
+          signature: signature,
+          signatureDate: signatureDate,
         );
 
   factory ConditionAtStartModel.fromJson(Map<String, dynamic> json) =>

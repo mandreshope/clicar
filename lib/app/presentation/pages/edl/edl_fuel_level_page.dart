@@ -18,6 +18,7 @@ class EdlFuelLevelPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final edlBloc = context.read<EdlBloc>();
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -33,7 +34,9 @@ class EdlFuelLevelPage extends StatelessWidget {
         ],
       ),
       body: BlocProvider(
-        create: (context) => GaugeCubit(),
+        create: (context) => GaugeCubit(
+            gaugeInitial: GaugeInitial(
+                value: edlBloc.contract.conditionAtStart?.fuelQuantity ?? 0)),
         child: ScaffoldBody(
           child: BlocBuilder<EdlBloc, BaseState>(
             buildWhen: (prevState, currState) {
@@ -53,7 +56,6 @@ class EdlFuelLevelPage extends StatelessWidget {
               return prevState != currState;
             },
             builder: (context, state) {
-              final edlBloc = context.read<EdlBloc>();
               return SingleChildScrollView(
                 child: Column(
                   children: [
@@ -86,20 +88,95 @@ class EdlFuelLevelPage extends StatelessWidget {
                           const SizedBox(
                             height: CustomTheme.spacer,
                           ),
+                          if (edlBloc.typeEdl == TypeEdl.retour) ...[
+                            Row(
+                              children: [
+                                Text(
+                                  "Carburant départ",
+                                  style: TextStyle(
+                                    fontSize: CustomTheme
+                                        .mainBtnTextStyle.fontSize
+                                        ?.sp(context),
+                                    color: Colors.green,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10.0,
+                                ),
+                                Text(
+                                  "${edlBloc.contract.conditionAtStart?.fuelQuantity} %",
+                                  style: TextStyle(
+                                    fontSize: CustomTheme
+                                        .mainBtnTextStyle.fontSize
+                                        ?.sp(context),
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: CustomTheme.spacer,
+                            ),
+                          ],
                           BlocBuilder<GaugeCubit, GaugeState>(
                             builder: (context, state) {
                               final gaugeCubit = context.read<GaugeCubit>();
-                              return SizedBox(
-                                width: 100.w(context),
-                                height: 400,
-                                child: PercentSlider(
-                                    min: 0,
-                                    value: state is GaugeChangeState
-                                        ? state.value
-                                        : 0,
-                                    onChange: (v) {
-                                      gaugeCubit.change(v);
-                                    }),
+                              return Column(
+                                children: [
+                                  SizedBox(
+                                    width: 100.w(context),
+                                    height: 400,
+                                    child: PercentSlider(
+                                      min: 0,
+                                      value: state is GaugeChangeState
+                                          ? state.value
+                                          : 0,
+                                      onChange: (v) {
+                                        gaugeCubit.change(v);
+                                      },
+                                    ),
+                                  ),
+                                  if (edlBloc.typeEdl == TypeEdl.retour) ...[
+                                    Visibility(
+                                      visible: state is GaugeChangeState
+                                          ? state.value <
+                                              (edlBloc.contract.conditionAtStart
+                                                      ?.fuelQuantity ??
+                                                  0)
+                                          : false,
+                                      child: Text(
+                                        "Attention, il y a moins de carburant qu'au départ du véhicule",
+                                        style: TextStyle(
+                                          fontSize: CustomTheme
+                                              .mainBtnTextStyle.fontSize
+                                              ?.sp(context),
+                                          color: Colors.red,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: CustomTheme.spacer,
+                                    ),
+                                    SecondaryButton(
+                                      height: 40.0,
+                                      padding: MaterialStateProperty.all(
+                                          const EdgeInsets.all(0.0)),
+                                      width: double.infinity,
+                                      child: Text(
+                                        "Facture: 50€ frais de carburant"
+                                            .toUpperCase(),
+                                        style: TextStyle(
+                                          fontSize: CustomTheme
+                                              .mainBtnTextStyle.fontSize
+                                              ?.sp(context),
+                                          color: CustomTheme.primaryColor,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ],
                               );
                             },
                           ),

@@ -19,6 +19,8 @@ ConditionAtStartModel _$ConditionAtStartModelFromJson(
       comment: json['comment'] as String?,
       km: json['km'] as int?,
       fuelQuantity: json['fuelQuantity'] as int?,
+      signature: json['signature'] as String?,
+      signatureDate: json['signatureDate'] as String?,
     );
 
 Map<String, dynamic> _$ConditionAtStartModelToJson(
@@ -31,4 +33,6 @@ Map<String, dynamic> _$ConditionAtStartModelToJson(
       'comment': instance.comment,
       'km': instance.km,
       'fuelQuantity': instance.fuelQuantity,
+      'signature': instance.signature,
+      'signatureDate': instance.signatureDate,
     };

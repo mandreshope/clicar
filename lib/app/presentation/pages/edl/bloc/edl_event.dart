@@ -104,11 +104,9 @@ class UploadPhotosInteriorEvent extends EdlEvent {
 
 class UploadPhotoDefectsExteriorEvent extends EdlEvent {
   final File file;
-
   const UploadPhotoDefectsExteriorEvent({
     required this.file,
   });
-
   @override
   List<Object> get props => [file];
 }

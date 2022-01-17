@@ -12,6 +12,8 @@ class ConditionAtEndModel extends ConditionAtEnd {
   final String? comment;
   final int? km;
   final int? fuelQuantity;
+  final String? signature;
+  final String? signatureDate;
 
   const ConditionAtEndModel({
     this.conditions,
@@ -21,6 +23,8 @@ class ConditionAtEndModel extends ConditionAtEnd {
     this.comment,
     this.km,
     this.fuelQuantity,
+    this.signature,
+    this.signatureDate,
   }) : super(
           conditions: conditions,
           faults: faults,
@@ -29,6 +33,8 @@ class ConditionAtEndModel extends ConditionAtEnd {
           comment: comment,
           km: km,
           fuelQuantity: fuelQuantity,
+          signatureDate: signatureDate,
+          signature: signature,
         );
 
   factory ConditionAtEndModel.fromJson(Map<String, dynamic> json) =>

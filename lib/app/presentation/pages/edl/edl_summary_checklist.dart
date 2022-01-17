@@ -181,6 +181,32 @@ class EdlSummaryChecklistPage extends StatelessWidget {
                         const SizedBox(
                           height: CustomTheme.spacer,
                         ),
+                        if (edlBloc.typeEdl == TypeEdl.retour) ...[
+                          SecondaryButton(
+                            width: double.infinity,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Facturation".toUpperCase(),
+                                  style: TextStyle(
+                                    fontSize: CustomTheme
+                                        .mainBtnTextStyle.fontSize
+                                        ?.sp(context),
+                                    color: CustomTheme.primaryColor,
+                                  ),
+                                ),
+                                Image.asset(
+                                  "${assetsImages}success.png",
+                                  width: 30.0,
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: CustomTheme.spacer,
+                          ),
+                        ],
                         SecondaryButton(
                           width: double.infinity,
                           child: Row(
@@ -195,18 +221,37 @@ class EdlSummaryChecklistPage extends StatelessWidget {
                                   color: CustomTheme.primaryColor,
                                 ),
                               ),
-                              Visibility(
-                                visible: edlBloc.contract.signature == null,
-                                child: const Icon(
-                                  Icons.radio_button_off,
-                                  size: 30.0,
-                                  color: CustomTheme.secondaryColor,
-                                ),
-                                replacement: Image.asset(
-                                  "${assetsImages}success.png",
-                                  width: 30.0,
-                                ),
-                              )
+                              if (edlBloc.typeEdl == TypeEdl.departure) ...[
+                                Visibility(
+                                  visible: edlBloc.contract.conditionAtStart
+                                          ?.signature ==
+                                      null,
+                                  child: const Icon(
+                                    Icons.radio_button_off,
+                                    size: 30.0,
+                                    color: CustomTheme.secondaryColor,
+                                  ),
+                                  replacement: Image.asset(
+                                    "${assetsImages}success.png",
+                                    width: 30.0,
+                                  ),
+                                )
+                              ] else ...[
+                                Visibility(
+                                  visible: edlBloc
+                                          .contract.conditionAtEnd?.signature ==
+                                      null,
+                                  child: const Icon(
+                                    Icons.radio_button_off,
+                                    size: 30.0,
+                                    color: CustomTheme.secondaryColor,
+                                  ),
+                                  replacement: Image.asset(
+                                    "${assetsImages}success.png",
+                                    width: 30.0,
+                                  ),
+                                )
+                              ]
                             ],
                           ),
                         ),

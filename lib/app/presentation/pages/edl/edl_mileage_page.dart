@@ -55,7 +55,13 @@ class EdlMileagePage extends StatelessWidget {
                     context: context,
                     message: "Contract updated",
                     isError: false);
-                Navigator.of(context).pushNamed(AppRoutes.edlSummaryChecklist);
+                if (edlBloc.typeEdl == TypeEdl.departure) {
+                  Navigator.of(context)
+                      .pushNamed(AppRoutes.edlSummaryChecklist);
+                } else {
+                  Navigator.of(context)
+                      .pushNamed(AppRoutes.edlBilledInfoSummary);
+                }
               } else if (currState.status == Status.error) {
                 SnackBarWidget.show(
                     context: context,
@@ -189,7 +195,9 @@ class EdlMileagePage extends StatelessWidget {
                                 );
                               },
                             ),
-                            const SizedBox(
+
+                            ///TODO: WAITING...
+                            /*const SizedBox(
                               height: CustomTheme.spacer,
                             ),
                             SecondaryButton(
@@ -198,7 +206,7 @@ class EdlMileagePage extends StatelessWidget {
                                   const EdgeInsets.all(0.0)),
                               width: double.infinity,
                               child: Text(
-                                "Facture: 50€ frais de carburant".toUpperCase(),
+                                "Facture: 200€ km supp".toUpperCase(),
                                 style: TextStyle(
                                   fontSize: CustomTheme
                                       .mainBtnTextStyle.fontSize
@@ -206,7 +214,7 @@ class EdlMileagePage extends StatelessWidget {
                                   color: CustomTheme.primaryColor,
                                 ),
                               ),
-                            ),
+                            ),*/
                           ],
                           const SizedBox(
                             height: CustomTheme.spacer,

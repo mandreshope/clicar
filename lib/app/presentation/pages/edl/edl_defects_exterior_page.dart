@@ -5,6 +5,7 @@ import 'package:clicar/app/core/states/base_state.dart';
 import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
+import 'package:clicar/app/data/sources/remote/remote_config.dart';
 import 'package:clicar/app/presentation/pages/edl/bloc/edl_bloc.dart';
 import 'package:clicar/app/presentation/pages/edl/cubit/draggable_cubit.dart';
 import 'package:clicar/app/presentation/pages/edl/enums/type_edl.dart';
@@ -100,6 +101,8 @@ class _EdlDefectsExteriorPageState extends State<EdlDefectsExteriorPage> {
             },
             builder: (context, state) {
               final edlBloc = context.read<EdlBloc>();
+              final typeVehicle =
+                  edlBloc.contract.vehicle?.registration?.vehicleKind ?? "";
               return SingleChildScrollView(
                 child: Column(
                   children: [
@@ -140,19 +143,29 @@ class _EdlDefectsExteriorPageState extends State<EdlDefectsExteriorPage> {
                               Column(
                                 children: [
                                   Draggable(
-                                    data: "${assetsImages}casse.png",
+                                    data: edlBloc.typeEdl == TypeEdl.departure
+                                        ? "${assetsImages}casse.png"
+                                        : "${assetsImages}casse_retour.png",
                                     feedback: SizedBox(
                                       width: 20,
                                       height: 20,
-                                      child: Image.asset(
-                                          "${assetsImages}casse.png"),
+                                      child: edlBloc.typeEdl ==
+                                              TypeEdl.departure
+                                          ? Image.asset(
+                                              "${assetsImages}casse.png")
+                                          : Image.asset(
+                                              "${assetsImages}casse_retour.png"),
                                     ),
                                     onDragCompleted: () {},
                                     child: SizedBox(
                                       width: 50,
                                       height: 50,
-                                      child: Image.asset(
-                                          "${assetsImages}casse.png"),
+                                      child: edlBloc.typeEdl ==
+                                              TypeEdl.departure
+                                          ? Image.asset(
+                                              "${assetsImages}casse.png")
+                                          : Image.asset(
+                                              "${assetsImages}casse_retour.png"),
                                     ),
                                   ),
                                   Text(
@@ -169,19 +182,29 @@ class _EdlDefectsExteriorPageState extends State<EdlDefectsExteriorPage> {
                               Column(
                                 children: [
                                   Draggable(
-                                    data: "${assetsImages}rayure.png",
+                                    data: edlBloc.typeEdl == TypeEdl.departure
+                                        ? "${assetsImages}rayure.png"
+                                        : "${assetsImages}rayure_retour.png",
                                     feedback: SizedBox(
                                       width: 20,
                                       height: 20,
-                                      child: Image.asset(
-                                          "${assetsImages}rayure.png"),
+                                      child: edlBloc.typeEdl ==
+                                              TypeEdl.departure
+                                          ? Image.asset(
+                                              "${assetsImages}rayure.png")
+                                          : Image.asset(
+                                              "${assetsImages}rayure_retour.png"),
                                     ),
                                     onDragCompleted: () {},
                                     child: SizedBox(
                                       width: 50,
                                       height: 50,
-                                      child: Image.asset(
-                                          "${assetsImages}rayure.png"),
+                                      child: edlBloc.typeEdl ==
+                                              TypeEdl.departure
+                                          ? Image.asset(
+                                              "${assetsImages}rayure.png")
+                                          : Image.asset(
+                                              "${assetsImages}rayure_retour.png"),
                                     ),
                                   ),
                                   Text(
@@ -198,19 +221,29 @@ class _EdlDefectsExteriorPageState extends State<EdlDefectsExteriorPage> {
                               Column(
                                 children: [
                                   Draggable(
-                                    data: "${assetsImages}choc.png",
+                                    data: edlBloc.typeEdl == TypeEdl.departure
+                                        ? "${assetsImages}choc.png"
+                                        : "${assetsImages}choc_retour.png",
                                     feedback: SizedBox(
                                       width: 20,
                                       height: 20,
-                                      child: Image.asset(
-                                          "${assetsImages}choc.png"),
+                                      child: edlBloc.typeEdl ==
+                                              TypeEdl.departure
+                                          ? Image.asset(
+                                              "${assetsImages}choc.png")
+                                          : Image.asset(
+                                              "${assetsImages}choc_retour.png"),
                                     ),
                                     onDragCompleted: () {},
                                     child: SizedBox(
                                       width: 50,
                                       height: 50,
-                                      child: Image.asset(
-                                          "${assetsImages}choc.png"),
+                                      child: edlBloc.typeEdl ==
+                                              TypeEdl.departure
+                                          ? Image.asset(
+                                              "${assetsImages}choc.png")
+                                          : Image.asset(
+                                              "${assetsImages}choc_retour.png"),
                                     ),
                                   ),
                                   Text(
@@ -252,11 +285,54 @@ class _EdlDefectsExteriorPageState extends State<EdlDefectsExteriorPage> {
                                     (context, candidateItems, rejectedItems) {
                                   return Stack(
                                     children: [
-                                      Center(
-                                        child: Image.asset(
-                                          "${assetsImages}citadine_defeacts_exterior.png",
+                                      if (edlBloc.typeEdl ==
+                                          TypeEdl.departure) ...[
+                                        Center(
+                                          child: Image.asset(
+                                            typeVehicle.contains("Citadine")
+                                                ? "${assetsImages}citadine_defeacts_exterior.png"
+                                                : "${assetsImages}berline_defeacts_exterior.png",
+                                          ),
                                         ),
-                                      ),
+                                      ] else ...[
+                                        Center(
+                                          child: Image.network(
+                                            "${RemoteConfig.baseUrl}${edlBloc.contract.conditionAtStart?.faults?.first}",
+                                            fit: BoxFit.cover,
+                                            loadingBuilder:
+                                                (BuildContext context,
+                                                    Widget child,
+                                                    ImageChunkEvent?
+                                                        loadingProgress) {
+                                              if (loadingProgress == null) {
+                                                return child;
+                                              }
+                                              return Center(
+                                                child: CircularProgress(
+                                                  value: loadingProgress
+                                                              .expectedTotalBytes !=
+                                                          null
+                                                      ? loadingProgress
+                                                              .cumulativeBytesLoaded /
+                                                          loadingProgress
+                                                              .expectedTotalBytes!
+                                                      : null,
+                                                ),
+                                              );
+                                            },
+                                            errorBuilder: (context, _, __) {
+                                              return Image.asset(
+                                                "${assetsImages}citadine_defeacts_exterior.png",
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                        /*Center(
+                                          child: Image.asset(
+                                            "${assetsImages}citadine_defeacts_exterior.png",
+                                          ),
+                                        ),*/
+                                      ],
                                       ...context
                                           .read<DraggableCubit>()
                                           .drags

@@ -140,9 +140,9 @@ class EdlPhotoPickerPage extends StatelessWidget {
                         PrimaryButton(
                           width: 40.w(context),
                           onPressed: () {
-                            Navigator.of(context)
-                                .pushNamed(AppRoutes.edlDefectsExterior);
-                            /*if (edlBloc.uploadPhotosExterior.isNotEmpty &&
+                            /*Navigator.of(context)
+                                .pushNamed(AppRoutes.edlDefectsExterior);*/
+                            if (edlBloc.uploadPhotosExterior.isNotEmpty &&
                                 edlBloc.uploadPhotosInterior.isNotEmpty) {
                               Navigator.of(context)
                                   .pushNamed(AppRoutes.edlDefectsExterior);
@@ -151,7 +151,7 @@ class EdlPhotoPickerPage extends StatelessWidget {
                                   context: context,
                                   message: "Veuillez ajouter des photos",
                                   isError: true);
-                            }*/
+                            }
                           },
                           child: Text(
                             'Suivant'.toUpperCase(),

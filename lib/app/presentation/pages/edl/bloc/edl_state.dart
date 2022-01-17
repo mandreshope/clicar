@@ -95,6 +95,15 @@ class EdlMileageSuccessState extends BaseState {
         );
 }
 
+class EdlBilledInfoSuccessState extends BaseState {
+  const EdlBilledInfoSuccessState(
+      {required Status status, required String message})
+      : super(
+          status: status,
+          message: message,
+        );
+}
+
 class EdlDepartureNoteSuccessState extends BaseState {
   const EdlDepartureNoteSuccessState(
       {required Status status, required String message})
@@ -129,4 +138,22 @@ class UploadPhotoDefectsExteriorSuccessState extends BaseState {
           status: status,
           message: message,
         );
+}
+
+class SearchBilledInfoSuccessState extends BaseState {
+  final List<BilledInfo> result;
+  final String tag;
+
+  const SearchBilledInfoSuccessState({
+    required Status status,
+    required String message,
+    required this.result,
+    this.tag = "",
+  }) : super(
+          status: status,
+          message: message,
+        );
+
+  @override
+  List<Object> get props => [result, tag];
 }

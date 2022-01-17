@@ -1,7 +1,4 @@
-import 'dart:typed_data';
-
 import 'package:clicar/app/core/states/base_state.dart';
-import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
 import 'package:clicar/app/presentation/pages/edl/bloc/edl_bloc.dart';
@@ -14,29 +11,12 @@ import 'package:clicar/app/presentation/widgets/snack_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class EdlDefectsExteriorNotePage extends StatefulWidget {
-  const EdlDefectsExteriorNotePage({Key? key}) : super(key: key);
-
-  @override
-  State<EdlDefectsExteriorNotePage> createState() =>
-      _EdlDefectsExteriorNotePageState();
-}
-
-class _EdlDefectsExteriorNotePageState
-    extends State<EdlDefectsExteriorNotePage> {
-  final TextEditingController departureNote = TextEditingController();
-
-  final TextEditingController retourNote = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    final edlBloc = context.read<EdlBloc>();
-    departureNote.text = edlBloc.contract.conditionAtStart?.comment ?? "";
-  }
+class EdlBilledInfoSummaryPage extends StatelessWidget {
+  const EdlBilledInfoSummaryPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final edlBloc = context.read<EdlBloc>();
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -54,33 +34,20 @@ class _EdlDefectsExteriorNotePageState
       body: ScaffoldBody(
         child: BlocBuilder<EdlBloc, BaseState>(
           buildWhen: (prevState, currState) {
-            if (currState is EdlDepartureNoteSuccessState) {
+            if (currState is EdlBilledInfoSuccessState) {
               SnackBarWidget.show(
-                context: context,
-                message: "Les remarques sont envoyées",
-                isError: false,
-              );
-              if (context.read<EdlBloc>().typeEdl == TypeEdl.departure) {
-                Navigator.of(context).pushNamed(AppRoutes.edlFuelLevel);
-              } else {
-                Navigator.of(context).pushNamed(AppRoutes.edlBilledInfo);
-              }
-            }
-            if (currState is EdlRetourNoteSuccessState) {
-              SnackBarWidget.show(
-                context: context,
-                message: "Les remarques sont envoyées",
-                isError: false,
-              );
-              Navigator.of(context).pushNamed(AppRoutes.edlBilledInfo);
+                  context: context,
+                  message: "Contract updated",
+                  isError: false);
+              Navigator.of(context).pushNamed(AppRoutes.edlSummaryChecklist);
             } else if (currState.status == Status.error) {
               SnackBarWidget.show(
                   context: context, message: currState.message, isError: true);
             }
+
             return prevState != currState;
           },
           builder: (context, state) {
-            final edlBloc = context.read<EdlBloc>();
             return SingleChildScrollView(
               child: Column(
                 children: [
@@ -99,11 +66,10 @@ class _EdlDefectsExteriorNotePageState
                         const SizedBox(
                           height: 30,
                         ),
-
                         SecondaryButton(
                           width: double.infinity,
                           child: Text(
-                            "défauts extérieures".toUpperCase(),
+                            "facturation".toUpperCase(),
                             style: TextStyle(
                               fontSize: CustomTheme.mainBtnTextStyle.fontSize
                                   ?.sp(context),
@@ -114,43 +80,68 @@ class _EdlDefectsExteriorNotePageState
                         const SizedBox(
                           height: CustomTheme.spacer,
                         ),
-
-                        ///note departure
-                        TextFieldFilled(
-                          textInputType: TextInputType.multiline,
-                          labelText: "Remarques départ",
-                          maxLines: 5,
-                          controller: departureNote,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'note obligatoire';
-                            }
-                            return null;
-                          },
+                        ...edlBloc.billedInfoList
+                            .where((e) => e.isSelected)
+                            .map((e) => Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 2.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        e.label,
+                                        style: TextStyle(
+                                          color: CustomTheme.secondaryColor,
+                                          fontSize:
+                                              CustomTheme.subtitle2.sp(context),
+                                        ),
+                                      ),
+                                      Text(
+                                        "${e.amount.round()} €",
+                                        style: TextStyle(
+                                          color: CustomTheme.primaryColor,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize:
+                                              CustomTheme.subtitle2.sp(context),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ))
+                            .toList(),
+                        const SizedBox(
+                          height: CustomTheme.spacer,
+                        ),
+                        SecondaryButton(
+                          height: 40.0,
+                          padding: MaterialStateProperty.all(
+                              const EdgeInsets.symmetric(horizontal: 10.0)),
+                          width: double.infinity,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Total".toUpperCase(),
+                                style: TextStyle(
+                                  color: CustomTheme.secondaryColor,
+                                  fontSize: CustomTheme.subtitle2.sp(context),
+                                ),
+                              ),
+                              Text(
+                                "${edlBloc.billedInfoList.where((e) => e.isSelected).map((e) => e.amount).reduce((a, b) => a + b)} €",
+                                style: TextStyle(
+                                  color: CustomTheme.primaryColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: CustomTheme.subtitle2.sp(context),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         const SizedBox(
                           height: CustomTheme.spacer,
                         ),
-
-                        if (edlBloc.typeEdl == TypeEdl.retour) ...[
-                          ///note retour
-                          TextFieldFilled(
-                            textInputType: TextInputType.multiline,
-                            labelText: "Remarques retour",
-                            maxLines: 5,
-                            controller: retourNote,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Remarques retour obligatoire';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(
-                            height: CustomTheme.spacer,
-                          ),
-                        ],
-
                         Visibility(
                           visible: state.status == Status.loading,
                           child: PrimaryButton(
@@ -162,14 +153,8 @@ class _EdlDefectsExteriorNotePageState
                           ),
                           replacement: PrimaryButton(
                             width: 40.w(context),
-                            onPressed: () async {
-                              if (edlBloc.typeEdl == TypeEdl.departure) {
-                                edlBloc.add(EdlDepartureNoteEvent(
-                                    note: departureNote.text));
-                              } else {
-                                edlBloc.add(
-                                    EdlRetourNoteEvent(note: retourNote.text));
-                              }
+                            onPressed: () {
+                              edlBloc.add(const EdlBilledInfoEvent());
                             },
                             child: Text(
                               'Suivant'.toUpperCase(),

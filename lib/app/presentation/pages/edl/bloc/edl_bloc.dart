@@ -16,6 +16,7 @@ import 'package:clicar/app/domain/usecases/edl/edl_retour_usecase.dart';
 import 'package:clicar/app/domain/usecases/upload_file/upload_multi_file_usecase.dart';
 import 'package:clicar/app/domain/usecases/upload_file/upload_single_file_usecase.dart';
 import 'package:clicar/app/presentation/pages/edl/enums/type_edl.dart';
+import 'package:clicar/app/presentation/pages/edl/widgets/billed_info.dart';
 import 'package:clicar/app/presentation/pages/edl/widgets/camera_pos.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -106,6 +107,37 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
     ),
   ];
 
+  List<BilledInfo> billedInfoList = [
+    BilledInfo(
+      label: "Remplacement PC AV (200 €)",
+      amount: 200,
+    ),
+    BilledInfo(
+      label: "Remplacement phare AV (400 €)",
+      amount: 400,
+    ),
+    BilledInfo(
+      label: "Roue de secours (100 €)",
+      amount: 100,
+    ),
+    BilledInfo(
+      label: "Lavage simplle (250 €)",
+      amount: 250,
+    ),
+    BilledInfo(
+      label: "Rapatriement véhicule (250 €)",
+      amount: 250,
+    ),
+    BilledInfo(
+      label: "Rayure (100 €)",
+      amount: 100,
+    ),
+    BilledInfo(
+      label: "Enfoncement (100 €)",
+      amount: 100,
+    ),
+  ];
+
   EdlBloc({
     required this.signContractUseCase,
     required this.uploadSingleFileUseCase,
@@ -118,6 +150,12 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         transformer: (Stream<SearchContractEvent> events, mapper) {
       return events.debounceTime(const Duration(seconds: 1)).switchMap(mapper);
     });
+    on<SearchBilledInfoEvent>(_searchBilledInfoEvent,
+        transformer: (Stream<SearchBilledInfoEvent> events, mapper) {
+      return events.debounceTime(const Duration(seconds: 1)).switchMap(mapper);
+    });
+    on<SelectBilledInfoEvent>(_selectBilledInfoEvent);
+
     on<SelectContractEvent>(_selectContractEvent);
     on<UploadPhotosExteriorEvent>(_uploadPhotosExteriorEvent);
     on<UploadPhotosInteriorEvent>(_uploadPhotosInteriorEvent);
@@ -130,6 +168,7 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
     on<EdlPhotoDefectsEvent>(_edlPhotoDefectsEvent);
     on<EdlFuelLevelEvent>(_edlFuelLevelEvent);
     on<EdlMileageEvent>(_edlMileageEvent);
+    on<EdlBilledInfoEvent>(_edlBilledInfoEvent);
     on<EdlDepartureNoteEvent>(_edlDepartureNoteEvent);
     on<EdlRetourNoteEvent>(_edlRetourNoteEvent);
     on<EdlDepartureSignEvent>(_edlDepartureSignEvent);
@@ -179,6 +218,32 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
     } catch (_) {
       emit(ErrorState(status: Status.error, message: _.toString()));
     }
+  }
+
+  Future<void> _searchBilledInfoEvent(
+      SearchBilledInfoEvent event, Emitter emit) async {
+    emit(const BaseState(status: Status.loading, message: 'loading ⌛'));
+    final result = billedInfoList
+        .where((e) =>
+            e.label.toLowerCase().contains(event.keyWord.toLowerCase().trim()))
+        .toList();
+    await Future.delayed(const Duration(seconds: 1));
+    emit(
+      SearchBilledInfoSuccessState(
+          result: result, status: Status.success, message: 'update'),
+    );
+  }
+
+  void _selectBilledInfoEvent(SelectBilledInfoEvent event, Emitter emit) {
+    billedInfoList[billedInfoList.indexOf(event.billedInfo)].isSelected =
+        !event.billedInfo.isSelected;
+    emit(
+      SearchBilledInfoSuccessState(
+          result: event.result,
+          status: Status.success,
+          message: 'success',
+          tag: "${event.billedInfo.label}${!event.billedInfo.isSelected}"),
+    );
   }
 
   Future _selectContractEvent(SelectContractEvent event, Emitter emit) async {
@@ -512,6 +577,52 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         (success) {
           contract = success;
           emit(const EdlMileageSuccessState(
+            status: Status.success,
+            message: "",
+          ));
+        },
+      );
+    } catch (_) {
+      emit(ErrorState(status: Status.error, message: _.toString()));
+    }
+  }
+
+  Future<void> _edlBilledInfoEvent(
+      EdlBilledInfoEvent event, Emitter emit) async {
+    emit(const BaseState(status: Status.loading, message: 'loading ⌛'));
+    try {
+      final data = {
+        "numberContrat": "${contract.numberContrat}",
+        "conditionDate": DateTime.now().formatDatePayload,
+        "billedInfos": [
+          ...billedInfoList
+              .where((e) => e.isSelected)
+              .map((e) => e.toMap())
+              .toList()
+        ],
+      };
+      final result = typeEdl == TypeEdl.departure
+          ? await edlDepartureUseCase(EdlDepartureParams(data: data))
+          : await edlRetourUseCase(EdlRetourParams(data: data));
+      result.fold(
+        (failure) {
+          if (failure is NoConnectionFailure) {
+            emit(const ErrorState(
+                status: Status.error, message: 'No connextion error'));
+          } else if (failure is ServerFailure) {
+            emit(ErrorState(status: Status.error, message: failure.message));
+          } else if (failure is TokenExpiredFailure) {
+            emit(const ErrorState(
+                status: Status.tokenExpired,
+                message: 'token expired 🔑🔑🔑🔑🔑🪙🪙🔑🔑🔑'));
+          } else {
+            emit(const ErrorState(
+                status: Status.error, message: 'Unknown error'));
+          }
+        },
+        (success) {
+          contract = success;
+          emit(const EdlBilledInfoSuccessState(
             status: Status.success,
             message: "",
           ));

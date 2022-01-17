@@ -49,6 +49,31 @@ class SearchContractEvent extends EdlEvent {
   List<Object> get props => [keyWord];
 }
 
+class SearchBilledInfoEvent extends EdlEvent {
+  final String keyWord;
+
+  const SearchBilledInfoEvent({required this.keyWord});
+
+  @override
+  List<Object> get props => [keyWord];
+}
+
+class SelectBilledInfoEvent extends EdlEvent {
+  final BilledInfo billedInfo;
+  final List<BilledInfo> result;
+
+  const SelectBilledInfoEvent({
+    required this.billedInfo,
+    required this.result,
+  });
+
+  @override
+  List<Object> get props => [
+        billedInfo,
+        result,
+      ];
+}
+
 class SelectContractEvent extends EdlEvent {
   final Contract contract;
 
@@ -135,6 +160,12 @@ class EdlMileageEvent extends EdlEvent {
   const EdlMileageEvent({required this.mileage});
   @override
   List<Object> get props => [mileage];
+}
+
+class EdlBilledInfoEvent extends EdlEvent {
+  const EdlBilledInfoEvent();
+  @override
+  List<Object> get props => [];
 }
 
 class EdlFuelLevelEvent extends EdlEvent {

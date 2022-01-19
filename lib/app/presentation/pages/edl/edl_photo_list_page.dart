@@ -1,4 +1,5 @@
 import 'package:clicar/app/core/states/base_state.dart';
+import 'package:clicar/app/core/states/error_state.dart';
 import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
@@ -58,6 +59,9 @@ class EdlPhotoListPage extends StatelessWidget {
               Navigator.of(context).pop();
               Navigator.of(context).pop();
             } else if (currState.status == Status.error) {
+              SnackBarWidget.show(
+                  context: context, message: currState.message, isError: true);
+            } else if (currState is ErrorState) {
               SnackBarWidget.show(
                   context: context, message: currState.message, isError: true);
             }

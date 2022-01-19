@@ -45,6 +45,25 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
   int currentCameraPos = 0;
   int currentCameraInteriorPos = 0;
 
+  List<CameraPos> cameraInteriorPosListLock = [
+    CameraPos(
+      label: "1- Tableau de bord",
+      isActive: true,
+    ),
+    CameraPos(
+      label: "2- Sièges avant",
+      isActive: false,
+    ),
+    CameraPos(
+      label: "3- Banquette arrière",
+      isActive: false,
+    ),
+    CameraPos(
+      label: "4- coffre",
+      isActive: false,
+    ),
+  ];
+
   List<CameraPos> cameraInteriorPosList = [
     CameraPos(
       label: "1- Tableau de bord",
@@ -61,6 +80,49 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
     CameraPos(
       label: "4- coffre",
       isActive: false,
+    ),
+  ];
+
+  List<CameraPos> cameraPosListLock = [
+    CameraPos(
+      rotation: math.pi * 2,
+      isActive: true,
+      alignment: Alignment.centerLeft,
+    ),
+    CameraPos(
+      rotation: math.pi / 3,
+      isActive: false,
+      alignment: Alignment.topCenter,
+    ),
+    CameraPos(
+      rotation: math.pi / 2,
+      isActive: false,
+      alignment: Alignment.topCenter,
+    ),
+    CameraPos(
+      rotation: 2.2,
+      isActive: false,
+      alignment: Alignment.topCenter,
+    ),
+    CameraPos(
+      rotation: math.pi,
+      isActive: false,
+      alignment: Alignment.centerRight,
+    ),
+    CameraPos(
+      rotation: 4.1,
+      isActive: false,
+      alignment: Alignment.bottomCenter,
+    ),
+    CameraPos(
+      rotation: -math.pi / 2,
+      isActive: false,
+      alignment: Alignment.bottomCenter,
+    ),
+    CameraPos(
+      rotation: 5.4,
+      isActive: false,
+      alignment: Alignment.bottomCenter,
     ),
   ];
 
@@ -104,6 +166,37 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
       rotation: 5.4,
       isActive: false,
       alignment: Alignment.bottomCenter,
+    ),
+  ];
+
+  List<BilledInfo> billedInfoListLock = [
+    BilledInfo(
+      label: "Remplacement PC AV (200 €)",
+      amount: 200,
+    ),
+    BilledInfo(
+      label: "Remplacement phare AV (400 €)",
+      amount: 400,
+    ),
+    BilledInfo(
+      label: "Roue de secours (100 €)",
+      amount: 100,
+    ),
+    BilledInfo(
+      label: "Lavage simplle (250 €)",
+      amount: 250,
+    ),
+    BilledInfo(
+      label: "Rapatriement véhicule (250 €)",
+      amount: 250,
+    ),
+    BilledInfo(
+      label: "Rayure (100 €)",
+      amount: 100,
+    ),
+    BilledInfo(
+      label: "Enfoncement (100 €)",
+      amount: 100,
     ),
   ];
 
@@ -176,13 +269,68 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
     on<UploadSignatureFileEvent>(_uploadSignatureFileEvent);
   }
 
-  void reset() {
-    debugPrint(logTrace);
-    contract = const Contract();
+  void resetUploadPhoto() {
+    currentCameraPos = 0;
+    currentCameraInteriorPos = 0;
     uploadSignatureFile = const UploadFile();
     uploadPhotosExterior = [];
     uploadPhotosInterior = [];
     uploadDefectsExterior = const UploadFile();
+    cameraPosList = cameraPosListLock
+        .map((e) => CameraPos(
+              rotation: e.rotation,
+              isActive: e.isActive,
+              alignment: e.alignment,
+            ))
+        .toList();
+
+    cameraInteriorPosList = cameraInteriorPosListLock
+        .map((e) => CameraPos(
+              label: e.label,
+              isActive: e.isActive,
+            ))
+        .toList();
+    billedInfoList = billedInfoListLock
+        .map(
+          (e) => BilledInfo(
+            label: e.label,
+            amount: e.amount,
+          ),
+        )
+        .toList();
+  }
+
+  void resetAll() {
+    debugPrint(logTrace);
+    contract = const Contract();
+    currentCameraPos = 0;
+    currentCameraInteriorPos = 0;
+    uploadSignatureFile = const UploadFile();
+    uploadPhotosExterior = [];
+    uploadPhotosInterior = [];
+    uploadDefectsExterior = const UploadFile();
+    cameraPosList = cameraPosListLock
+        .map((e) => CameraPos(
+              rotation: e.rotation,
+              isActive: e.isActive,
+              alignment: e.alignment,
+            ))
+        .toList();
+
+    cameraInteriorPosList = cameraInteriorPosListLock
+        .map((e) => CameraPos(
+              label: e.label,
+              isActive: e.isActive,
+            ))
+        .toList();
+    billedInfoList = billedInfoListLock
+        .map(
+          (e) => BilledInfo(
+            label: e.label,
+            amount: e.amount,
+          ),
+        )
+        .toList();
   }
 
   Future<void> _searchContractEvent(

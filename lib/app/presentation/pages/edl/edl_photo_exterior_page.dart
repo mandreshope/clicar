@@ -307,6 +307,7 @@ class _EdlPhotoExteriorPageState extends State<EdlPhotoExteriorPage> {
                                               final XFile? image =
                                                   await _picker.pickImage(
                                                 source: ImageSource.gallery,
+                                                imageQuality: 50,
                                               );
                                               Navigator.of(context).pop(image);
                                             },
@@ -319,8 +320,9 @@ class _EdlPhotoExteriorPageState extends State<EdlPhotoExteriorPage> {
                                               // Pick an image
                                               final XFile? image =
                                                   await _picker.pickImage(
-                                                      source:
-                                                          ImageSource.camera);
+                                                source: ImageSource.camera,
+                                                imageQuality: 50,
+                                              );
                                               Navigator.of(context).pop(image);
                                             },
                                             title: const Text(

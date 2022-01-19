@@ -96,7 +96,7 @@ class EdlSignatureSuccessPage extends StatelessWidget {
                               return PrimaryButton(
                                 width: 40.w(context),
                                 onPressed: () async {
-                                  edlBloc.reset();
+                                  edlBloc.resetAll();
                                   acceptContractBloc.add(
                                       const AcceptContractEvent(
                                           isAccepted: false));

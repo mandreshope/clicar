@@ -4,6 +4,7 @@ import 'package:clicar/app/core/utils/theme.dart';
 import 'package:clicar/app/presentation/pages/edl/bloc/edl_bloc.dart';
 import 'package:clicar/app/presentation/pages/edl/cubit/gauge_cubit.dart';
 import 'package:clicar/app/presentation/pages/edl/enums/type_edl.dart';
+import 'package:clicar/app/presentation/pages/edl/types/billed_info.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
 import 'package:clicar/app/presentation/widgets/circular_progress_widget.dart';
@@ -145,34 +146,38 @@ class EdlFuelLevelPage extends StatelessWidget {
                                                       ?.fuelQuantity ??
                                                   0)
                                           : false,
-                                      child: Text(
-                                        "Attention, il y a moins de carburant qu'au départ du véhicule",
-                                        style: TextStyle(
-                                          fontSize: CustomTheme
-                                              .mainBtnTextStyle.fontSize
-                                              ?.sp(context),
-                                          color: Colors.red,
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: CustomTheme.spacer,
-                                    ),
-                                    SecondaryButton(
-                                      height: 40.0,
-                                      padding: MaterialStateProperty.all(
-                                          const EdgeInsets.all(0.0)),
-                                      width: double.infinity,
-                                      child: Text(
-                                        "Facture: 50€ frais de carburant"
-                                            .toUpperCase(),
-                                        style: TextStyle(
-                                          fontSize: CustomTheme
-                                              .mainBtnTextStyle.fontSize
-                                              ?.sp(context),
-                                          color: CustomTheme.primaryColor,
-                                        ),
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            "Attention, il y a moins de carburant qu'au départ du véhicule",
+                                            style: TextStyle(
+                                              fontSize: CustomTheme
+                                                  .mainBtnTextStyle.fontSize
+                                                  ?.sp(context),
+                                              color: Colors.red,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          const SizedBox(
+                                            height: CustomTheme.spacer,
+                                          ),
+                                          SecondaryButton(
+                                            height: 40.0,
+                                            padding: MaterialStateProperty.all(
+                                                const EdgeInsets.all(0.0)),
+                                            width: double.infinity,
+                                            child: Text(
+                                              "Facture: 50€ frais de carburant"
+                                                  .toUpperCase(),
+                                              style: TextStyle(
+                                                fontSize: CustomTheme
+                                                    .mainBtnTextStyle.fontSize
+                                                    ?.sp(context),
+                                                color: CustomTheme.primaryColor,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],
@@ -196,6 +201,19 @@ class EdlFuelLevelPage extends StatelessWidget {
                               width: 40.w(context),
                               onPressed: () {
                                 final gaugeCubit = context.read<GaugeCubit>();
+                                if ((gaugeCubit.state as GaugeChangeState)
+                                        .value <
+                                    (edlBloc.contract.conditionAtStart
+                                            ?.fuelQuantity ??
+                                        0)) {
+                                  edlBloc.billedInfoList.add(
+                                    BilledInfo(
+                                      label: "Frais de carburant (100 €)",
+                                      amount: 50,
+                                      isSelected: true,
+                                    ),
+                                  );
+                                }
                                 edlBloc.add(EdlFuelLevelEvent(
                                     fuel: gaugeCubit.state is GaugeChangeState
                                         ? (gaugeCubit.state as GaugeChangeState)

@@ -198,6 +198,7 @@ class EdlPhotoInteriorPage extends StatelessWidget {
                                               final XFile? image =
                                                   await _picker.pickImage(
                                                 source: ImageSource.gallery,
+                                                imageQuality: 50,
                                               );
                                               Navigator.of(context).pop(image);
                                             },
@@ -210,8 +211,9 @@ class EdlPhotoInteriorPage extends StatelessWidget {
                                               // Pick an image
                                               final XFile? image =
                                                   await _picker.pickImage(
-                                                      source:
-                                                          ImageSource.camera);
+                                                source: ImageSource.camera,
+                                                imageQuality: 50,
+                                              );
                                               Navigator.of(context).pop(image);
                                             },
                                             title: const Text(

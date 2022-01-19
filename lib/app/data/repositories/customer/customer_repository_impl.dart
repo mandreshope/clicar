@@ -1,3 +1,4 @@
+import 'package:clicar/app/core/errors/exceptions.dart';
 import 'package:clicar/app/core/errors/failures.dart';
 import 'package:clicar/app/core/network/network_info.dart';
 import 'package:clicar/app/data/sources/local/local_source.dart';
@@ -20,14 +21,72 @@ class CustomerRepositoryImpl implements CustomerRepository {
   @override
   Future<Either<Failure, Customer>> addDocuments(
       {required Map<String, dynamic> data, required String id}) async {
-    // TODO: implement addDocuments
-    throw UnimplementedError();
+    if (await networkInfo.isConnected) {
+      if (localDataSource.isExpiredToken() == false) {
+        try {
+          final remoteData =
+              await remoteDataSource.customerUpdate(data: data, id: id);
+          return Right(remoteData);
+        } on ServerException catch (_) {
+          return Left(ServerFailure(
+            message: _.message,
+            statusCode: _.statusCode,
+            body: _.body,
+          ));
+        } on SocketException catch (_) {
+          return Left(ServerFailure(
+            message: _.toString(),
+            body: '',
+            statusCode: 0,
+          ));
+        } catch (_) {
+          return Left(ServerFailure(
+            message: _.toString(),
+            body: '',
+            statusCode: 0,
+          ));
+        }
+      } else {
+        return Left(TokenExpiredFailure());
+      }
+    } else {
+      return Left(NoConnectionFailure());
+    }
   }
 
   @override
   Future<Either<Failure, List<Customer>>> search(
       {required String filter}) async {
-    // TODO: implement search
-    throw UnimplementedError();
+    if (await networkInfo.isConnected) {
+      if (localDataSource.isExpiredToken() == false) {
+        try {
+          final remoteData =
+              await remoteDataSource.searchCustomer(filter: filter);
+          return Right(remoteData);
+        } on ServerException catch (_) {
+          return Left(ServerFailure(
+            message: _.message,
+            statusCode: _.statusCode,
+            body: _.body,
+          ));
+        } on SocketException catch (_) {
+          return Left(ServerFailure(
+            message: _.toString(),
+            body: '',
+            statusCode: 0,
+          ));
+        } catch (_) {
+          return Left(ServerFailure(
+            message: _.toString(),
+            body: '',
+            statusCode: 0,
+          ));
+        }
+      } else {
+        return Left(TokenExpiredFailure());
+      }
+    } else {
+      return Left(NoConnectionFailure());
+    }
   }
 }

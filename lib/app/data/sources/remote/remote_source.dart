@@ -42,7 +42,8 @@ abstract class RemoteSource {
     required String username,
     required String email,
   });
-  Future<List<ContractModel>> searchContract({required keyWord});
+  Future<List<ContractModel>> searchContract(
+      {required keyWord, required bool isSigned});
   Future<UploadFileModel> uploadSingleFile(
       {required File file, required String fileDestination});
   Future<List<UploadFileModel>> uploadMultiFile(

@@ -4,7 +4,7 @@ import 'package:clicar/app/domain/entities/vehicle/vehicle.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class VehicleRepository {
-  Future<Either<Failure, Customer>> addDocuments({
+  Future<Either<Failure, Vehicle>> addDocuments({
     required Map<String, dynamic> data,
     required String id,
   });

@@ -54,16 +54,12 @@ ContractModel _$ContractModelFromJson(Map<String, dynamic> json) =>
           : SignatureModel.fromJson(json['signature'] as Map<String, dynamic>),
       conditionAtStart: json['conditionAtStart'] == null
           ? null
-          : json['conditionAtStart'] is String
-              ? ConditionAtStartModel.fromJson({"id": json['conditionAtStart']})
-              : ConditionAtStartModel.fromJson(
-                  json['conditionAtStart'] as Map<String, dynamic>),
+          : ConditionAtStartModel.fromJson(
+              json['conditionAtStart'] as Map<String, dynamic>),
       conditionAtEnd: json['conditionAtEnd'] == null
           ? null
-          : json['conditionAtEnd'] is String
-              ? ConditionAtEndModel.fromJson({"id": json['conditionAtEnd']})
-              : ConditionAtEndModel.fromJson(
-                  json['conditionAtEnd'] as Map<String, dynamic>),
+          : ConditionAtEndModel.fromJson(
+              json['conditionAtEnd'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ContractModelToJson(ContractModel instance) =>

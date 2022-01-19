@@ -17,6 +17,10 @@ import 'package:clicar/app/domain/usecases/auth/forgot_password_usecase.dart';
 import 'package:clicar/app/domain/usecases/auth/logout_usecase.dart';
 import 'package:clicar/app/domain/usecases/contract/search_contract_usecase.dart';
 import 'package:clicar/app/domain/usecases/contract/sign_contract_usecase.dart';
+import 'package:clicar/app/domain/usecases/customer/customer_update_usecase.dart';
+import 'package:clicar/app/domain/usecases/customer/search_customer_usecase.dart';
+import 'package:clicar/app/domain/usecases/driver/driver_update_usecase.dart';
+import 'package:clicar/app/domain/usecases/driver/search_driver_usecase.dart';
 import 'package:clicar/app/domain/usecases/edl/edl_departure_usecase.dart';
 import 'package:clicar/app/domain/usecases/edl/edl_retour_usecase.dart';
 import 'package:clicar/app/domain/usecases/upload_file/upload_multi_file_usecase.dart';
@@ -26,6 +30,8 @@ import 'package:clicar/app/domain/usecases/auth/register_usecase.dart';
 import 'package:clicar/app/domain/usecases/user/user_add_photo_usecase.dart';
 import 'package:clicar/app/domain/usecases/user/user_change_password.dart';
 import 'package:clicar/app/domain/usecases/user/user_info_update_usecase.dart';
+import 'package:clicar/app/domain/usecases/vehicle/search_vehicle_usecase.dart';
+import 'package:clicar/app/domain/usecases/vehicle/vehicle_update_usecase.dart';
 import 'package:clicar/app/presentation/pages/account/bloc/account/account_bloc.dart';
 import 'package:clicar/app/presentation/pages/account/bloc/user_info/user_info_bloc.dart';
 import 'package:clicar/app/presentation/pages/document/bloc/document_bloc.dart';
@@ -80,9 +86,14 @@ Future<void> init() async {
       edlDepartureUseCase: sl(),
       edlRetourUseCase: sl()));
   sl.registerFactory(() => DocumentBloc(
-        uploadSingleFileUseCase: sl(),
-        uploadMultiFileUseCase: sl(),
-      ));
+      uploadSingleFileUseCase: sl(),
+      uploadMultiFileUseCase: sl(),
+      searchCustomerUseCase: sl(),
+      searchDriverUseCase: sl(),
+      searchVehicleUseCase: sl(),
+      driverUpdateUseCase: sl(),
+      customerUpdateUseCase: sl(),
+      vehicleUpdateUseCase: sl()));
 
   ///Use cases
   sl.registerLazySingleton(() => LoginUseCase(repository: sl()));
@@ -101,6 +112,12 @@ Future<void> init() async {
   sl.registerLazySingleton(() => UploadMultiFileUseCase(repository: sl()));
   sl.registerLazySingleton(() => EdlDepartureUseCase(repository: sl()));
   sl.registerLazySingleton(() => EdlRetourUseCase(repository: sl()));
+  sl.registerLazySingleton(() => SearchDriverUseCase(repository: sl()));
+  sl.registerLazySingleton(() => SearchCustomerUseCase(repository: sl()));
+  sl.registerLazySingleton(() => SearchVehicleUseCase(repository: sl()));
+  sl.registerLazySingleton(() => DriverUpdateUseCase(repository: sl()));
+  sl.registerLazySingleton(() => VehicleUpdateUseCase(repository: sl()));
+  sl.registerLazySingleton(() => CustomerUpdateUseCase(repository: sl()));
 
   ///Repositories
   sl.registerLazySingleton<AuthRepository>(

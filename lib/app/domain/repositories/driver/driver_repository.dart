@@ -4,7 +4,7 @@ import 'package:clicar/app/domain/entities/driver/driver.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class DriverRepository {
-  Future<Either<Failure, Customer>> addDocuments({
+  Future<Either<Failure, Driver>> addDocuments({
     required Map<String, dynamic> data,
     required String id,
   });

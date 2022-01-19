@@ -1,9 +1,10 @@
+import 'package:clicar/app/domain/entities/customer/customer.dart';
 import 'package:equatable/equatable.dart';
 
 class Driver extends Equatable {
   final String? id;
   final bool? deleted;
-  final String? customer;
+  final Customer? customer;
   final String? firstName;
   final String? lastName;
   final String? youngName;

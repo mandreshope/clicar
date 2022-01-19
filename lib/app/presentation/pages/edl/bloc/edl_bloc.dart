@@ -191,6 +191,7 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
     try {
       final result = await searchContractUseCase(SearchContractParams(
         keyWord: event.keyWord,
+        isSigned: true,
       ));
       result.fold(
         (failure) {

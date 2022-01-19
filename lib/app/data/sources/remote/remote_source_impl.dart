@@ -219,12 +219,16 @@ class RemoteSourceImpl extends RemoteSource {
   }
 
   @override
-  Future<List<ContractModel>> searchContract({required keyWord}) async {
+  Future<List<ContractModel>> searchContract({
+    required keyWord,
+    required bool isSigned,
+  }) async {
     final url = Uri.parse(RemoteEndpoint.searchContract);
     final response = await client.post(
       url,
       body: jsonEncode({
         'keyWord': keyWord,
+        'isSigned': isSigned,
       }),
     );
     if (response.statusCode == 200) {
@@ -433,9 +437,13 @@ class RemoteSourceImpl extends RemoteSource {
     );
     if (response.statusCode == 200) {
       _refreshToken(response.headers);
-      final body = _parseBody(response.body);
+      try {
+        // final body = _parseBody(response.body);
 
-      return CustomerModel.fromJson(body);
+        return CustomerModel.fromJson({}); //TODO: RESPONSE STRING NOT A JSON
+      } catch (e) {
+        rethrow;
+      }
     } else {
       throw ServerException(
         statusCode: response.statusCode,
@@ -455,9 +463,13 @@ class RemoteSourceImpl extends RemoteSource {
     );
     if (response.statusCode == 200) {
       _refreshToken(response.headers);
-      final body = _parseBody(response.body);
+      try {
+        // final body = _parseBody(response.body);
 
-      return DriverModel.fromJson(body);
+        return DriverModel.fromJson({}); //TODO: RESPONSE STRING NOT A JSON
+      } catch (e) {
+        rethrow;
+      }
     } else {
       throw ServerException(
         statusCode: response.statusCode,
@@ -477,9 +489,13 @@ class RemoteSourceImpl extends RemoteSource {
     );
     if (response.statusCode == 200) {
       _refreshToken(response.headers);
-      final body = _parseBody(response.body);
+      try {
+        // final body = _parseBody(response.body);
 
-      return VehicleModel.fromJson(body);
+        return VehicleModel.fromJson({}); //TODO: RESPONSE STRING NOT A JSON
+      } catch (e) {
+        rethrow;
+      }
     } else {
       throw ServerException(
         statusCode: response.statusCode,
@@ -499,12 +515,16 @@ class RemoteSourceImpl extends RemoteSource {
       }),
     );
     if (response.statusCode == 200) {
-      _refreshToken(response.headers);
-      Map<String, dynamic> map = _parseBody(response.body);
+      try {
+        _refreshToken(response.headers);
+        final Iterable iterable = jsonDecode(response.body);
 
-      return List.from(map['data'])
-          .map((x) => CustomerModel.fromJson(x))
-          .toList();
+        return List.from(iterable)
+            .map((x) => CustomerModel.fromJson(x))
+            .toList();
+      } catch (e) {
+        rethrow;
+      }
     } else {
       throw ServerException(
         statusCode: response.statusCode,
@@ -525,11 +545,14 @@ class RemoteSourceImpl extends RemoteSource {
     );
     if (response.statusCode == 200) {
       _refreshToken(response.headers);
-      Map<String, dynamic> map = _parseBody(response.body);
+      try {
+        _refreshToken(response.headers);
+        final Iterable iterable = jsonDecode(response.body);
 
-      return List.from(map['data'])
-          .map((x) => DriverModel.fromJson(x))
-          .toList();
+        return List.from(iterable).map((x) => DriverModel.fromJson(x)).toList();
+      } catch (e) {
+        rethrow;
+      }
     } else {
       throw ServerException(
         statusCode: response.statusCode,
@@ -542,18 +565,23 @@ class RemoteSourceImpl extends RemoteSource {
   @override
   Future<List<VehicleModel>> searchVehicle(
       {required Map<String, dynamic> filters}) async {
-    final url = Uri.parse(RemoteEndpoint.driverFilter);
+    final url = Uri.parse(RemoteEndpoint.vehicleSearch);
     final response = await client.post(
       url,
       body: jsonEncode(filters),
     );
     if (response.statusCode == 200) {
       _refreshToken(response.headers);
-      Map<String, dynamic> map = _parseBody(response.body);
+      try {
+        _refreshToken(response.headers);
+        final Iterable iterable = jsonDecode(response.body);
 
-      return List.from(map['data'])
-          .map((x) => VehicleModel.fromJson(x))
-          .toList();
+        return List.from(iterable)
+            .map((x) => VehicleModel.fromJson(x))
+            .toList();
+      } catch (e) {
+        rethrow;
+      }
     } else {
       throw ServerException(
         statusCode: response.statusCode,

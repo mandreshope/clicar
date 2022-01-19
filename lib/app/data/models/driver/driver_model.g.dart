@@ -9,7 +9,12 @@ part of 'driver_model.dart';
 DriverModel _$DriverModelFromJson(Map<String, dynamic> json) => DriverModel(
       id: json['id'] as String?,
       deleted: json['deleted'] as bool?,
-      customer: json['customer'] as String?,
+      customer: json['customer'] == null
+          ? null
+          : json['customer'] is String
+              ? CustomerModel.fromJson({})
+              : CustomerModel.fromJson(
+                  json['customer'] as Map<String, dynamic>),
       firstName: json['firstName'] as String?,
       lastName: json['lastName'] as String?,
       youngName: json['youngName'] as String?,
@@ -40,7 +45,7 @@ Map<String, dynamic> _$DriverModelToJson(DriverModel instance) =>
     <String, dynamic>{
       'id': instance.id,
       'deleted': instance.deleted,
-      'customer': instance.customer,
+      'customer': instance.customer?.toJson(),
       'firstName': instance.firstName,
       'lastName': instance.lastName,
       'youngName': instance.youngName,

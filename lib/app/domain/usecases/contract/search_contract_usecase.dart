@@ -14,15 +14,20 @@ class SearchContractUseCase
   @override
   Future<Either<Failure, List<Contract>>> call(
       SearchContractParams params) async {
-    return await repository.search(keyWord: params.keyWord);
+    return await repository.search(
+      keyWord: params.keyWord,
+      isSigned: params.isSigned,
+    );
   }
 }
 
 class SearchContractParams extends Equatable {
   final String keyWord;
+  final bool isSigned;
 
   const SearchContractParams({
     required this.keyWord,
+    required this.isSigned,
   });
 
   @override

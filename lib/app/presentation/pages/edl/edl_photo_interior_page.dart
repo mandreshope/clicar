@@ -147,6 +147,18 @@ class EdlPhotoInteriorPage extends StatelessWidget {
                                         fontSize:
                                             CustomTheme.subtitle1.sp(context)),
                                   ),
+                                  const SizedBox(
+                                    height: 10.0,
+                                  ),
+                                  Text(
+                                    "La taille de téléchargement \n maximale est de 2 Mo",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize:
+                                            CustomTheme.bodyText1.sp(context)),
+                                  ),
                                 ],
                               ),
                             ),

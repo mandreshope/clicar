@@ -45,6 +45,7 @@ class SignatureBloc extends Bloc<SignatureEvent, BaseState> {
     try {
       final result = await searchContractUseCase(SearchContractParams(
         keyWord: event.keyWord,
+        isSigned: false,
       ));
       result.fold(
         (failure) {

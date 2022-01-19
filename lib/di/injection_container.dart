@@ -1,11 +1,17 @@
 import 'package:clicar/app/core/http/http_client.dart';
 import 'package:clicar/app/core/usecases/fetch_token_usecase.dart';
 import 'package:clicar/app/data/repositories/contract/contract_repository_impl.dart';
+import 'package:clicar/app/data/repositories/customer/customer_repository_impl.dart';
+import 'package:clicar/app/data/repositories/driver/driver_repository_impl.dart';
 import 'package:clicar/app/data/repositories/edl/edl_repository_impl.dart';
 import 'package:clicar/app/data/repositories/upload_file/upload_file_repository_impl.dart';
+import 'package:clicar/app/data/repositories/vehicle/vehicle_repository.dart';
 import 'package:clicar/app/domain/repositories/contract/contract_repository.dart';
+import 'package:clicar/app/domain/repositories/customer/customer_repository.dart';
+import 'package:clicar/app/domain/repositories/driver/driver_repository.dart';
 import 'package:clicar/app/domain/repositories/edl/edl_repository.dart';
 import 'package:clicar/app/domain/repositories/upload_file/upload_file_repository.dart';
+import 'package:clicar/app/domain/repositories/vehicle/vehicle_repository.dart';
 import 'package:clicar/app/domain/usecases/auth/change_password_usecase.dart';
 import 'package:clicar/app/domain/usecases/auth/forgot_password_usecase.dart';
 import 'package:clicar/app/domain/usecases/auth/logout_usecase.dart';
@@ -22,6 +28,7 @@ import 'package:clicar/app/domain/usecases/user/user_change_password.dart';
 import 'package:clicar/app/domain/usecases/user/user_info_update_usecase.dart';
 import 'package:clicar/app/presentation/pages/account/bloc/account/account_bloc.dart';
 import 'package:clicar/app/presentation/pages/account/bloc/user_info/user_info_bloc.dart';
+import 'package:clicar/app/presentation/pages/document/bloc/document_bloc.dart';
 import 'package:clicar/app/presentation/pages/edl/bloc/edl_bloc.dart';
 import 'package:clicar/app/presentation/pages/forgot_password/bloc/forgot_password_bloc.dart';
 import 'package:clicar/app/presentation/pages/home/bloc/user/user_bloc.dart';
@@ -72,6 +79,10 @@ Future<void> init() async {
       uploadMultiFileUseCase: sl(),
       edlDepartureUseCase: sl(),
       edlRetourUseCase: sl()));
+  sl.registerFactory(() => DocumentBloc(
+        uploadSingleFileUseCase: sl(),
+        uploadMultiFileUseCase: sl(),
+      ));
 
   ///Use cases
   sl.registerLazySingleton(() => LoginUseCase(repository: sl()));
@@ -112,6 +123,12 @@ Future<void> init() async {
     () => EdlRepositoryImpl(
         networkInfo: sl(), localDataSource: sl(), remoteDataSource: sl()),
   );
+  sl.registerLazySingleton<CustomerRepository>(() => CustomerRepositoryImpl(
+      networkInfo: sl(), localDataSource: sl(), remoteDataSource: sl()));
+  sl.registerLazySingleton<DriverRepository>(() => DriverRepositoryImpl(
+      networkInfo: sl(), localDataSource: sl(), remoteDataSource: sl()));
+  sl.registerLazySingleton<VehicleRepository>(() => VehicleRepositoryImpl(
+      networkInfo: sl(), localDataSource: sl(), remoteDataSource: sl()));
 
   ///Data sources
   sl.registerLazySingleton<RemoteSource>(() => RemoteSourceImpl(client: sl()));

@@ -143,8 +143,7 @@ class EdlBilledInfoPage extends StatelessWidget {
                                           if (state.result.isEmpty)
                                             const Padding(
                                               padding: EdgeInsets.all(8.0),
-                                              child:
-                                                  Text("Aucun contrat trouvé"),
+                                              child: Text("Aucun data trouvé"),
                                             )
                                           else
                                             ...state.result

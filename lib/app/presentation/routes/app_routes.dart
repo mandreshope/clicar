@@ -1,6 +1,9 @@
 import 'package:clicar/app/presentation/pages/account/account_page.dart';
 import 'package:clicar/app/presentation/pages/account/user_info_page.dart';
 import 'package:clicar/app/presentation/pages/account/user_password_page.dart';
+import 'package:clicar/app/presentation/pages/document/document_page.dart';
+import 'package:clicar/app/presentation/pages/document/document_photo_page.dart';
+import 'package:clicar/app/presentation/pages/document/document_summary_page.dart';
 import 'package:clicar/app/presentation/pages/edl/edl_billed_info_page.dart';
 import 'package:clicar/app/presentation/pages/edl/edl_billed_info_summary_page.dart';
 import 'package:clicar/app/presentation/pages/edl/edl_defects_exterior_note_page.dart';
@@ -71,6 +74,9 @@ abstract class AppRoutes {
   static const edlSignatureSuccess = '/edl-signature-success';
   static const edlBilledInfo = '/edl-billed-info';
   static const edlBilledInfoSummary = '/edl-billed-info-summary';
+  static const document = '/document';
+  static const documentPhoto = '/document-photo';
+  static const documentSummary = '/document-summary';
 
   static Map<String, Widget Function(BuildContext)> routes = {
     AppRoutes.login: (BuildContext context) => LoginPage(),
@@ -123,5 +129,10 @@ abstract class AppRoutes {
     AppRoutes.edlBilledInfo: (BuildContext context) => EdlBilledInfoPage(),
     AppRoutes.edlBilledInfoSummary: (BuildContext context) =>
         const EdlBilledInfoSummaryPage(),
+    AppRoutes.document: (BuildContext context) => const DocumentPage(),
+    AppRoutes.documentPhoto: (BuildContext context) =>
+        const DocumentPhotoPage(),
+    AppRoutes.documentSummary: (BuildContext context) =>
+        const DocumentSummaryPage(),
   };
 }

@@ -8,8 +8,11 @@ import 'package:clicar/app/data/models/auth/forgot_password_model.dart';
 import 'package:clicar/app/data/models/auth/login_model.dart';
 import 'package:clicar/app/data/models/auth/register_model.dart';
 import 'package:clicar/app/data/models/contract/contract_model.dart';
+import 'package:clicar/app/data/models/customer/customer_model.dart';
+import 'package:clicar/app/data/models/driver/driver_model.dart';
 import 'package:clicar/app/data/models/upload_file/upload_file_model.dart';
 import 'package:clicar/app/data/models/user/user_model.dart';
+import 'package:clicar/app/data/models/vehicle/vehicle_model.dart';
 import 'package:clicar/app/data/sources/remote/remote_config.dart';
 import 'package:clicar/app/data/sources/remote/remote_source.dart';
 import 'package:clicar/app/domain/usecases/contract/sign_contract_usecase.dart';
@@ -411,6 +414,146 @@ class RemoteSourceImpl extends RemoteSource {
 
       final contract = body['contract'];
       return ContractModel.fromJson(contract);
+    } else {
+      throw ServerException(
+        statusCode: response.statusCode,
+        message: response.reasonPhrase ?? 'Server Error',
+        body: response.body,
+      );
+    }
+  }
+
+  @override
+  Future<CustomerModel> customerUpdate(
+      {required Map<String, dynamic> data, required String id}) async {
+    final url = Uri.parse(RemoteEndpoint.customerUpdate);
+    final response = await client.post(
+      url,
+      body: jsonEncode(data),
+    );
+    if (response.statusCode == 200) {
+      _refreshToken(response.headers);
+      final body = _parseBody(response.body);
+
+      return CustomerModel.fromJson(body);
+    } else {
+      throw ServerException(
+        statusCode: response.statusCode,
+        message: response.reasonPhrase ?? 'Server Error',
+        body: response.body,
+      );
+    }
+  }
+
+  @override
+  Future<DriverModel> driverUpdate(
+      {required Map<String, dynamic> data, required String id}) async {
+    final url = Uri.parse(RemoteEndpoint.driverEdit);
+    final response = await client.patch(
+      url,
+      body: jsonEncode(data),
+    );
+    if (response.statusCode == 200) {
+      _refreshToken(response.headers);
+      final body = _parseBody(response.body);
+
+      return DriverModel.fromJson(body);
+    } else {
+      throw ServerException(
+        statusCode: response.statusCode,
+        message: response.reasonPhrase ?? 'Server Error',
+        body: response.body,
+      );
+    }
+  }
+
+  @override
+  Future<VehicleModel> vehicleUpdate(
+      {required Map<String, dynamic> data, required String id}) async {
+    final url = Uri.parse(RemoteEndpoint.vehicleEdit(id));
+    final response = await client.patch(
+      url,
+      body: jsonEncode(data),
+    );
+    if (response.statusCode == 200) {
+      _refreshToken(response.headers);
+      final body = _parseBody(response.body);
+
+      return VehicleModel.fromJson(body);
+    } else {
+      throw ServerException(
+        statusCode: response.statusCode,
+        message: response.reasonPhrase ?? 'Server Error',
+        body: response.body,
+      );
+    }
+  }
+
+  @override
+  Future<List<CustomerModel>> searchCustomer({required String filter}) async {
+    final url = Uri.parse(RemoteEndpoint.customerFilter);
+    final response = await client.post(
+      url,
+      body: jsonEncode({
+        'filter': filter,
+      }),
+    );
+    if (response.statusCode == 200) {
+      _refreshToken(response.headers);
+      Map<String, dynamic> map = _parseBody(response.body);
+
+      return List.from(map['data'])
+          .map((x) => CustomerModel.fromJson(x))
+          .toList();
+    } else {
+      throw ServerException(
+        statusCode: response.statusCode,
+        message: response.reasonPhrase ?? 'Server Error',
+        body: response.body,
+      );
+    }
+  }
+
+  @override
+  Future<List<DriverModel>> searchDriver({required String filter}) async {
+    final url = Uri.parse(RemoteEndpoint.driverFilter);
+    final response = await client.post(
+      url,
+      body: jsonEncode({
+        'filter': filter,
+      }),
+    );
+    if (response.statusCode == 200) {
+      _refreshToken(response.headers);
+      Map<String, dynamic> map = _parseBody(response.body);
+
+      return List.from(map['data'])
+          .map((x) => DriverModel.fromJson(x))
+          .toList();
+    } else {
+      throw ServerException(
+        statusCode: response.statusCode,
+        message: response.reasonPhrase ?? 'Server Error',
+        body: response.body,
+      );
+    }
+  }
+
+  @override
+  Future<List<VehicleModel>> searchVehicle(
+      {required Map<String, dynamic> filters}) async {
+    final url = Uri.parse(RemoteEndpoint.driverFilter);
+    final response = await client.post(
+      url,
+      body: jsonEncode(filters),
+    );
+    if (response.statusCode == 200) {
+      _refreshToken(response.headers);
+      Map<String, dynamic> map = _parseBody(response.body);
+
+      return List.from(map['data'])
+          .map((x) => VehicleModel.fromJson(x))
+          .toList();
     } else {
       throw ServerException(
         statusCode: response.statusCode,

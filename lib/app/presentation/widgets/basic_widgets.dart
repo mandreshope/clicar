@@ -118,11 +118,13 @@ class SearchTextFieldUnderlined extends StatelessWidget {
   final TextEditingController? controller;
   final Function(String)? onChanged;
   final VoidCallback? onEditingComplete;
+  final String? hintText;
   const SearchTextFieldUnderlined({
     Key? key,
     this.controller,
     this.onChanged,
     this.onEditingComplete,
+    this.hintText,
   }) : super(key: key);
 
   @override
@@ -131,9 +133,10 @@ class SearchTextFieldUnderlined extends StatelessWidget {
       controller: controller,
       onChanged: onChanged,
       onEditingComplete: onEditingComplete,
-      decoration: const InputDecoration(
-        prefixIcon: Icon(Icons.search, color: Colors.grey),
-        border: UnderlineInputBorder(
+      decoration: InputDecoration(
+        hintText: hintText,
+        prefixIcon: const Icon(Icons.search, color: Colors.grey),
+        border: const UnderlineInputBorder(
           borderSide: BorderSide(
             color: Colors.grey,
             width: 0.5,

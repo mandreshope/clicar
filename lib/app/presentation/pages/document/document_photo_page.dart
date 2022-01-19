@@ -1,23 +1,33 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:clicar/app/core/states/base_state.dart';
 import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
+import 'package:clicar/app/presentation/pages/account/bloc/account/account_bloc.dart';
+import 'package:clicar/app/presentation/pages/document/bloc/document_bloc.dart';
 import 'package:clicar/app/presentation/pages/edl/bloc/edl_bloc.dart';
 import 'package:clicar/app/presentation/pages/edl/enums/type_edl.dart';
 import 'package:clicar/app/presentation/pages/edl/enums/type_photo_args.dart';
-import 'package:clicar/app/presentation/pages/signature/bloc/signature_bloc.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
 import 'package:clicar/app/presentation/widgets/scaffold_body.dart';
 import 'package:clicar/app/presentation/widgets/snack_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:image_picker/image_picker.dart';
 
-class EdlPhotoInteriorPage extends StatelessWidget {
-  const EdlPhotoInteriorPage({Key? key}) : super(key: key);
+class DocumentPhotoPage extends StatefulWidget {
+  const DocumentPhotoPage({Key? key}) : super(key: key);
+
+  @override
+  State<DocumentPhotoPage> createState() => _DocumentPhotoPageState();
+}
+
+class _DocumentPhotoPageState extends State<DocumentPhotoPage> {
+  double value = 0.0;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +46,7 @@ class EdlPhotoInteriorPage extends StatelessWidget {
         ],
       ),
       body: ScaffoldBody(
-        child: BlocBuilder<EdlBloc, BaseState>(
+        child: BlocBuilder<DocumentBloc, BaseState>(
           buildWhen: (prevState, currState) {
             if (currState.status == Status.error) {
               SnackBarWidget.show(
@@ -45,7 +55,7 @@ class EdlPhotoInteriorPage extends StatelessWidget {
             return prevState != currState;
           },
           builder: (context, state) {
-            final edlBloc = context.read<EdlBloc>();
+            final documentBloc = context.read<DocumentBloc>();
             return SingleChildScrollView(
               child: Column(
                 children: [
@@ -57,9 +67,7 @@ class EdlPhotoInteriorPage extends StatelessWidget {
                     child: Column(
                       children: [
                         TitleWithSeparator(
-                          title: edlBloc.typeEdl == TypeEdl.departure
-                              ? "Départ".toUpperCase()
-                              : "Retour".toUpperCase(),
+                          title: "ajout pièces".toUpperCase(),
                         ),
                         const SizedBox(
                           height: 30,
@@ -81,47 +89,33 @@ class EdlPhotoInteriorPage extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      ...edlBloc.cameraInteriorPosList
-                                          .map(
-                                            (e) => InkWell(
-                                              onTap: () {
-                                                edlBloc.add(
-                                                  SelectCameraInteriorPosEvent(
-                                                    cameraPos: e,
-                                                  ),
-                                                );
-                                              },
-                                              child: Row(
-                                                children: [
-                                                  Text(
-                                                    e.label ?? "-",
-                                                    style: TextStyle(
-                                                      color: e.isActive == true
-                                                          ? CustomTheme
-                                                              .secondaryColor
-                                                          : Colors.black,
-                                                      fontSize: CustomTheme
-                                                          .subtitle1
-                                                          .sp(
-                                                        context,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 10.0,
-                                                  ),
-                                                  Visibility(
-                                                    visible: e.hasPhoto,
-                                                    child: Image.asset(
-                                                      "${assetsImages}success.png",
-                                                      width: 20.0,
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          )
-                                          .toList(),
+                                      Text(
+                                        "1- Prendre en photo les pièces",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: CustomTheme.subtitle1.sp(
+                                            context,
+                                          ),
+                                        ),
+                                      ),
+                                      Text(
+                                        "2- Renommer les pièces",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: CustomTheme.subtitle1.sp(
+                                            context,
+                                          ),
+                                        ),
+                                      ),
+                                      Text(
+                                        "3- Associer les pièces",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: CustomTheme.subtitle1.sp(
+                                            context,
+                                          ),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -134,14 +128,7 @@ class EdlPhotoInteriorPage extends StatelessWidget {
                               child: Column(
                                 children: [
                                   Text(
-                                    "Prenez 4 photos intérieures",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize:
-                                            CustomTheme.subtitle1.sp(context)),
-                                  ),
-                                  Text(
-                                    "Veuillez à ce qu'elle soient nettes.",
+                                    "Prendre en photos tous les documents",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontSize:
@@ -157,15 +144,6 @@ class EdlPhotoInteriorPage extends StatelessWidget {
                               child: Center(
                                 child: PrimaryButton(
                                   onPressed: () async {
-                                    if (edlBloc.cameraInteriorPosList
-                                        .where((e) => e.hasPhoto == false)
-                                        .isEmpty) {
-                                      Navigator.of(context).pushNamed(
-                                        AppRoutes.edlPhotoList,
-                                        arguments: TypePhotoArgs.interior,
-                                      );
-                                      return;
-                                    }
                                     final ImagePicker _picker = ImagePicker();
                                     final XFile? image =
                                         await showDialog<XFile?>(
@@ -209,8 +187,8 @@ class EdlPhotoInteriorPage extends StatelessWidget {
                                       ),
                                     );
                                     if (image != null) {
-                                      edlBloc.add(
-                                        AddFileOfCameraInteriorPosEvent(
+                                      documentBloc.add(
+                                        AddDocumentPickerEvent(
                                           file: File(image.path),
                                         ),
                                       );
@@ -219,13 +197,34 @@ class EdlPhotoInteriorPage extends StatelessWidget {
                                   backgroundColor: CustomTheme.secondaryColor,
                                   width: 80.0,
                                   height: 80.0,
-                                  child: Icon(
-                                    edlBloc.cameraInteriorPosList
-                                            .where((e) => e.hasPhoto == false)
-                                            .isEmpty
-                                        ? Icons.check
-                                        : Icons.camera_alt,
+                                  child: const Icon(
+                                    Icons.camera_alt,
                                     color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Visibility(
+                              visible: documentBloc.documentPickers.isNotEmpty,
+                              child: Positioned(
+                                bottom: 20.0,
+                                right: 50.0,
+                                child: Center(
+                                  child: PrimaryButton(
+                                    padding: MaterialStateProperty.all(
+                                        const EdgeInsets.all(0.0)),
+                                    onPressed: () async {
+                                      Navigator.of(context)
+                                          .pushNamed(AppRoutes.document);
+                                    },
+                                    backgroundColor: CustomTheme.secondaryColor,
+                                    width: 40.0,
+                                    height: 40.0,
+                                    child: const Icon(
+                                      Icons.arrow_forward_ios,
+                                      color: Colors.white,
+                                      size: 20.0,
+                                    ),
                                   ),
                                 ),
                               ),

@@ -4,8 +4,11 @@ import 'package:clicar/app/data/models/auth/forgot_password_model.dart';
 import 'package:clicar/app/data/models/auth/login_model.dart';
 import 'package:clicar/app/data/models/auth/register_model.dart';
 import 'package:clicar/app/data/models/contract/contract_model.dart';
+import 'package:clicar/app/data/models/customer/customer_model.dart';
+import 'package:clicar/app/data/models/driver/driver_model.dart';
 import 'package:clicar/app/data/models/upload_file/upload_file_model.dart';
 import 'package:clicar/app/data/models/user/user_model.dart';
+import 'package:clicar/app/data/models/vehicle/vehicle_model.dart';
 import 'package:clicar/app/domain/usecases/contract/sign_contract_usecase.dart';
 
 abstract class RemoteSource {
@@ -57,4 +60,20 @@ abstract class RemoteSource {
   });
   Future<ContractModel> edlDeparture({required Map<String, dynamic> data});
   Future<ContractModel> edlRetour({required Map<String, dynamic> data});
+  Future<CustomerModel> customerUpdate({
+    required Map<String, dynamic> data,
+    required String id,
+  });
+  Future<DriverModel> driverUpdate({
+    required Map<String, dynamic> data,
+    required String id,
+  });
+  Future<VehicleModel> vehicleUpdate({
+    required Map<String, dynamic> data,
+    required String id,
+  });
+  Future<List<CustomerModel>> searchCustomer({required String filter});
+  Future<List<DriverModel>> searchDriver({required String filter});
+  Future<List<VehicleModel>> searchVehicle(
+      {required Map<String, dynamic> filters});
 }

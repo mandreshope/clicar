@@ -9,7 +9,7 @@ import 'package:clicar/app/data/sources/remote/remote_config.dart';
 import 'package:clicar/app/presentation/pages/edl/bloc/edl_bloc.dart';
 import 'package:clicar/app/presentation/pages/edl/cubit/draggable_cubit.dart';
 import 'package:clicar/app/presentation/pages/edl/enums/type_edl.dart';
-import 'package:clicar/app/presentation/pages/edl/widgets/drag.dart';
+import 'package:clicar/app/presentation/pages/edl/types/drag.dart';
 import 'package:clicar/app/presentation/pages/signature/bloc/signature_bloc.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';

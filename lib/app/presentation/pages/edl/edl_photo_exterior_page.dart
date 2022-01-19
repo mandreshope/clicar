@@ -279,7 +279,7 @@ class _EdlPhotoExteriorPageState extends State<EdlPhotoExteriorPage> {
                                     final XFile? image =
                                         await showDialog<XFile?>(
                                       context: context,
-                                      barrierDismissible: false,
+                                      barrierDismissible: true,
                                       barrierColor: Colors.transparent,
                                       builder: (BuildContext context) =>
                                           SimpleDialog(

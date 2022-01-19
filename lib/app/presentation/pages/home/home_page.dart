@@ -193,12 +193,13 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                                 onPressed: () {
-                                  // TODO: implement Joindre des documents
-                                  SnackBarWidget.show(
+                                  Navigator.of(context)
+                                      .pushNamed(AppRoutes.documentPhoto);
+                                  /* SnackBarWidget.show(
                                     isError: true,
                                     message: "this feature is coming soon",
                                     context: context,
-                                  );
+                                  );*/
                                 },
                               ),
                               const SizedBox(

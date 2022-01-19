@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:clicar/app/presentation/pages/edl/widgets/drag.dart';
+import 'package:clicar/app/presentation/pages/edl/types/drag.dart';
 import 'package:equatable/equatable.dart';
 
 part './draggable_state.dart';

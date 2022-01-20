@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:clicar/app/core/states/base_state.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
@@ -11,6 +13,7 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/src/provider.dart';
 
 class DocumentExpandable extends StatelessWidget {
@@ -26,14 +29,85 @@ class DocumentExpandable extends StatelessWidget {
         return Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 2.0),
-              child: Image.file(
-                documentPicker.file,
-                width: 100.w(context),
-                height: 20.h(context),
-                fit: BoxFit.cover,
-              ),
-            ),
+                padding: const EdgeInsets.symmetric(vertical: 2.0),
+                child: Stack(
+                  children: [
+                    Image.file(
+                      documentPicker.file,
+                      width: 100.w(context),
+                      height: 20.h(context),
+                      fit: BoxFit.cover,
+                    ),
+                    Positioned(
+                      right: 10.0,
+                      top: 10.0,
+                      child: PrimaryButton(
+                        width: 50.0,
+                        height: 50.0,
+                        backgroundColor:
+                            Theme.of(context).primaryColor.withOpacity(0.7),
+                        padding: MaterialStateProperty.all(
+                            const EdgeInsets.all(0.0)),
+                        onPressed: () async {
+                          final ImagePicker _picker = ImagePicker();
+                          final XFile? image = await showDialog<XFile?>(
+                            context: context,
+                            barrierDismissible: true,
+                            barrierColor: Colors.transparent,
+                            builder: (BuildContext context) => SimpleDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                  CustomTheme.defaultBorderRadius,
+                                ),
+                              ),
+                              children: [
+                                ListTile(
+                                  onTap: () async {
+                                    // Pick an image
+                                    final XFile? image =
+                                        await _picker.pickImage(
+                                      source: ImageSource.gallery,
+                                      imageQuality: 50,
+                                    );
+                                    Navigator.of(context).pop(image);
+                                  },
+                                  title: const Text(
+                                    "Importer une photo",
+                                  ),
+                                ),
+                                ListTile(
+                                  onTap: () async {
+                                    // Pick an image
+                                    final XFile? image =
+                                        await _picker.pickImage(
+                                      source: ImageSource.camera,
+                                      imageQuality: 50,
+                                    );
+                                    Navigator.of(context).pop(image);
+                                  },
+                                  title: const Text("Capturer une photo"),
+                                ),
+                              ],
+                            ),
+                          );
+                          if (image != null) {
+                            documentBloc.add(
+                              UpdateDocumentPickerEvent(
+                                file: File(image.path),
+                                index: documentBloc.documentPickers
+                                    .indexOf(documentPicker),
+                              ),
+                            );
+                          }
+                        },
+                        child: const Icon(
+                          Icons.edit,
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  ],
+                )),
             const SizedBox(
               height: 10,
             ),
@@ -188,6 +262,7 @@ class DocumentExpandable extends StatelessWidget {
             ),
             if (documentPicker.associated != null) ...[
               ExpandableNotifier(
+                controller: documentPicker.expandableSearchController,
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
@@ -272,6 +347,8 @@ class DocumentExpandable extends StatelessWidget {
                             ],
                           ),
                           builder: (_, collapsed, expanded) {
+                            documentPicker
+                                .expandableSearchController?.expanded = true;
                             return Padding(
                               padding: const EdgeInsets.only(
                                 left: 10,

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:clicar/app/core/states/base_state.dart';
 import 'package:clicar/app/core/states/error_state.dart';
 import 'package:clicar/app/core/utils/constants.dart';
@@ -12,6 +14,7 @@ import 'package:clicar/app/presentation/widgets/scaffold_body.dart';
 import 'package:clicar/app/presentation/widgets/snack_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EdlPhotoListPage extends StatelessWidget {
   const EdlPhotoListPage({Key? key}) : super(key: key);
@@ -107,15 +110,101 @@ class EdlPhotoListPage extends StatelessWidget {
                           ...edlBloc.cameraPosList
                               .map(
                                 (e) => Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 2.0),
-                                  child: Image.file(
-                                    e.file!,
-                                    width: 100.w(context),
-                                    height: 20.h(context),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 2.0),
+                                    child: Stack(
+                                      children: [
+                                        Image.file(
+                                          e.file!,
+                                          width: 100.w(context),
+                                          height: 20.h(context),
+                                          fit: BoxFit.cover,
+                                        ),
+                                        Positioned(
+                                          right: 10.0,
+                                          top: 10.0,
+                                          child: PrimaryButton(
+                                            width: 50.0,
+                                            height: 50.0,
+                                            backgroundColor: Theme.of(context)
+                                                .primaryColor
+                                                .withOpacity(0.7),
+                                            padding: MaterialStateProperty.all(
+                                                const EdgeInsets.all(0.0)),
+                                            onPressed: () async {
+                                              final ImagePicker _picker =
+                                                  ImagePicker();
+                                              final XFile? image =
+                                                  await showDialog<XFile?>(
+                                                context: context,
+                                                barrierDismissible: true,
+                                                barrierColor:
+                                                    Colors.transparent,
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        SimpleDialog(
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                      CustomTheme
+                                                          .defaultBorderRadius,
+                                                    ),
+                                                  ),
+                                                  children: [
+                                                    ListTile(
+                                                      onTap: () async {
+                                                        // Pick an image
+                                                        final XFile? image =
+                                                            await _picker
+                                                                .pickImage(
+                                                          source: ImageSource
+                                                              .gallery,
+                                                          imageQuality: 50,
+                                                        );
+                                                        Navigator.of(context)
+                                                            .pop(image);
+                                                      },
+                                                      title: const Text(
+                                                        "Importer une photo",
+                                                      ),
+                                                    ),
+                                                    ListTile(
+                                                      onTap: () async {
+                                                        // Pick an image
+                                                        final XFile? image =
+                                                            await _picker
+                                                                .pickImage(
+                                                          source: ImageSource
+                                                              .camera,
+                                                          imageQuality: 50,
+                                                        );
+                                                        Navigator.of(context)
+                                                            .pop(image);
+                                                      },
+                                                      title: const Text(
+                                                          "Capturer une photo"),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                              if (image != null) {
+                                                edlBloc.add(
+                                                  UpdateFileOfCameraPosEvent(
+                                                    file: File(image.path),
+                                                    index: edlBloc.cameraPosList
+                                                        .indexOf(e),
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                            child: const Icon(
+                                              Icons.edit,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    )),
                               )
                               .toList(),
                         ] else if (typePhotoArgs == TypePhotoArgs.interior) ...[
@@ -138,11 +227,97 @@ class EdlPhotoListPage extends StatelessWidget {
                                 (e) => Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 2.0),
-                                  child: Image.file(
-                                    e.file!,
-                                    width: 100.w(context),
-                                    height: 20.h(context),
-                                    fit: BoxFit.cover,
+                                  child: Stack(
+                                    children: [
+                                      Image.file(
+                                        e.file!,
+                                        width: 100.w(context),
+                                        height: 20.h(context),
+                                        fit: BoxFit.cover,
+                                      ),
+                                      Positioned(
+                                        right: 10.0,
+                                        top: 10.0,
+                                        child: PrimaryButton(
+                                          width: 50.0,
+                                          height: 50.0,
+                                          backgroundColor: Theme.of(context)
+                                              .primaryColor
+                                              .withOpacity(0.7),
+                                          padding: MaterialStateProperty.all(
+                                              const EdgeInsets.all(0.0)),
+                                          onPressed: () async {
+                                            final ImagePicker _picker =
+                                                ImagePicker();
+                                            final XFile? image =
+                                                await showDialog<XFile?>(
+                                              context: context,
+                                              barrierDismissible: true,
+                                              barrierColor: Colors.transparent,
+                                              builder: (BuildContext context) =>
+                                                  SimpleDialog(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                    CustomTheme
+                                                        .defaultBorderRadius,
+                                                  ),
+                                                ),
+                                                children: [
+                                                  ListTile(
+                                                    onTap: () async {
+                                                      // Pick an image
+                                                      final XFile? image =
+                                                          await _picker
+                                                              .pickImage(
+                                                        source:
+                                                            ImageSource.gallery,
+                                                        imageQuality: 50,
+                                                      );
+                                                      Navigator.of(context)
+                                                          .pop(image);
+                                                    },
+                                                    title: const Text(
+                                                      "Importer une photo",
+                                                    ),
+                                                  ),
+                                                  ListTile(
+                                                    onTap: () async {
+                                                      // Pick an image
+                                                      final XFile? image =
+                                                          await _picker
+                                                              .pickImage(
+                                                        source:
+                                                            ImageSource.camera,
+                                                        imageQuality: 50,
+                                                      );
+                                                      Navigator.of(context)
+                                                          .pop(image);
+                                                    },
+                                                    title: const Text(
+                                                        "Capturer une photo"),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                            if (image != null) {
+                                              edlBloc.add(
+                                                UpdateFileOfCameraInteriorPosEvent(
+                                                  file: File(image.path),
+                                                  index: edlBloc
+                                                      .cameraInteriorPosList
+                                                      .indexOf(e),
+                                                ),
+                                              );
+                                            }
+                                          },
+                                          child: const Icon(
+                                            Icons.edit,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      )
+                                    ],
                                   ),
                                 ),
                               )

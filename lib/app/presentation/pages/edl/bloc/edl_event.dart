@@ -31,6 +31,17 @@ class AddFileOfCameraPosEvent extends EdlEvent {
   List<Object> get props => [file];
 }
 
+class UpdateFileOfCameraPosEvent extends EdlEvent {
+  final File file;
+  final int index;
+  const UpdateFileOfCameraPosEvent({
+    required this.file,
+    required this.index,
+  });
+  @override
+  List<Object> get props => [file, index];
+}
+
 class AddFileOfCameraInteriorPosEvent extends EdlEvent {
   final File file;
   const AddFileOfCameraInteriorPosEvent({
@@ -38,6 +49,17 @@ class AddFileOfCameraInteriorPosEvent extends EdlEvent {
   });
   @override
   List<Object> get props => [file];
+}
+
+class UpdateFileOfCameraInteriorPosEvent extends EdlEvent {
+  final int index;
+  final File file;
+  const UpdateFileOfCameraInteriorPosEvent({
+    required this.index,
+    required this.file,
+  });
+  @override
+  List<Object> get props => [file, index];
 }
 
 class SearchContractEvent extends EdlEvent {

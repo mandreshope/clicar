@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:clicar/app/presentation/pages/document/types/document_item.dart';
+import 'package:expandable/expandable.dart';
 import 'package:flutter/cupertino.dart';
 
 class DocumentPicker {
@@ -9,6 +10,7 @@ class DocumentPicker {
   DocumentItem? associated;
   String? associatedSelectedId;
   String? associatedSelectedName;
+  ExpandableController? expandableSearchController = ExpandableController();
   TextEditingController? search = TextEditingController();
 
   DocumentPicker({

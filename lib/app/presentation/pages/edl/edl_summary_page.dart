@@ -16,9 +16,21 @@ class EdlSummaryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () {
-        context.read<EdlBloc>().resetAll();
-        return Future.value(true);
+      onWillPop: () async {
+        final bool? confirm = await showDialog<bool?>(
+          context: context,
+          barrierDismissible: false,
+          barrierColor: Colors.transparent,
+          builder: (BuildContext context) => const ConfirmDialog(
+            title: "Voulez-vous annuler l'EDL ?",
+          ),
+        );
+        if (confirm == true) {
+          context.read<EdlBloc>().resetAll();
+          return Future.value(true);
+        } else {
+          return false;
+        }
       },
       child: Scaffold(
         backgroundColor: CustomTheme.primaryColor,

@@ -32,9 +32,21 @@ class _DocumentPhotoPageState extends State<DocumentPhotoPage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () {
-        context.read<DocumentBloc>().reset();
-        return Future.value(true);
+      onWillPop: () async {
+        final bool? confirm = await showDialog<bool?>(
+          context: context,
+          barrierDismissible: false,
+          barrierColor: Colors.transparent,
+          builder: (BuildContext context) => const ConfirmDialog(
+            title: "Voulez-vous annuler ?",
+          ),
+        );
+        if (confirm == true) {
+          context.read<DocumentBloc>().reset();
+          return Future.value(true);
+        } else {
+          return false;
+        }
       },
       child: Scaffold(
         appBar: AppBar(

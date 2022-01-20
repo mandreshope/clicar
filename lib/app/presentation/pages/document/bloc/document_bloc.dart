@@ -76,6 +76,7 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
     required this.customerUpdateUseCase,
   }) : super(const BaseState(status: Status.initial, message: "initial")) {
     on<AddDocumentPickerEvent>(_addDocumentPickerEvent);
+    on<UpdateDocumentPickerEvent>(_updateDocumentPickerEvent);
     on<SelectTypeDocumentEvent>(_selectTypeDocumentEvent);
     on<SelectAssociatedDocumentEvent>(_selectAssociatedDocumentEvent);
     on<SelectAssociatedIdDocumentEvent>(_selectAssociatedIdDocumentEvent);
@@ -95,6 +96,12 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
 
   void _addDocumentPickerEvent(AddDocumentPickerEvent event, Emitter emit) {
     documentPickers.add(DocumentPicker(file: event.file));
+    emit(BaseState(status: Status.success, message: "file: ${event.file}"));
+  }
+
+  void _updateDocumentPickerEvent(
+      UpdateDocumentPickerEvent event, Emitter emit) {
+    documentPickers[event.index].file = event.file;
     emit(BaseState(status: Status.success, message: "file: ${event.file}"));
   }
 
@@ -200,8 +207,10 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
             }
           },
           (success) {
+            final splitResult =
+                success.length > 20 ? success.sublist(0, 10) : success;
             emit(SearchAssociateSuccessState(
-                result: success
+                result: splitResult
                     .map((e) => DocumentItem(
                         id: e.id,
                         type: "Client",
@@ -232,8 +241,10 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
             }
           },
           (success) {
+            final splitResult =
+                success.length > 20 ? success.sublist(0, 10) : success;
             emit(SearchAssociateSuccessState(
-                result: success
+                result: splitResult
                     .map((e) => DocumentItem(
                         id: e.id,
                         type: "Conducteur",
@@ -267,8 +278,10 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
             }
           },
           (success) {
+            final splitResult =
+                success.length > 20 ? success.sublist(0, 10) : success;
             emit(SearchAssociateSuccessState(
-                result: success
+                result: splitResult
                     .map((e) => DocumentItem(
                         id: e.id,
                         type: "Vehicule",

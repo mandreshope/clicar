@@ -256,6 +256,8 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
     on<SelectCameraInteriorPosEvent>(_selectCameraInteriorPosEvent);
     on<AddFileOfCameraPosEvent>(_addFileOfCameraPosEvent);
     on<AddFileOfCameraInteriorPosEvent>(_addFileOfCameraInteriorPosEvent);
+    on<UpdateFileOfCameraInteriorPosEvent>(_updateFileOfCameraInteriorPosEvent);
+    on<UpdateFileOfCameraPosEvent>(_updateFileOfCameraPosEvent);
     on<UploadPhotoDefectsExteriorEvent>(_uploadPhotosDefectsExteriorEvent);
     on<EdlPhotosEvent>(_edlPhotosEvent);
     on<EdlPhotoDefectsEvent>(_edlPhotoDefectsEvent);
@@ -558,6 +560,30 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         status: Status.success,
         message:
             "$currentCameraInteriorPos ${cameraInteriorPosList[currentCameraInteriorPos].file} reload",
+      ),
+    );
+  }
+
+  void _updateFileOfCameraInteriorPosEvent(
+      UpdateFileOfCameraInteriorPosEvent event, emit) {
+    cameraInteriorPosList[event.index].file = event.file;
+    cameraInteriorPosList[event.index].hasPhoto = true;
+    emit(
+      AddFileOfCameraPosState(
+        status: Status.success,
+        message:
+            "${event.index} ${cameraInteriorPosList[event.index].file} reload",
+      ),
+    );
+  }
+
+  void _updateFileOfCameraPosEvent(UpdateFileOfCameraPosEvent event, emit) {
+    cameraPosList[event.index].file = event.file;
+    cameraPosList[event.index].hasPhoto = true;
+    emit(
+      AddFileOfCameraPosState(
+        status: Status.success,
+        message: "${event.index} ${cameraPosList[event.index].file} reload",
       ),
     );
   }

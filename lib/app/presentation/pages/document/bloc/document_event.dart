@@ -15,6 +15,19 @@ class AddDocumentPickerEvent extends DocumentEvent {
   List<Object> get props => [file];
 }
 
+class UpdateDocumentPickerEvent extends DocumentEvent {
+  final File file;
+  final int index;
+
+  const UpdateDocumentPickerEvent({
+    required this.file,
+    required this.index,
+  });
+
+  @override
+  List<Object> get props => [file, index];
+}
+
 class SelectTypeDocumentEvent extends DocumentEvent {
   final DocumentPicker documentPicker;
   final DocumentItem documentItem;

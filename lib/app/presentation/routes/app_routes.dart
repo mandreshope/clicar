@@ -6,6 +6,7 @@ import 'package:clicar/app/presentation/pages/document/document_photo_page.dart'
 import 'package:clicar/app/presentation/pages/document/document_summary_page.dart';
 import 'package:clicar/app/presentation/pages/edl/edl_billed_info_page.dart';
 import 'package:clicar/app/presentation/pages/edl/edl_billed_info_summary_page.dart';
+import 'package:clicar/app/presentation/pages/edl/edl_camera_exterior_page.dart';
 import 'package:clicar/app/presentation/pages/edl/edl_defects_exterior_note_page.dart';
 import 'package:clicar/app/presentation/pages/edl/edl_defects_exterior_page.dart';
 import 'package:clicar/app/presentation/pages/edl/edl_departure_page.dart';
@@ -77,6 +78,7 @@ abstract class AppRoutes {
   static const document = '/document';
   static const documentPhoto = '/document-photo';
   static const documentSummary = '/document-summary';
+  static const edlCameraExterior = '/edl-camera-exterior';
 
   static Map<String, Widget Function(BuildContext)> routes = {
     AppRoutes.login: (BuildContext context) => LoginPage(),
@@ -134,5 +136,7 @@ abstract class AppRoutes {
         const DocumentPhotoPage(),
     AppRoutes.documentSummary: (BuildContext context) =>
         const DocumentSummaryPage(),
+    AppRoutes.edlCameraExterior: (BuildContext context) =>
+        EdlCameraExteriorPage(),
   };
 }

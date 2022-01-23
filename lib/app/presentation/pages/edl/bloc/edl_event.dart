@@ -6,47 +6,62 @@ abstract class EdlEvent extends Equatable {
 
 class SelectCameraPosEvent extends EdlEvent {
   final CameraPos cameraPos;
+
   const SelectCameraPosEvent({
     required this.cameraPos,
   });
+
   @override
   List<Object> get props => [cameraPos];
 }
 
 class SelectCameraInteriorPosEvent extends EdlEvent {
   final CameraPos cameraPos;
+
   const SelectCameraInteriorPosEvent({
     required this.cameraPos,
   });
+
   @override
   List<Object> get props => [cameraPos];
 }
 
 class AddFileOfCameraPosEvent extends EdlEvent {
   final File file;
+
   const AddFileOfCameraPosEvent({
     required this.file,
   });
+
   @override
   List<Object> get props => [file];
+}
+
+class ReloadEvent extends EdlEvent {
+  @override
+  List<Object> get props => [];
 }
 
 class UpdateFileOfCameraPosEvent extends EdlEvent {
   final File file;
   final int index;
+
   const UpdateFileOfCameraPosEvent({
     required this.file,
     required this.index,
   });
+
   @override
   List<Object> get props => [file, index];
 }
 
 class AddFileOfCameraInteriorPosEvent extends EdlEvent {
   final File file;
+
   const AddFileOfCameraInteriorPosEvent({
     required this.file,
   });
+
   @override
   List<Object> get props => [file];
 }
@@ -54,10 +69,12 @@ class AddFileOfCameraInteriorPosEvent extends EdlEvent {
 class UpdateFileOfCameraInteriorPosEvent extends EdlEvent {
   final int index;
   final File file;
+
   const UpdateFileOfCameraInteriorPosEvent({
     required this.index,
     required this.file,
   });
+
   @override
   List<Object> get props => [file, index];
 }
@@ -151,9 +168,11 @@ class UploadPhotosInteriorEvent extends EdlEvent {
 
 class UploadPhotoDefectsExteriorEvent extends EdlEvent {
   final File file;
+
   const UploadPhotoDefectsExteriorEvent({
     required this.file,
   });
+
   @override
   List<Object> get props => [file];
 }
@@ -165,48 +184,61 @@ class EdlPhotoDefectsEvent extends EdlEvent {
 
 class EdlDepartureNoteEvent extends EdlEvent {
   final String note;
+
   const EdlDepartureNoteEvent({required this.note});
+
   @override
   List<Object> get props => [note];
 }
 
 class EdlRetourNoteEvent extends EdlEvent {
   final String note;
+
   const EdlRetourNoteEvent({required this.note});
+
   @override
   List<Object> get props => [note];
 }
 
 class EdlMileageEvent extends EdlEvent {
   final int mileage;
+
   const EdlMileageEvent({required this.mileage});
+
   @override
   List<Object> get props => [mileage];
 }
 
 class EdlBilledInfoEvent extends EdlEvent {
   const EdlBilledInfoEvent();
+
   @override
   List<Object> get props => [];
 }
 
 class EdlFuelLevelEvent extends EdlEvent {
   final int fuel;
+
   const EdlFuelLevelEvent({required this.fuel});
+
   @override
   List<Object> get props => [fuel];
 }
 
 class EdlDepartureSignEvent extends EdlEvent {
   final bool isAccepted;
+
   const EdlDepartureSignEvent({required this.isAccepted});
+
   @override
   List<Object> get props => [isAccepted];
 }
 
 class EdlRetourSignEvent extends EdlEvent {
   final bool isAccepted;
+
   const EdlRetourSignEvent({required this.isAccepted});
+
   @override
   List<Object> get props => [isAccepted];
 }

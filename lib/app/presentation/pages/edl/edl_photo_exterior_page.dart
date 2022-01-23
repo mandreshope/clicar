@@ -9,6 +9,7 @@ import 'package:clicar/app/presentation/pages/account/bloc/account/account_bloc.
 import 'package:clicar/app/presentation/pages/edl/bloc/edl_bloc.dart';
 import 'package:clicar/app/presentation/pages/edl/enums/type_edl.dart';
 import 'package:clicar/app/presentation/pages/edl/enums/type_photo_args.dart';
+import 'package:clicar/app/presentation/pages/edl/widgets/camera_pos_car_exterior.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
 import 'package:clicar/app/presentation/widgets/scaffold_body.dart';
@@ -92,148 +93,8 @@ class _EdlPhotoExteriorPageState extends State<EdlPhotoExteriorPage> {
                             ContainerRoundedGrey(
                               width: 100.w(context),
                               height: 60.h(context),
-                              child: Center(
-                                child: SizedBox(
-                                  width: 70.w(context),
-                                  height: 25.h(context),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: edlBloc.cameraPosList
-                                            .map(
-                                              (e) => e.alignment ==
-                                                      Alignment.topCenter
-                                                  ? InkWell(
-                                                      onTap: () {
-                                                        edlBloc.add(
-                                                          SelectCameraPosEvent(
-                                                            cameraPos: e,
-                                                          ),
-                                                        );
-                                                      },
-                                                      child: Transform.rotate(
-                                                        angle:
-                                                            e.rotation ?? 0.0,
-                                                        child: Image.asset(
-                                                          e.isActive ||
-                                                                  e.hasPhoto
-                                                              ? "${assetsImages}camera_active.png"
-                                                              : "${assetsImages}camera_inactive.png",
-                                                          width: 60,
-                                                          height: 60,
-                                                        ),
-                                                      ),
-                                                    )
-                                                  : const SizedBox.shrink(),
-                                            )
-                                            .toList(),
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          //devant
-                                          ...edlBloc.cameraPosList
-                                              .map(
-                                                (e) => e.alignment ==
-                                                        Alignment.centerLeft
-                                                    ? InkWell(
-                                                        onTap: () {
-                                                          edlBloc.add(
-                                                            SelectCameraPosEvent(
-                                                              cameraPos: e,
-                                                            ),
-                                                          );
-                                                        },
-                                                        child: Transform.rotate(
-                                                          angle:
-                                                              e.rotation ?? 0.0,
-                                                          child: Image.asset(
-                                                            e.isActive ||
-                                                                    e.hasPhoto
-                                                                ? "${assetsImages}camera_active.png"
-                                                                : "${assetsImages}camera_inactive.png",
-                                                            width: 60,
-                                                            height: 60,
-                                                          ),
-                                                        ),
-                                                      )
-                                                    : const SizedBox.shrink(),
-                                              )
-                                              .toList(),
-                                          Image.asset(
-                                            "${assetsImages}top_view_citadine.png",
-                                            width: 130,
-                                          ),
-                                          ...edlBloc.cameraPosList
-                                              .map(
-                                                (e) => e.alignment ==
-                                                        Alignment.centerRight
-                                                    ? InkWell(
-                                                        onTap: () {
-                                                          edlBloc.add(
-                                                            SelectCameraPosEvent(
-                                                              cameraPos: e,
-                                                            ),
-                                                          );
-                                                        },
-                                                        child: Transform.rotate(
-                                                          angle:
-                                                              e.rotation ?? 0.0,
-                                                          child: Image.asset(
-                                                            e.isActive ||
-                                                                    e.hasPhoto
-                                                                ? "${assetsImages}camera_active.png"
-                                                                : "${assetsImages}camera_inactive.png",
-                                                            width: 60,
-                                                            height: 60,
-                                                          ),
-                                                        ),
-                                                      )
-                                                    : const SizedBox.shrink(),
-                                              )
-                                              .toList(),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: edlBloc.cameraPosList.reversed
-                                            .map(
-                                              (e) => e.alignment ==
-                                                      Alignment.bottomCenter
-                                                  ? InkWell(
-                                                      onTap: () {
-                                                        edlBloc.add(
-                                                          SelectCameraPosEvent(
-                                                            cameraPos: e,
-                                                          ),
-                                                        );
-                                                      },
-                                                      child: Transform.rotate(
-                                                        angle:
-                                                            e.rotation ?? 0.0,
-                                                        child: Image.asset(
-                                                          e.isActive ||
-                                                                  e.hasPhoto
-                                                              ? "${assetsImages}camera_active.png"
-                                                              : "${assetsImages}camera_inactive.png",
-                                                          width: 60,
-                                                          height: 60,
-                                                        ),
-                                                      ),
-                                                    )
-                                                  : const SizedBox.shrink(),
-                                            )
-                                            .toList(),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                              child: const Center(
+                                child: CameraPosCarExterior(),
                               ),
                             ),
                             Positioned(
@@ -317,13 +178,20 @@ class _EdlPhotoExteriorPageState extends State<EdlPhotoExteriorPage> {
                                           ),
                                           ListTile(
                                             onTap: () async {
-                                              // Pick an image
-                                              final XFile? image =
+                                              Navigator.of(context).pop();
+
+                                              // Capture an image
+                                              await Navigator.of(context)
+                                                  .pushNamed(AppRoutes
+                                                      .edlCameraExterior);
+                                              edlBloc.add(ReloadEvent());
+
+                                              /*final XFile? image =
                                                   await _picker.pickImage(
                                                 source: ImageSource.camera,
                                                 imageQuality: 50,
                                               );
-                                              Navigator.of(context).pop(image);
+                                              Navigator.of(context).pop(image);*/
                                             },
                                             title: const Text(
                                                 "Capturer une photo"),
@@ -333,8 +201,11 @@ class _EdlPhotoExteriorPageState extends State<EdlPhotoExteriorPage> {
                                     );
 
                                     if (image != null) {
-                                      edlBloc.add(AddFileOfCameraPosEvent(
-                                          file: File(image.path)));
+                                      edlBloc.add(
+                                        AddFileOfCameraPosEvent(
+                                          file: File(image.path),
+                                        ),
+                                      );
                                     }
                                   },
                                   backgroundColor: CustomTheme.secondaryColor,

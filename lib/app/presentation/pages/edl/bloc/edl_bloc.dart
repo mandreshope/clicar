@@ -269,6 +269,7 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
     on<EdlDepartureSignEvent>(_edlDepartureSignEvent);
     on<EdlRetourSignEvent>(_edlRetourSignEvent);
     on<UploadSignatureFileEvent>(_uploadSignatureFileEvent);
+    on<ReloadEvent>(_reloadEvent);
   }
 
   void resetUploadPhoto() {
@@ -333,6 +334,11 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
           ),
         )
         .toList();
+  }
+
+  void _reloadEvent(ReloadEvent event, Emitter emit) {
+    emit(state.copyWith(
+        message: "reload state ${DateTime.now().microsecondsSinceEpoch}"));
   }
 
   Future<void> _searchContractEvent(

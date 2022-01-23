@@ -11,6 +11,16 @@ class BaseState extends Equatable {
 
   @override
   List<Object?> get props => [status, message];
+
+  BaseState copyWith({
+    Status? status,
+    String? message,
+  }) {
+    return BaseState(
+      status: status ?? this.status,
+      message: message ?? this.message,
+    );
+  }
 }
 
 enum Status {

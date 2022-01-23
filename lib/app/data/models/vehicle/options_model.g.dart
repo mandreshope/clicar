@@ -13,6 +13,8 @@ OptionsModel _$OptionsModelFromJson(Map<String, dynamic> json) => OptionsModel(
       equipments: json['equipments'] as List<dynamic>?,
       category: json['category'] as String?,
       motor: json['motor'] as int?,
+      additionalKmUnitPrice:
+          (json['additionalKmUnitPrice'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$OptionsModelToJson(OptionsModel instance) =>
@@ -23,4 +25,5 @@ Map<String, dynamic> _$OptionsModelToJson(OptionsModel instance) =>
       'equipments': instance.equipments,
       'category': instance.category,
       'motor': instance.motor,
+      'additionalKmUnitPrice': instance.additionalKmUnitPrice,
     };

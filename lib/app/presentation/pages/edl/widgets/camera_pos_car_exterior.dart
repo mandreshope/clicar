@@ -43,12 +43,15 @@ class CameraPosCarExterior extends StatelessWidget {
                                   },
                                   child: Transform.rotate(
                                     angle: e.rotation ?? 0.0,
-                                    child: Image.asset(
-                                      e.isActive || e.hasPhoto
-                                          ? "${assetsImages}camera_active.png"
-                                          : "${assetsImages}camera_inactive.png",
-                                      width: 40,
-                                      height: 40,
+                                    child: Opacity(
+                                      opacity: 0.7,
+                                      child: Image.asset(
+                                        e.isActive || e.hasPhoto
+                                            ? "${assetsImages}camera_active.png"
+                                            : "${assetsImages}camera_inactive.png",
+                                        width: 40,
+                                        height: 40,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -102,12 +105,15 @@ class CameraPosCarExterior extends StatelessWidget {
                                     },
                                     child: Transform.rotate(
                                       angle: e.rotation ?? 0.0,
-                                      child: Image.asset(
-                                        e.isActive || e.hasPhoto
-                                            ? "${assetsImages}camera_active.png"
-                                            : "${assetsImages}camera_inactive.png",
-                                        width: 40,
-                                        height: 40,
+                                      child: Opacity(
+                                        opacity: 0.7,
+                                        child: Image.asset(
+                                          e.isActive || e.hasPhoto
+                                              ? "${assetsImages}camera_active.png"
+                                              : "${assetsImages}camera_inactive.png",
+                                          width: 40,
+                                          height: 40,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -142,7 +148,7 @@ class CameraPosCarExterior extends StatelessWidget {
                   Visibility(
                     visible: isOnCamera,
                     child: Opacity(
-                      opacity: 0.5,
+                      opacity: 0.7,
                       child: Image.asset(
                         "${assetsImages}top_view_citadine.png",
                         width: 100,
@@ -228,12 +234,15 @@ class CameraPosCarExterior extends StatelessWidget {
                                   },
                                   child: Transform.rotate(
                                     angle: e.rotation ?? 0.0,
-                                    child: Image.asset(
-                                      e.isActive || e.hasPhoto
-                                          ? "${assetsImages}camera_active.png"
-                                          : "${assetsImages}camera_inactive.png",
-                                      width: 40,
-                                      height: 40,
+                                    child: Opacity(
+                                      opacity: 0.7,
+                                      child: Image.asset(
+                                        e.isActive || e.hasPhoto
+                                            ? "${assetsImages}camera_active.png"
+                                            : "${assetsImages}camera_inactive.png",
+                                        width: 40,
+                                        height: 40,
+                                      ),
                                     ),
                                   ),
                                 ),

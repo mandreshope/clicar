@@ -10,13 +10,19 @@ class MileageCubit extends Cubit<MileageState> {
     required int kmInclus,
     required int departMileage,
     required int retourMileage,
+    required double additionalKmUnitPrice,
   }) {
     if (departMileage < retourMileage) {
       final diff = (retourMileage - departMileage);
       if (kmInclus < diff) {
         final exceedValue = diff - kmInclus;
+        final exceedPrice = additionalKmUnitPrice * exceedValue;
         emit(MileageChangeState(
-            value: retourMileage, isExceed: true, exceedValue: exceedValue));
+          value: retourMileage,
+          isExceed: true,
+          exceedValue: exceedValue,
+          exceedPrice: exceedPrice,
+        ));
       } else {
         emit(MileageChangeState(value: retourMileage, isExceed: false));
       }

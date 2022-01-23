@@ -10,6 +10,7 @@ class OptionsModel extends Options {
   final List<dynamic>? equipments;
   final String? category;
   final int? motor;
+  final double? additionalKmUnitPrice;
 
   const OptionsModel({
     this.gearBox,
@@ -18,6 +19,7 @@ class OptionsModel extends Options {
     this.equipments,
     this.category,
     this.motor,
+    this.additionalKmUnitPrice,
   }) : super(
           gearBox: gearBox,
           color: color,
@@ -25,6 +27,7 @@ class OptionsModel extends Options {
           equipments: equipments,
           category: category,
           motor: motor,
+          additionalKmUnitPrice: additionalKmUnitPrice,
         );
 
   factory OptionsModel.fromJson(Map<String, dynamic> json) =>

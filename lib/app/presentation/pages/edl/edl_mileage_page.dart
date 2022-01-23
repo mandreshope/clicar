@@ -6,6 +6,7 @@ import 'package:clicar/app/presentation/pages/edl/bloc/edl_bloc.dart';
 import 'package:clicar/app/presentation/pages/edl/cubit/gauge_cubit.dart';
 import 'package:clicar/app/presentation/pages/edl/cubit/mileage_cubit.dart';
 import 'package:clicar/app/presentation/pages/edl/enums/type_edl.dart';
+import 'package:clicar/app/presentation/pages/edl/types/billed_info.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
 import 'package:clicar/app/presentation/widgets/circular_progress_widget.dart';
@@ -114,6 +115,12 @@ class EdlMileagePage extends StatelessWidget {
                                   formatterInteger.parse(v) ?? 0;
                               int departureMileage =
                                   edlBloc.contract.conditionAtStart?.km ?? 0;
+                              double additionalKmUnitPrice = edlBloc
+                                      .contract
+                                      .vehicle
+                                      ?.options
+                                      ?.additionalKmUnitPrice ??
+                                  0;
                               int kmInclus = formatterInteger.parse(edlBloc
                                           .contract
                                           .rate
@@ -123,9 +130,12 @@ class EdlMileagePage extends StatelessWidget {
                                       "") ??
                                   0;
                               context.read<MileageCubit>().change(
-                                  departMileage: departureMileage,
-                                  retourMileage: retourMileage,
-                                  kmInclus: kmInclus);
+                                    departMileage: departureMileage,
+                                    retourMileage: retourMileage,
+                                    kmInclus: kmInclus,
+                                    additionalKmUnitPrice:
+                                        additionalKmUnitPrice,
+                                  );
                             },
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -182,39 +192,42 @@ class EdlMileagePage extends StatelessWidget {
                                 return Visibility(
                                   visible:
                                       (state as MileageChangeState).isExceed,
-                                  child: Text(
-                                    "Attention, dépassement du nombre de kilomètre inclus +${state.exceedValue} km",
-                                    style: TextStyle(
-                                      fontSize: CustomTheme
-                                          .mainBtnTextStyle.fontSize
-                                          ?.sp(context),
-                                      color: Colors.red,
-                                    ),
-                                    textAlign: TextAlign.center,
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        "Attention, dépassement du nombre de kilomètre inclus +${state.exceedValue} km",
+                                        style: TextStyle(
+                                          fontSize: CustomTheme
+                                              .mainBtnTextStyle.fontSize
+                                              ?.sp(context),
+                                          color: Colors.red,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      const SizedBox(
+                                        height: CustomTheme.spacer,
+                                      ),
+                                      SecondaryButton(
+                                        height: 40.0,
+                                        padding: MaterialStateProperty.all(
+                                            const EdgeInsets.all(0.0)),
+                                        width: double.infinity,
+                                        child: Text(
+                                          "Facture: ${state.exceedPrice} € km supp"
+                                              .toUpperCase(),
+                                          style: TextStyle(
+                                            fontSize: CustomTheme
+                                                .mainBtnTextStyle.fontSize
+                                                ?.sp(context),
+                                            color: CustomTheme.primaryColor,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 );
                               },
                             ),
-
-                            ///TODO: WAITING...
-                            /*const SizedBox(
-                              height: CustomTheme.spacer,
-                            ),
-                            SecondaryButton(
-                              height: 40.0,
-                              padding: MaterialStateProperty.all(
-                                  const EdgeInsets.all(0.0)),
-                              width: double.infinity,
-                              child: Text(
-                                "Facture: 200€ km supp".toUpperCase(),
-                                style: TextStyle(
-                                  fontSize: CustomTheme
-                                      .mainBtnTextStyle.fontSize
-                                      ?.sp(context),
-                                  color: CustomTheme.primaryColor,
-                                ),
-                              ),
-                            ),*/
                           ],
                           const SizedBox(
                             height: CustomTheme.spacer,
@@ -231,6 +244,22 @@ class EdlMileagePage extends StatelessWidget {
                             replacement: PrimaryButton(
                               width: 40.w(context),
                               onPressed: () {
+                                final mileageCubit =
+                                    context.read<MileageCubit>();
+                                if ((mileageCubit.state as MileageChangeState)
+                                        .exceedPrice >
+                                    0) {
+                                  edlBloc.billedInfoList.add(
+                                    BilledInfo(
+                                      label:
+                                          "${(mileageCubit.state as MileageChangeState).exceedValue} km supplémentaire",
+                                      amount: (mileageCubit.state
+                                              as MileageChangeState)
+                                          .exceedPrice,
+                                      isSelected: true,
+                                    ),
+                                  );
+                                }
                                 edlBloc.add(EdlMileageEvent(
                                     mileage:
                                         formatterInteger.parse(mileage.text) ??

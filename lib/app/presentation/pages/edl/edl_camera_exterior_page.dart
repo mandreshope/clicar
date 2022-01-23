@@ -18,6 +18,7 @@ import 'package:clicar/app/presentation/widgets/circular_progress_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
+import 'dart:math' as math;
 
 class EdlCameraExteriorPage extends StatefulWidget {
   const EdlCameraExteriorPage({Key? key}) : super(key: key);

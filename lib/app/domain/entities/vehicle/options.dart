@@ -7,6 +7,7 @@ class Options extends Equatable {
   final List<dynamic>? equipments;
   final String? category;
   final int? motor;
+  final double? additionalKmUnitPrice;
 
   const Options({
     this.gearBox,
@@ -15,6 +16,7 @@ class Options extends Equatable {
     this.equipments,
     this.category,
     this.motor,
+    this.additionalKmUnitPrice,
   });
 
   @override
@@ -25,5 +27,6 @@ class Options extends Equatable {
         equipments,
         category,
         motor,
+        additionalKmUnitPrice,
       ];
 }

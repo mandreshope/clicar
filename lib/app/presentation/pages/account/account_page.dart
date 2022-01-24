@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:clicar/app/core/states/base_state.dart';
+import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/responsive.dart';
 import 'package:clicar/app/core/utils/theme.dart';
@@ -176,14 +177,64 @@ class AccountPage extends StatelessWidget {
                                       onPressed: () async {
                                         final ImagePicker _picker =
                                             ImagePicker();
-                                        // Pick an image
                                         final XFile? image =
-                                            await _picker.pickImage(
-                                                source: ImageSource.gallery);
+                                            await showDialog<XFile?>(
+                                          context: context,
+                                          barrierDismissible: true,
+                                          barrierColor: Colors.transparent,
+                                          builder: (BuildContext context) =>
+                                              SimpleDialog(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                CustomTheme.defaultBorderRadius,
+                                              ),
+                                            ),
+                                            children: [
+                                              ListTile(
+                                                onTap: () async {
+                                                  // Pick an image
+                                                  final XFile? image =
+                                                      await _picker.pickImage(
+                                                    source: ImageSource.gallery,
+                                                    imageQuality: 50,
+                                                  );
+                                                  Navigator.of(context)
+                                                      .pop(image);
+                                                },
+                                                title: const Text(
+                                                  "Importer une photo",
+                                                ),
+                                              ),
+                                              ListTile(
+                                                onTap: () async {
+                                                  final XFile? image =
+                                                      await _picker.pickImage(
+                                                    source: ImageSource.camera,
+                                                    imageQuality: 50,
+                                                  );
+                                                  Navigator.of(context)
+                                                      .pop(image);
+                                                },
+                                                title: const Text(
+                                                    "Capturer une photo"),
+                                              ),
+                                            ],
+                                          ),
+                                        );
                                         if (image != null) {
+                                          final file = File(image.path);
+                                          if (fileSize(file) >= 2.0) {
+                                            SnackBarWidget.show(
+                                                context: context,
+                                                message:
+                                                    "2 Mo la taille de fichier maximale pour le téléversement !",
+                                                isError: true);
+                                            return;
+                                          }
                                           context.read<AccountBloc>().add(
                                               UploadUserPhotoFileEvent(
-                                                  file: File(image.path)));
+                                                  file: file));
                                         }
                                       },
                                     ),

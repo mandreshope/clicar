@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:clicar/app/core/utils/currency_formatter.dart';
 import 'package:clicar/app/core/utils/integer_formatter.dart';
 import 'package:flutter/cupertino.dart';
@@ -48,4 +50,15 @@ Future<String> get localPath async {
   final directory = await getApplicationDocumentsDirectory();
 
   return directory.path;
+}
+
+double fileSize(File? file) {
+  if (file == null) {
+    return 0;
+  }
+  final bytes = file.readAsBytesSync().lengthInBytes;
+  final kb = bytes / 1024;
+  final mb = kb / 1024;
+  // debugPrint("$mb Mo");
+  return mb;
 }

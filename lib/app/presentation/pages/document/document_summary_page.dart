@@ -1,4 +1,5 @@
 import 'package:clicar/app/core/states/base_state.dart';
+import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
 import 'package:clicar/app/presentation/pages/document/bloc/document_bloc.dart';
@@ -146,6 +147,18 @@ class DocumentSummaryPage extends StatelessWidget {
                             replacement: PrimaryButton(
                               width: 40.w(context),
                               onPressed: () {
+                                final filesExceedMaxSize = documentBloc
+                                    .documentPickers
+                                    .where((e) => fileSize(e.file) >= 2.0)
+                                    .toList();
+                                if (filesExceedMaxSize.isNotEmpty) {
+                                  SnackBarWidget.show(
+                                      context: context,
+                                      message:
+                                          "Veuillez respecter la taille de fichier maximale pour le téléversement !",
+                                      isError: true);
+                                  return;
+                                }
                                 documentBloc.add(UploadDocumentsEvent());
                               },
                               child: Text(

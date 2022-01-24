@@ -499,13 +499,13 @@ class ConfirmDialog extends StatelessWidget {
       title: Text(
         title,
         style: TextStyle(
-          fontSize: CustomTheme.headline.sp(context),
+          fontSize: CustomTheme.headline1.sp(context),
           color: CustomTheme.primaryColor,
         ),
       ),
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(24.0, 0.0, 24.0, 0.0),
+          padding: const EdgeInsets.fromLTRB(24.0, 10.0, 24.0, 0.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

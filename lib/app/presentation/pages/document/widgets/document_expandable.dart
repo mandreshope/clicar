@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:clicar/app/core/states/base_state.dart';
+import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
 import 'package:clicar/app/presentation/pages/document/bloc/document_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:clicar/app/presentation/pages/document/types/document_item.dart'
 import 'package:clicar/app/presentation/pages/document/types/document_picker.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
 import 'package:clicar/app/presentation/widgets/circular_progress_widget.dart';
+import 'package:clicar/app/presentation/widgets/photo_size_max.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +39,16 @@ class DocumentExpandable extends StatelessWidget {
                       width: 100.w(context),
                       height: 20.h(context),
                       fit: BoxFit.cover,
+                    ),
+                    Visibility(
+                      visible: fileSize(documentPicker.file) >= 2.0,
+                      child: const Positioned(
+                        top: 0,
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: PhotoSizeMax(),
+                      ),
                     ),
                     Positioned(
                       right: 10.0,
@@ -111,6 +123,8 @@ class DocumentExpandable extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
+
+            ///type de documents
             ExpandableNotifier(
               controller: documentPicker.expandableTypeController,
               child: Container(
@@ -185,6 +199,8 @@ class DocumentExpandable extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
+
+            ///associer
             ExpandableNotifier(
               controller: documentPicker.expandableAssociateController,
               child: Container(
@@ -267,6 +283,8 @@ class DocumentExpandable extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
+
+            ///search
             if (documentPicker.associated != null) ...[
               ExpandableNotifier(
                 controller: documentPicker.expandableSearchController,

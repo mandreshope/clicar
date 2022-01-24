@@ -42,6 +42,23 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
 
   int documentsUploadedCounter = 0;
 
+  List<DocumentItem> typesLock = [
+    DocumentItem(type: "CIN_recto", label: "Carte d’identité recto"),
+    DocumentItem(type: "CIN_verso", label: "Carte d’identité verso"),
+    DocumentItem(type: "Passeport", label: "Passeport"),
+    DocumentItem(type: "Justificatif", label: "justificatif de domicile"),
+    DocumentItem(type: "kbis", label: "K-bis"),
+    DocumentItem(type: "CVTC", label: "Carte VTC"),
+    DocumentItem(type: "Permis_recto", label: "Permis de conduire recto"),
+    DocumentItem(type: "Permis_verso", label: "Permis de conduire verso"),
+    DocumentItem(type: "Vehicle_CG", label: "Carte grise"),
+    DocumentItem(type: "Vehicle_CPIP", label: "CPI provisoire"),
+    DocumentItem(type: "Vehicle_ADV", label: "Assurance du véhicule"),
+    DocumentItem(type: "Vehicle_AP", label: "Assurance passagers"),
+    DocumentItem(type: "Vehicle_CT", label: "Contrôle technique"),
+    DocumentItem(type: "Other", label: "Other")
+  ];
+
   List<DocumentItem> types = [
     DocumentItem(type: "CIN_recto", label: "Carte d’identité recto"),
     DocumentItem(type: "CIN_verso", label: "Carte d’identité verso"),
@@ -57,6 +74,12 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
     DocumentItem(type: "Vehicle_AP", label: "Assurance passagers"),
     DocumentItem(type: "Vehicle_CT", label: "Contrôle technique"),
     DocumentItem(type: "Other", label: "Other")
+  ];
+
+  List<DocumentItem> associatesLock = [
+    DocumentItem(type: "Conducteur", label: "Conducteur"),
+    DocumentItem(type: "Client", label: "Client"),
+    DocumentItem(type: "Vehicule", label: "Véhicule"),
   ];
 
   List<DocumentItem> associates = [
@@ -108,6 +131,31 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
   void _selectTypeDocumentEvent(SelectTypeDocumentEvent event, Emitter emit) {
     documentPickers[documentPickers.indexOf(event.documentPicker)].type =
         event.documentItem;
+    documentPickers[documentPickers.indexOf(event.documentPicker)].associated =
+        null;
+    associates = associatesLock
+        .map((e) => e.copyWith(
+              label: e.label,
+              id: e.id,
+              type: e.type,
+            ))
+        .toList();
+
+    if (["CIN_recto", "CIN_verso", "Passeport", "Permis_recto", "Permis_verso"]
+        .contains(event.documentItem.type)) {
+      associates = associatesLock
+          .where((e) => ["Conducteur", "Client"].contains(e.type))
+          .toList();
+    } else if ([
+      "Vehicle_CG",
+      "Vehicle_CPIP",
+      "Vehicle_ADV",
+      "Vehicle_AP",
+      "Vehicle_CT",
+    ].contains(event.documentItem.type)) {
+      associates =
+          associatesLock.where((e) => ["Vehicule"].contains(e.type)).toList();
+    }
     emit(BaseState(
         status: Status.success,
         message:

@@ -10,8 +10,11 @@ class DocumentPicker {
   DocumentItem? associated;
   String? associatedSelectedId;
   String? associatedSelectedName;
-  ExpandableController? expandableSearchController = ExpandableController();
+  ExpandableController expandableSearchController = ExpandableController();
   TextEditingController? search = TextEditingController();
+
+  ExpandableController expandableTypeController = ExpandableController();
+  ExpandableController expandableAssociateController = ExpandableController();
 
   DocumentPicker({
     required this.file,

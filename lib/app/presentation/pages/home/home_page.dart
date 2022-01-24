@@ -197,7 +197,7 @@ class _HomePageState extends State<HomePage> {
                                       .pushNamed(AppRoutes.documentPhoto);
                                   /* SnackBarWidget.show(
                                     isError: true,
-                                    message: "this feature is coming soon",
+                                    message: "This feature is coming soon",
                                     context: context,
                                   );*/
                                 },
@@ -219,7 +219,7 @@ class _HomePageState extends State<HomePage> {
                                   // TODO: implement Consulter les statistiques
                                   SnackBarWidget.show(
                                     isError: true,
-                                    message: "this feature is coming soon",
+                                    message: "This feature is coming soon",
                                     context: context,
                                   );
                                 },

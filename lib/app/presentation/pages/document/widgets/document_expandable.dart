@@ -112,6 +112,7 @@ class DocumentExpandable extends StatelessWidget {
               height: 10,
             ),
             ExpandableNotifier(
+              controller: documentPicker.expandableTypeController,
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -149,6 +150,8 @@ class DocumentExpandable extends StatelessWidget {
                         ...documentBloc.types
                             .map((documentItem) => InkWell(
                                   onTap: () {
+                                    documentPicker.expandableTypeController
+                                        .expanded = false;
                                     documentBloc.add(SelectTypeDocumentEvent(
                                         documentPicker: documentPicker,
                                         documentItem: documentItem));
@@ -183,6 +186,7 @@ class DocumentExpandable extends StatelessWidget {
               height: 10,
             ),
             ExpandableNotifier(
+              controller: documentPicker.expandableAssociateController,
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -223,6 +227,9 @@ class DocumentExpandable extends StatelessWidget {
                             ...documentBloc.associates
                                 .map((documentItem) => InkWell(
                                       onTap: () {
+                                        documentPicker
+                                            .expandableAssociateController
+                                            .expanded = false;
                                         documentBloc.add(
                                             SelectAssociatedDocumentEvent(
                                                 documentPicker: documentPicker,
@@ -347,8 +354,8 @@ class DocumentExpandable extends StatelessWidget {
                             ],
                           ),
                           builder: (_, collapsed, expanded) {
-                            documentPicker
-                                .expandableSearchController?.expanded = true;
+                            documentPicker.expandableSearchController.expanded =
+                                true;
                             return Padding(
                               padding: const EdgeInsets.only(
                                 left: 10,

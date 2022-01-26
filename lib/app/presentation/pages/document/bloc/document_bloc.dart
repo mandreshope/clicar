@@ -376,6 +376,20 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
           }
         };
 
+        final vihiclePayload = {
+          "data": {
+            "id": associateId,
+            "documents": {
+              documentType: {
+                "label": "Carte d’identité recto",
+                "date": DateTime.now().formatDatePayloadFr,
+                "path": uploadFile.path,
+                "filename": uploadFile.filename,
+              },
+            }
+          }
+        };
+
         if (documentAssociate == DocumentAssociate.customer) {
           final result = await customerUpdateUseCase(CustomerUpdateParams(
             data: payload,
@@ -434,7 +448,7 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
           );
         } else if (documentAssociate == DocumentAssociate.vehicle) {
           final result = await vehicleUpdateUseCase(VehicleUpdateParams(
-            data: payload,
+            data: vihiclePayload,
             id: associateId ?? "",
           ));
           result.fold(

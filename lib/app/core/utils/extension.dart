@@ -52,6 +52,12 @@ extension FormatDate on DateTime {
     if (n >= 10) return '$n';
     return '0$n';
   }
+
+  /// SERVER FORMAT DATE
+  ///
+  /// 17-01-2022
+  String get formatDatePayloadFr =>
+      "${twoDigits(day)}-${twoDigits(month)}-$year";
 }
 
 Map<String, dynamic> removeNullsFromMap(Map<String, dynamic> json) => json

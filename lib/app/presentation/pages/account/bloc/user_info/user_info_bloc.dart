@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:clicar/app/core/errors/message.dart';
 import 'package:clicar/app/core/errors/failures.dart';
 import 'package:clicar/app/core/states/base_state.dart';
 import 'package:clicar/app/core/states/error_state.dart';
@@ -43,16 +44,14 @@ class UserInfoBloc extends Bloc<UserInfoEvent, BaseState> {
         (failure) {
           if (failure is NoConnectionFailure) {
             emit(const ErrorState(
-                status: Status.error, message: 'No connextion error'));
+                status: Status.error, message: noConnexionMessage));
           } else if (failure is ServerFailure) {
-            emit(ErrorState(status: Status.error, message: failure.message));
+            emit(const ErrorState(status: Status.error, message: serverError));
           } else if (failure is TokenExpiredFailure) {
             emit(const ErrorState(
-                status: Status.tokenExpired,
-                message: 'token expired 🔑🔑🔑🔑🔑🪙🪙🔑🔑🔑'));
+                status: Status.tokenExpired, message: tokenExpired));
           } else {
-            emit(const ErrorState(
-                status: Status.error, message: 'Unknown error'));
+            emit(const ErrorState(status: Status.error, message: unknownError));
           }
         },
         (success) {
@@ -64,7 +63,7 @@ class UserInfoBloc extends Bloc<UserInfoEvent, BaseState> {
         },
       );
     } catch (_) {
-      emit(ErrorState(message: _.toString(), status: Status.error));
+      emit(ErrorState(message: unknownError, status: Status.error));
     }
   }
 }

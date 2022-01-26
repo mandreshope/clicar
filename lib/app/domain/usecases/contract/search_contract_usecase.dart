@@ -17,6 +17,8 @@ class SearchContractUseCase
     return await repository.search(
       keyWord: params.keyWord,
       isSigned: params.isSigned,
+      hasStartingEdl: params.hasStartingEdl,
+      hasEndingEdl: params.hasEndingEdl,
     );
   }
 }
@@ -24,12 +26,16 @@ class SearchContractUseCase
 class SearchContractParams extends Equatable {
   final String keyWord;
   final bool isSigned;
+  final bool? hasStartingEdl;
+  final bool? hasEndingEdl;
 
   const SearchContractParams({
     required this.keyWord,
     required this.isSigned,
+    this.hasStartingEdl,
+    this.hasEndingEdl,
   });
 
   @override
-  List<Object> get props => [keyWord];
+  List<Object?> get props => [keyWord, isSigned, hasStartingEdl, hasEndingEdl];
 }

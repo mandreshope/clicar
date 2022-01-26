@@ -20,6 +20,7 @@ import 'package:clicar/di/injection_container.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:clicar/app/core/utils/extension.dart';
 
 class RemoteSourceImpl extends RemoteSource {
   late HttpClient client;
@@ -222,22 +223,28 @@ class RemoteSourceImpl extends RemoteSource {
   Future<List<ContractModel>> searchContract({
     required keyWord,
     required bool isSigned,
+    bool? hasStartingEdl,
+    bool? hasEndingEdl,
   }) async {
     final url = Uri.parse(RemoteEndpoint.searchContract);
-    final response = await client.post(
-      url,
-      body: jsonEncode({
-        'keyWord': keyWord,
-        'isSigned': isSigned,
-      }),
-    );
+    final body = jsonEncode({
+      'keyWord': keyWord,
+      'isSigned': isSigned,
+      'hasStartingEdl': hasStartingEdl,
+      'hasEndingEdl': hasEndingEdl,
+    }.removeNulls);
+    final response = await client.post(url, body: body);
     if (response.statusCode == 200) {
       _refreshToken(response.headers);
       Map<String, dynamic> map = _parseBody(response.body);
 
-      return List.from(map['data'])
-          .map((x) => ContractModel.fromJson(x))
-          .toList();
+      try {
+        return List.from(map['data'])
+            .map((x) => ContractModel.fromJson(x))
+            .toList();
+      } catch (e) {
+        rethrow;
+      }
     } else {
       throw ServerException(
         statusCode: response.statusCode,
@@ -483,9 +490,10 @@ class RemoteSourceImpl extends RemoteSource {
   Future<VehicleModel> vehicleUpdate(
       {required Map<String, dynamic> data, required String id}) async {
     final url = Uri.parse(RemoteEndpoint.vehicleEdit(id));
+    final body = jsonEncode(data);
     final response = await client.patch(
       url,
-      body: jsonEncode(data),
+      body: body,
     );
     if (response.statusCode == 200) {
       _refreshToken(response.headers);

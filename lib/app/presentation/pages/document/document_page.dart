@@ -85,27 +85,17 @@ class DocumentPage extends StatelessWidget {
                                       e.associatedSelectedName != null)
                                   .length ==
                               documentBloc.documentPickers.length,
-                          child: Visibility(
-                            visible: state.status == Status.loading,
-                            child: PrimaryButton(
-                              height: 50.0,
-                              width: 40.w(context),
-                              child: const CircularProgress(
+                          child: PrimaryButton(
+                            width: 40.w(context),
+                            onPressed: () {
+                              Navigator.of(context)
+                                  .pushNamed(AppRoutes.documentSummary);
+                            },
+                            child: Text(
+                              'Suivant'.toUpperCase(),
+                              style: TextStyle(
+                                fontSize: CustomTheme.button.sp(context),
                                 color: Colors.white,
-                              ),
-                            ),
-                            replacement: PrimaryButton(
-                              width: 40.w(context),
-                              onPressed: () {
-                                Navigator.of(context)
-                                    .pushNamed(AppRoutes.documentSummary);
-                              },
-                              child: Text(
-                                'Suivant'.toUpperCase(),
-                                style: TextStyle(
-                                  fontSize: CustomTheme.button.sp(context),
-                                  color: Colors.white,
-                                ),
                               ),
                             ),
                           ),

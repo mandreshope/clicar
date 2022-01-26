@@ -1,3 +1,4 @@
+import 'package:clicar/app/data/models/contract/contract_model.dart';
 import 'package:clicar/app/data/models/vehicle/general_model.dart';
 import 'package:clicar/app/data/models/vehicle/insurance_model.dart';
 import 'package:clicar/app/data/models/vehicle/options_model.dart';
@@ -16,7 +17,7 @@ class VehicleModel extends Vehicle {
   final List<dynamic>? maintenances;
   final List<dynamic>? pvs;
   final bool? deleted;
-  final List<String>? contrats;
+  final List<ContractModel>? contrats;
   final List<dynamic>? locations;
   final String? number;
   final String? immat1;

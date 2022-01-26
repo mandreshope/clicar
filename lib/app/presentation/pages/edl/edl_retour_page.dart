@@ -119,9 +119,15 @@ class _EdlRetourPageState extends State<EdlRetourPage> {
                                           SearchTextFieldUnderlined(
                                             controller: search,
                                             onChanged: (v) {
+                                              if (v.trim().isEmpty) {
+                                                return;
+                                              }
                                               context.read<EdlBloc>().add(
-                                                  SearchContractEvent(
-                                                      keyWord: search.text));
+                                                    SearchContractEvent(
+                                                      keyWord: search.text,
+                                                      typeEdl: TypeEdl.retour,
+                                                    ),
+                                                  );
                                             },
                                           ),
                                           const SizedBox(

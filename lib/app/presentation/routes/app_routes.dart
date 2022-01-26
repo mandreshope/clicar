@@ -33,6 +33,7 @@ import 'package:clicar/app/presentation/pages/signature/signature_confirm_page.d
 import 'package:clicar/app/presentation/pages/signature/signature_detail_page.dart';
 import 'package:clicar/app/presentation/pages/signature/signature_draw_page.dart';
 import 'package:clicar/app/presentation/pages/signature/signature_page.dart';
+import 'package:clicar/app/presentation/pages/signature/signature_pdf_viewer_page.dart';
 import 'package:clicar/app/presentation/pages/signature/signature_success_page.dart';
 import 'package:clicar/app/presentation/pages/signature/signature_summary_page.dart';
 import 'package:clicar/app/presentation/pages/splash/splash_page.dart';
@@ -79,6 +80,7 @@ abstract class AppRoutes {
   static const documentPhoto = '/document-photo';
   static const documentSummary = '/document-summary';
   static const edlCameraExterior = '/edl-camera-exterior';
+  static const signaturePdfViewer = '/signature-pdf-Viewer';
 
   static Map<String, Widget Function(BuildContext)> routes = {
     AppRoutes.login: (BuildContext context) => LoginPage(),
@@ -137,6 +139,8 @@ abstract class AppRoutes {
     AppRoutes.documentSummary: (BuildContext context) =>
         const DocumentSummaryPage(),
     AppRoutes.edlCameraExterior: (BuildContext context) =>
-        EdlCameraExteriorPage(),
+        const EdlCameraExteriorPage(),
+    AppRoutes.signaturePdfViewer: (BuildContext context) =>
+        const SignaturePdfViewerPage(),
   };
 }

@@ -6,6 +6,7 @@ import 'package:clicar/app/domain/usecases/auth/change_password_usecase.dart';
 import 'package:clicar/app/domain/usecases/auth/forgot_password_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:clicar/app/core/errors/message.dart';
 
 part 'forgot_password_event.dart';
 part 'forgot_password_state.dart';
@@ -35,17 +36,17 @@ class ForgotPasswordBloc
       result.fold(
         (failure) {
           if (failure is NoConnectionFailure) {
-            emit(const ErrorState(message: 'No connextion error'));
+            emit(const ErrorState(message: noConnexionMessage));
           } else if (failure is ServerFailure) {
             emit(ErrorState(message: failure.message));
           } else {
-            emit(const ErrorState(message: 'Unknown error'));
+            emit(const ErrorState(message: unknownError));
           }
         },
         (success) => emit(VerificationCodeSentState()),
       );
     } catch (_) {
-      emit(ErrorState(message: _.toString()));
+      emit(ErrorState(message: unknownError));
     }
   }
 
@@ -62,17 +63,17 @@ class ForgotPasswordBloc
       result.fold(
         (failure) {
           if (failure is NoConnectionFailure) {
-            emit(const ErrorState(message: 'No connextion error'));
+            emit(const ErrorState(message: noConnexionMessage));
           } else if (failure is ServerFailure) {
             emit(ErrorState(message: failure.message));
           } else {
-            emit(const ErrorState(message: 'Unknown error'));
+            emit(const ErrorState(message: unknownError));
           }
         },
         (success) => emit(PasswordChangedState()),
       );
     } catch (_) {
-      emit(ErrorState(message: _.toString()));
+      emit(ErrorState(message: unknownError));
     }
   }
 

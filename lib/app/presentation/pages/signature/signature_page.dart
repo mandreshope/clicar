@@ -102,6 +102,9 @@ class SignaturePage extends StatelessWidget {
                                           SearchTextFieldUnderlined(
                                             controller: search,
                                             onChanged: (v) {
+                                              if (v.trim().isEmpty) {
+                                                return;
+                                              }
                                               context.read<SignatureBloc>().add(
                                                   SearchContractEvent(
                                                       keyWord: search.text));

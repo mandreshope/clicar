@@ -1,3 +1,4 @@
+import 'package:clicar/app/domain/entities/contract/contract.dart';
 import 'package:clicar/app/domain/entities/vehicle/general.dart';
 import 'package:clicar/app/domain/entities/vehicle/insurance.dart';
 import 'package:clicar/app/domain/entities/vehicle/options.dart';
@@ -12,7 +13,7 @@ class Vehicle extends Equatable {
   final List<dynamic>? maintenances;
   final List<dynamic>? pvs;
   final bool? deleted;
-  final List<String>? contrats;
+  final List<Contract>? contrats;
   final List<dynamic>? locations;
   final String? number;
   final String? immat1;

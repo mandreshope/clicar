@@ -20,13 +20,21 @@ class ContractRepositoryImpl implements ContractRepository {
   });
 
   @override
-  Future<Either<Failure, List<Contract>>> search(
-      {required String keyWord, required bool isSigned}) async {
+  Future<Either<Failure, List<Contract>>> search({
+    required String keyWord,
+    required bool isSigned,
+    bool? hasStartingEdl,
+    bool? hasEndingEdl,
+  }) async {
     if (await networkInfo.isConnected) {
       if (localDataSource.isExpiredToken() == false) {
         try {
           final remoteData = await remoteDataSource.searchContract(
-              keyWord: keyWord, isSigned: isSigned);
+            keyWord: keyWord,
+            isSigned: isSigned,
+            hasStartingEdl: hasStartingEdl,
+            hasEndingEdl: hasEndingEdl,
+          );
           return Right(remoteData);
         } on ServerException catch (_) {
           return Left(ServerFailure(

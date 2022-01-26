@@ -13,7 +13,9 @@ VehicleModel _$VehicleModelFromJson(Map<String, dynamic> json) => VehicleModel(
       pvs: json['pvs'] as List<dynamic>?,
       deleted: json['deleted'] as bool?,
       contrats: (json['contrats'] as List<dynamic>?)
-          ?.map((e) => e as String)
+          ?.map((e) => e is String
+              ? ContractModel.fromJson({})
+              : ContractModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       locations: json['locations'] as List<dynamic>?,
       number: json['number'] as String?,
@@ -55,7 +57,7 @@ Map<String, dynamic> _$VehicleModelToJson(VehicleModel instance) =>
       'maintenances': instance.maintenances,
       'pvs': instance.pvs,
       'deleted': instance.deleted,
-      'contrats': instance.contrats,
+      'contrats': instance.contrats?.map((e) => e.toJson()).toList(),
       'locations': instance.locations,
       'number': instance.number,
       'immat1': instance.immat1,

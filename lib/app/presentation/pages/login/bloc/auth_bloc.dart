@@ -8,6 +8,7 @@ import 'package:clicar/app/domain/usecases/auth/login_usecase.dart';
 import 'package:clicar/app/domain/usecases/auth/logout_usecase.dart';
 import 'package:clicar/app/domain/usecases/auth/register_usecase.dart';
 import 'package:equatable/equatable.dart';
+import 'package:clicar/app/core/errors/message.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -47,7 +48,7 @@ class AuthBloc extends Bloc<AuthEvent, BaseState> {
         },
       );
     } catch (_) {
-      emit(ErrorState(status: Status.error, message: _.toString()));
+      emit(const ErrorState(status: Status.error, message: unknownError));
     }
   }
 
@@ -63,18 +64,17 @@ class AuthBloc extends Bloc<AuthEvent, BaseState> {
       result.fold((failure) {
         if (failure is NoConnectionFailure) {
           emit(const ErrorState(
-              status: Status.error, message: 'No connextion error'));
+              status: Status.error, message: noConnexionMessage));
         } else if (failure is ServerFailure) {
-          emit(ErrorState(status: Status.error, message: failure.message));
+          emit(const ErrorState(status: Status.error, message: serverError));
         } else {
-          emit(
-              const ErrorState(status: Status.error, message: 'Unknown error'));
+          emit(const ErrorState(status: Status.error, message: unknownError));
         }
       }, (success) {
         emit(const BaseState(status: Status.logged, message: 'user logged 😊'));
       });
     } catch (_) {
-      emit(ErrorState(status: Status.error, message: _.toString()));
+      emit(const ErrorState(status: Status.error, message: unknownError));
     }
   }
 
@@ -93,7 +93,7 @@ class AuthBloc extends Bloc<AuthEvent, BaseState> {
       result.fold((failure) {
         if (failure is NoConnectionFailure) {
           emit(const ErrorState(
-              status: Status.error, message: 'No connextion error'));
+              status: Status.error, message: noConnexionMessage));
         } else if (failure is ServerFailure) {
           if (failure.body is Map) {
             if ((failure.body as Map).containsKey("email") &&
@@ -124,14 +124,13 @@ class AuthBloc extends Bloc<AuthEvent, BaseState> {
             ));
           }
         } else {
-          emit(
-              const ErrorState(status: Status.error, message: 'Unknown error'));
+          emit(const ErrorState(status: Status.error, message: unknownError));
         }
       }, (success) {
         emit(const BaseState(status: Status.logged, message: 'user logged 😊'));
       });
     } catch (_) {
-      emit(ErrorState(status: Status.error, message: _.toString()));
+      emit(const ErrorState(status: Status.error, message: unknownError));
     }
   }
 

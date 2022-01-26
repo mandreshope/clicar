@@ -123,9 +123,16 @@ class _EdlDeparturePageState extends State<EdlDeparturePage> {
                                           SearchTextFieldUnderlined(
                                             controller: search,
                                             onChanged: (v) {
+                                              if (v.trim().isEmpty) {
+                                                return;
+                                              }
                                               context.read<EdlBloc>().add(
-                                                  SearchContractEvent(
-                                                      keyWord: search.text));
+                                                    SearchContractEvent(
+                                                      keyWord: search.text,
+                                                      typeEdl:
+                                                          TypeEdl.departure,
+                                                    ),
+                                                  );
                                             },
                                           ),
                                           const SizedBox(

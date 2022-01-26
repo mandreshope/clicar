@@ -13,6 +13,7 @@ import 'package:clicar/app/domain/usecases/contract/sign_contract_usecase.dart';
 import 'package:clicar/app/domain/usecases/upload_file/upload_single_file_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:clicar/app/core/errors/message.dart';
 
 part './signature_event.dart';
 part './signature_state.dart';
@@ -51,16 +52,14 @@ class SignatureBloc extends Bloc<SignatureEvent, BaseState> {
         (failure) {
           if (failure is NoConnectionFailure) {
             emit(const ErrorState(
-                status: Status.error, message: 'No connextion error'));
+                status: Status.error, message: noConnexionMessage));
           } else if (failure is ServerFailure) {
-            emit(ErrorState(status: Status.error, message: failure.message));
+            emit(const ErrorState(status: Status.error, message: serverError));
           } else if (failure is TokenExpiredFailure) {
             emit(const ErrorState(
-                status: Status.tokenExpired,
-                message: 'token expired 🔑🔑🔑🔑🔑🪙🪙🔑🔑🔑'));
+                status: Status.tokenExpired, message: tokenExpired));
           } else {
-            emit(const ErrorState(
-                status: Status.error, message: 'Unknown error'));
+            emit(const ErrorState(status: Status.error, message: unknownError));
           }
         },
         (success) {
@@ -71,7 +70,7 @@ class SignatureBloc extends Bloc<SignatureEvent, BaseState> {
         },
       );
     } catch (_) {
-      emit(ErrorState(status: Status.error, message: _.toString()));
+      emit(const ErrorState(status: Status.error, message: unknownError));
     }
   }
 
@@ -110,7 +109,7 @@ class SignatureBloc extends Bloc<SignatureEvent, BaseState> {
         },
       );
     } catch (_) {
-      emit(ErrorState(status: Status.error, message: _.toString()));
+      emit(const ErrorState(status: Status.error, message: unknownError));
     }
   }
 
@@ -135,16 +134,14 @@ class SignatureBloc extends Bloc<SignatureEvent, BaseState> {
         (failure) {
           if (failure is NoConnectionFailure) {
             emit(const ErrorState(
-                status: Status.error, message: 'No connextion error'));
+                status: Status.error, message: noConnexionMessage));
           } else if (failure is ServerFailure) {
-            emit(ErrorState(status: Status.error, message: failure.message));
+            emit(const ErrorState(status: Status.error, message: serverError));
           } else if (failure is TokenExpiredFailure) {
             emit(const ErrorState(
-                status: Status.tokenExpired,
-                message: 'token expired 🔑🔑🔑🔑🔑🪙🪙🔑🔑🔑'));
+                status: Status.tokenExpired, message: tokenExpired));
           } else {
-            emit(const ErrorState(
-                status: Status.error, message: 'Unknown error'));
+            emit(const ErrorState(status: Status.error, message: unknownError));
           }
         },
         (success) {
@@ -157,7 +154,7 @@ class SignatureBloc extends Bloc<SignatureEvent, BaseState> {
         },
       );
     } catch (_) {
-      emit(ErrorState(status: Status.error, message: _.toString()));
+      emit(const ErrorState(status: Status.error, message: unknownError));
     }
   }
 }

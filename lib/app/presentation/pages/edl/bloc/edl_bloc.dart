@@ -21,6 +21,7 @@ import 'package:clicar/app/presentation/pages/edl/types/camera_pos.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:clicar/app/core/errors/message.dart';
 import 'dart:math' as math;
 
 part 'edl_event.dart';
@@ -345,24 +346,33 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
       SearchContractEvent event, Emitter emit) async {
     emit(const BaseState(status: Status.loading, message: 'loading ⌛'));
     try {
-      final result = await searchContractUseCase(SearchContractParams(
+      SearchContractParams payload = SearchContractParams(
         keyWord: event.keyWord,
         isSigned: true,
-      ));
+        hasStartingEdl: false,
+        hasEndingEdl: false,
+      );
+      if (event.typeEdl == TypeEdl.retour) {
+        payload = SearchContractParams(
+          keyWord: event.keyWord,
+          isSigned: true,
+          hasStartingEdl: true,
+          hasEndingEdl: false,
+        );
+      }
+      final result = await searchContractUseCase(payload);
       result.fold(
         (failure) {
           if (failure is NoConnectionFailure) {
             emit(const ErrorState(
-                status: Status.error, message: 'No connextion error'));
+                status: Status.error, message: noConnexionMessage));
           } else if (failure is ServerFailure) {
-            emit(ErrorState(status: Status.error, message: failure.message));
+            emit(const ErrorState(status: Status.error, message: serverError));
           } else if (failure is TokenExpiredFailure) {
             emit(const ErrorState(
-                status: Status.tokenExpired,
-                message: 'token expired 🔑🔑🔑🔑🔑🪙🪙🔑🔑🔑'));
+                status: Status.tokenExpired, message: tokenExpired));
           } else {
-            emit(const ErrorState(
-                status: Status.error, message: 'Unknown error'));
+            emit(const ErrorState(status: Status.error, message: unknownError));
           }
         },
         (success) {
@@ -373,7 +383,7 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         },
       );
     } catch (_) {
-      emit(ErrorState(status: Status.error, message: _.toString()));
+      emit(const ErrorState(status: Status.error, message: unknownError));
     }
   }
 
@@ -438,7 +448,7 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         },
       );
     } catch (_) {
-      emit(ErrorState(status: Status.error, message: _.toString()));
+      emit(const ErrorState(status: Status.error, message: unknownError));
     }
   }
 
@@ -468,7 +478,7 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         },
       );
     } catch (_) {
-      emit(ErrorState(status: Status.error, message: _.toString()));
+      emit(const ErrorState(status: Status.error, message: unknownError));
     }
   }
 
@@ -498,7 +508,7 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         },
       );
     } catch (_) {
-      emit(ErrorState(status: Status.error, message: _.toString()));
+      emit(const ErrorState(status: Status.error, message: unknownError));
     }
   }
 
@@ -629,16 +639,14 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         (failure) {
           if (failure is NoConnectionFailure) {
             emit(const ErrorState(
-                status: Status.error, message: 'No connextion error'));
+                status: Status.error, message: noConnexionMessage));
           } else if (failure is ServerFailure) {
-            emit(ErrorState(status: Status.error, message: failure.message));
+            emit(const ErrorState(status: Status.error, message: serverError));
           } else if (failure is TokenExpiredFailure) {
             emit(const ErrorState(
-                status: Status.tokenExpired,
-                message: 'token expired 🔑🔑🔑🔑🔑🪙🪙🔑🔑🔑'));
+                status: Status.tokenExpired, message: tokenExpired));
           } else {
-            emit(const ErrorState(
-                status: Status.error, message: 'Unknown error'));
+            emit(const ErrorState(status: Status.error, message: unknownError));
           }
         },
         (success) {
@@ -650,7 +658,7 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         },
       );
     } catch (_) {
-      emit(ErrorState(status: Status.error, message: _.toString()));
+      emit(const ErrorState(status: Status.error, message: unknownError));
     }
   }
 
@@ -677,16 +685,14 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         (failure) {
           if (failure is NoConnectionFailure) {
             emit(const ErrorState(
-                status: Status.error, message: 'No connextion error'));
+                status: Status.error, message: noConnexionMessage));
           } else if (failure is ServerFailure) {
-            emit(ErrorState(status: Status.error, message: failure.message));
+            emit(const ErrorState(status: Status.error, message: serverError));
           } else if (failure is TokenExpiredFailure) {
             emit(const ErrorState(
-                status: Status.tokenExpired,
-                message: 'token expired 🔑🔑🔑🔑🔑🪙🪙🔑🔑🔑'));
+                status: Status.tokenExpired, message: tokenExpired));
           } else {
-            emit(const ErrorState(
-                status: Status.error, message: 'Unknown error'));
+            emit(const ErrorState(status: Status.error, message: unknownError));
           }
         },
         (success) {
@@ -698,7 +704,7 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         },
       );
     } catch (_) {
-      emit(ErrorState(status: Status.error, message: _.toString()));
+      emit(const ErrorState(status: Status.error, message: unknownError));
     }
   }
 
@@ -717,16 +723,14 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         (failure) {
           if (failure is NoConnectionFailure) {
             emit(const ErrorState(
-                status: Status.error, message: 'No connextion error'));
+                status: Status.error, message: noConnexionMessage));
           } else if (failure is ServerFailure) {
-            emit(ErrorState(status: Status.error, message: failure.message));
+            emit(const ErrorState(status: Status.error, message: serverError));
           } else if (failure is TokenExpiredFailure) {
             emit(const ErrorState(
-                status: Status.tokenExpired,
-                message: 'token expired 🔑🔑🔑🔑🔑🪙🪙🔑🔑🔑'));
+                status: Status.tokenExpired, message: tokenExpired));
           } else {
-            emit(const ErrorState(
-                status: Status.error, message: 'Unknown error'));
+            emit(const ErrorState(status: Status.error, message: unknownError));
           }
         },
         (success) {
@@ -738,7 +742,7 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         },
       );
     } catch (_) {
-      emit(ErrorState(status: Status.error, message: _.toString()));
+      emit(const ErrorState(status: Status.error, message: unknownError));
     }
   }
 
@@ -757,16 +761,14 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         (failure) {
           if (failure is NoConnectionFailure) {
             emit(const ErrorState(
-                status: Status.error, message: 'No connextion error'));
+                status: Status.error, message: noConnexionMessage));
           } else if (failure is ServerFailure) {
-            emit(ErrorState(status: Status.error, message: failure.message));
+            emit(const ErrorState(status: Status.error, message: serverError));
           } else if (failure is TokenExpiredFailure) {
             emit(const ErrorState(
-                status: Status.tokenExpired,
-                message: 'token expired 🔑🔑🔑🔑🔑🪙🪙🔑🔑🔑'));
+                status: Status.tokenExpired, message: tokenExpired));
           } else {
-            emit(const ErrorState(
-                status: Status.error, message: 'Unknown error'));
+            emit(const ErrorState(status: Status.error, message: unknownError));
           }
         },
         (success) {
@@ -778,7 +780,7 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         },
       );
     } catch (_) {
-      emit(ErrorState(status: Status.error, message: _.toString()));
+      emit(const ErrorState(status: Status.error, message: unknownError));
     }
   }
 
@@ -803,16 +805,14 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         (failure) {
           if (failure is NoConnectionFailure) {
             emit(const ErrorState(
-                status: Status.error, message: 'No connextion error'));
+                status: Status.error, message: noConnexionMessage));
           } else if (failure is ServerFailure) {
-            emit(ErrorState(status: Status.error, message: failure.message));
+            emit(const ErrorState(status: Status.error, message: serverError));
           } else if (failure is TokenExpiredFailure) {
             emit(const ErrorState(
-                status: Status.tokenExpired,
-                message: 'token expired 🔑🔑🔑🔑🔑🪙🪙🔑🔑🔑'));
+                status: Status.tokenExpired, message: tokenExpired));
           } else {
-            emit(const ErrorState(
-                status: Status.error, message: 'Unknown error'));
+            emit(const ErrorState(status: Status.error, message: unknownError));
           }
         },
         (success) {
@@ -824,7 +824,7 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         },
       );
     } catch (_) {
-      emit(ErrorState(status: Status.error, message: _.toString()));
+      emit(const ErrorState(status: Status.error, message: unknownError));
     }
   }
 
@@ -846,16 +846,14 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         (failure) {
           if (failure is NoConnectionFailure) {
             emit(const ErrorState(
-                status: Status.error, message: 'No connextion error'));
+                status: Status.error, message: noConnexionMessage));
           } else if (failure is ServerFailure) {
-            emit(ErrorState(status: Status.error, message: failure.message));
+            emit(const ErrorState(status: Status.error, message: serverError));
           } else if (failure is TokenExpiredFailure) {
             emit(const ErrorState(
-                status: Status.tokenExpired,
-                message: 'token expired 🔑🔑🔑🔑🔑🪙🪙🔑🔑🔑'));
+                status: Status.tokenExpired, message: tokenExpired));
           } else {
-            emit(const ErrorState(
-                status: Status.error, message: 'Unknown error'));
+            emit(const ErrorState(status: Status.error, message: unknownError));
           }
         },
         (success) {
@@ -867,7 +865,7 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         },
       );
     } catch (_) {
-      emit(ErrorState(status: Status.error, message: _.toString()));
+      emit(const ErrorState(status: Status.error, message: unknownError));
     }
   }
 
@@ -885,16 +883,14 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         (failure) {
           if (failure is NoConnectionFailure) {
             emit(const ErrorState(
-                status: Status.error, message: 'No connextion error'));
+                status: Status.error, message: noConnexionMessage));
           } else if (failure is ServerFailure) {
-            emit(ErrorState(status: Status.error, message: failure.message));
+            emit(const ErrorState(status: Status.error, message: serverError));
           } else if (failure is TokenExpiredFailure) {
             emit(const ErrorState(
-                status: Status.tokenExpired,
-                message: 'token expired 🔑🔑🔑🔑🔑🪙🪙🔑🔑🔑'));
+                status: Status.tokenExpired, message: tokenExpired));
           } else {
-            emit(const ErrorState(
-                status: Status.error, message: 'Unknown error'));
+            emit(const ErrorState(status: Status.error, message: unknownError));
           }
         },
         (success) {
@@ -906,7 +902,7 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         },
       );
     } catch (_) {
-      emit(ErrorState(status: Status.error, message: _.toString()));
+      emit(const ErrorState(status: Status.error, message: unknownError));
     }
   }
 
@@ -926,16 +922,14 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         (failure) {
           if (failure is NoConnectionFailure) {
             emit(const ErrorState(
-                status: Status.error, message: 'No connextion error'));
+                status: Status.error, message: noConnexionMessage));
           } else if (failure is ServerFailure) {
-            emit(ErrorState(status: Status.error, message: failure.message));
+            emit(const ErrorState(status: Status.error, message: serverError));
           } else if (failure is TokenExpiredFailure) {
             emit(const ErrorState(
-                status: Status.tokenExpired,
-                message: 'token expired 🔑🔑🔑🔑🔑🪙🪙🔑🔑🔑'));
+                status: Status.tokenExpired, message: tokenExpired));
           } else {
-            emit(const ErrorState(
-                status: Status.error, message: 'Unknown error'));
+            emit(const ErrorState(status: Status.error, message: unknownError));
           }
         },
         (success) {
@@ -949,7 +943,7 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         },
       );
     } catch (_) {
-      emit(ErrorState(status: Status.error, message: _.toString()));
+      emit(const ErrorState(status: Status.error, message: unknownError));
     }
   }
 
@@ -969,16 +963,14 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         (failure) {
           if (failure is NoConnectionFailure) {
             emit(const ErrorState(
-                status: Status.error, message: 'No connextion error'));
+                status: Status.error, message: noConnexionMessage));
           } else if (failure is ServerFailure) {
-            emit(ErrorState(status: Status.error, message: failure.message));
+            emit(const ErrorState(status: Status.error, message: serverError));
           } else if (failure is TokenExpiredFailure) {
             emit(const ErrorState(
-                status: Status.tokenExpired,
-                message: 'token expired 🔑🔑🔑🔑🔑🪙🪙🔑🔑🔑'));
+                status: Status.tokenExpired, message: tokenExpired));
           } else {
-            emit(const ErrorState(
-                status: Status.error, message: 'Unknown error'));
+            emit(const ErrorState(status: Status.error, message: unknownError));
           }
         },
         (success) {
@@ -992,7 +984,7 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         },
       );
     } catch (_) {
-      emit(ErrorState(status: Status.error, message: _.toString()));
+      emit(const ErrorState(status: Status.error, message: unknownError));
     }
   }
 
@@ -1022,7 +1014,7 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         },
       );
     } catch (_) {
-      emit(ErrorState(status: Status.error, message: _.toString()));
+      emit(const ErrorState(status: Status.error, message: unknownError));
     }
   }
 }

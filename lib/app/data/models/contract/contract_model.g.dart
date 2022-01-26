@@ -23,23 +23,32 @@ ContractModel _$ContractModelFromJson(Map<String, dynamic> json) =>
           : ContractInfoModel.fromJson(json['info'] as Map<String, dynamic>),
       customer: json['customer'] == null
           ? null
-          : CustomerModel.fromJson(json['customer'] as Map<String, dynamic>),
+          : json['customer'] is String
+              ? CustomerModel.fromJson({})
+              : CustomerModel.fromJson(
+                  json['customer'] as Map<String, dynamic>),
       search: json['search'] == null
           ? null
           : SearchModel.fromJson(json['search'] as Map<String, dynamic>),
       vehicle: json['vehicle'] == null
           ? null
-          : VehicleModel.fromJson(json['vehicle'] as Map<String, dynamic>),
+          : json['vehicle'] is String
+              ? VehicleModel.fromJson({})
+              : VehicleModel.fromJson(json['vehicle'] as Map<String, dynamic>),
       driver: json['driver'] == null
           ? null
-          : DriverModel.fromJson(json['driver'] as Map<String, dynamic>),
+          : json['driver'] is String
+              ? DriverModel.fromJson({})
+              : DriverModel.fromJson(json['driver'] as Map<String, dynamic>),
       reglement: (json['reglement'] as List<dynamic>?)
           ?.map((e) => ReglementModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       sumReglement: json['sumReglement'] as String?,
       rate: json['rate'] == null
           ? null
-          : RateModel.fromJson(json['rate'] as Map<String, dynamic>),
+          : json['rate'] is String
+              ? RateModel.fromJson({})
+              : RateModel.fromJson(json['rate'] as Map<String, dynamic>),
       historyReglement: (json['historyReglement'] as List<dynamic>?)
           ?.map(
               (e) => HistoryReglementModel.fromJson(e as Map<String, dynamic>))
@@ -51,7 +60,10 @@ ContractModel _$ContractModelFromJson(Map<String, dynamic> json) =>
       v: json['v'] as int?,
       signature: json['signature'] == null
           ? null
-          : SignatureModel.fromJson(json['signature'] as Map<String, dynamic>),
+          : json['signature'] is String
+              ? SignatureModel.fromJson({})
+              : SignatureModel.fromJson(
+                  json['signature'] as Map<String, dynamic>),
       conditionAtStart: json['conditionAtStart'] == null
           ? null
           : ConditionAtStartModel.fromJson(

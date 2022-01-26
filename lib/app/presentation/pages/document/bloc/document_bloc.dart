@@ -19,6 +19,7 @@ import 'package:clicar/app/presentation/pages/document/types/document_item.dart'
 import 'package:clicar/app/presentation/pages/document/types/document_picker.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:clicar/app/core/errors/message.dart';
 import 'package:path/path.dart' as path;
 import 'package:rxdart/rxdart.dart';
 import 'package:clicar/app/core/utils/extension.dart';
@@ -226,7 +227,7 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
         );
       }
     } catch (_) {
-      emit(ErrorState(status: Status.error, message: _.toString()));
+      emit(const ErrorState(status: Status.error, message: unknownError));
     }
   }
 
@@ -242,16 +243,16 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
           (failure) {
             if (failure is NoConnectionFailure) {
               emit(const ErrorState(
-                  status: Status.error, message: 'No connextion error'));
+                  status: Status.error, message: noConnexionMessage));
             } else if (failure is ServerFailure) {
-              emit(ErrorState(status: Status.error, message: failure.message));
+              emit(
+                  const ErrorState(status: Status.error, message: serverError));
             } else if (failure is TokenExpiredFailure) {
               emit(const ErrorState(
-                  status: Status.tokenExpired,
-                  message: 'token expired 🔑🔑🔑🔑🔑🪙🪙🔑🔑🔑'));
+                  status: Status.tokenExpired, message: tokenExpired));
             } else {
               emit(const ErrorState(
-                  status: Status.error, message: 'Unknown error'));
+                  status: Status.error, message: unknownError));
             }
           },
           (success) {
@@ -276,16 +277,16 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
           (failure) {
             if (failure is NoConnectionFailure) {
               emit(const ErrorState(
-                  status: Status.error, message: 'No connextion error'));
+                  status: Status.error, message: noConnexionMessage));
             } else if (failure is ServerFailure) {
-              emit(ErrorState(status: Status.error, message: failure.message));
+              emit(
+                  const ErrorState(status: Status.error, message: serverError));
             } else if (failure is TokenExpiredFailure) {
               emit(const ErrorState(
-                  status: Status.tokenExpired,
-                  message: 'token expired 🔑🔑🔑🔑🔑🪙🪙🔑🔑🔑'));
+                  status: Status.tokenExpired, message: tokenExpired));
             } else {
               emit(const ErrorState(
-                  status: Status.error, message: 'Unknown error'));
+                  status: Status.error, message: unknownError));
             }
           },
           (success) {
@@ -313,16 +314,16 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
           (failure) {
             if (failure is NoConnectionFailure) {
               emit(const ErrorState(
-                  status: Status.error, message: 'No connextion error'));
+                  status: Status.error, message: noConnexionMessage));
             } else if (failure is ServerFailure) {
-              emit(ErrorState(status: Status.error, message: failure.message));
+              emit(
+                  const ErrorState(status: Status.error, message: serverError));
             } else if (failure is TokenExpiredFailure) {
               emit(const ErrorState(
-                  status: Status.tokenExpired,
-                  message: 'token expired 🔑🔑🔑🔑🔑🪙🪙🔑🔑🔑'));
+                  status: Status.tokenExpired, message: tokenExpired));
             } else {
               emit(const ErrorState(
-                  status: Status.error, message: 'Unknown error'));
+                  status: Status.error, message: unknownError));
             }
           },
           (success) {
@@ -341,7 +342,7 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
         );
       }
     } catch (_) {
-      emit(ErrorState(status: Status.error, message: _.toString()));
+      emit(const ErrorState(status: Status.error, message: unknownError));
     }
   }
 
@@ -368,7 +369,7 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
           "documents": {
             documentType: {
               "label": "Carte d’identité recto",
-              "date": DateTime.now().formatDatePayload,
+              "date": DateTime.now().formatDatePayloadFr,
               "path": uploadFile.path,
               "filename": uploadFile.filename,
             },
@@ -384,17 +385,16 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
             (failure) {
               if (failure is NoConnectionFailure) {
                 emit(const ErrorState(
-                    status: Status.error, message: 'No connextion error'));
+                    status: Status.error, message: noConnexionMessage));
               } else if (failure is ServerFailure) {
-                emit(
-                    ErrorState(status: Status.error, message: failure.message));
+                emit(const ErrorState(
+                    status: Status.error, message: serverError));
               } else if (failure is TokenExpiredFailure) {
                 emit(const ErrorState(
-                    status: Status.tokenExpired,
-                    message: 'token expired 🔑🔑🔑🔑🔑🪙🪙🔑🔑🔑'));
+                    status: Status.tokenExpired, message: tokenExpired));
               } else {
                 emit(const ErrorState(
-                    status: Status.error, message: 'Unknown error'));
+                    status: Status.error, message: unknownError));
               }
             },
             (success) {
@@ -413,17 +413,16 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
             (failure) {
               if (failure is NoConnectionFailure) {
                 emit(const ErrorState(
-                    status: Status.error, message: 'No connextion error'));
+                    status: Status.error, message: noConnexionMessage));
               } else if (failure is ServerFailure) {
-                emit(
-                    ErrorState(status: Status.error, message: failure.message));
+                emit(const ErrorState(
+                    status: Status.error, message: serverError));
               } else if (failure is TokenExpiredFailure) {
                 emit(const ErrorState(
-                    status: Status.tokenExpired,
-                    message: 'token expired 🔑🔑🔑🔑🔑🪙🪙🔑🔑🔑'));
+                    status: Status.tokenExpired, message: tokenExpired));
               } else {
                 emit(const ErrorState(
-                    status: Status.error, message: 'Unknown error'));
+                    status: Status.error, message: unknownError));
               }
             },
             (success) {
@@ -442,17 +441,16 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
             (failure) {
               if (failure is NoConnectionFailure) {
                 emit(const ErrorState(
-                    status: Status.error, message: 'No connextion error'));
+                    status: Status.error, message: noConnexionMessage));
               } else if (failure is ServerFailure) {
-                emit(
-                    ErrorState(status: Status.error, message: failure.message));
+                emit(const ErrorState(
+                    status: Status.error, message: serverError));
               } else if (failure is TokenExpiredFailure) {
                 emit(const ErrorState(
-                    status: Status.tokenExpired,
-                    message: 'token expired 🔑🔑🔑🔑🔑🪙🪙🔑🔑🔑'));
+                    status: Status.tokenExpired, message: tokenExpired));
               } else {
                 emit(const ErrorState(
-                    status: Status.error, message: 'Unknown error'));
+                    status: Status.error, message: unknownError));
               }
             },
             (success) {
@@ -465,7 +463,7 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
         }
       }
     } catch (_) {
-      emit(ErrorState(status: Status.error, message: _.toString()));
+      emit(const ErrorState(status: Status.error, message: unknownError));
     }
   }
 }

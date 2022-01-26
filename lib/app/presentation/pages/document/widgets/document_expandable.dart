@@ -313,6 +313,8 @@ class DocumentExpandable extends StatelessWidget {
                               hintText:
                                   "Nom du ${documentPicker.associated!.label}",
                               onChanged: (v) {
+                                documentPicker
+                                    .expandableSearchController.expanded = true;
                                 documentBloc.add(SearchAssociateEvent(
                                     documentAssociate:
                                         documentPicker.associated!.type ==
@@ -355,6 +357,9 @@ class DocumentExpandable extends StatelessWidget {
                                                     .trailing,
                                             value: documentItem.label,
                                             onChanged: (v) {
+                                              documentPicker
+                                                  .expandableSearchController
+                                                  .expanded = false;
                                               documentBloc.add(
                                                   SelectAssociatedIdDocumentEvent(
                                                       result: state.result,
@@ -372,8 +377,6 @@ class DocumentExpandable extends StatelessWidget {
                             ],
                           ),
                           builder: (_, collapsed, expanded) {
-                            documentPicker.expandableSearchController.expanded =
-                                true;
                             return Padding(
                               padding: const EdgeInsets.only(
                                 left: 10,

@@ -19,8 +19,7 @@ abstract class RemoteEndpoint {
   static String edlRetour = RemoteConfig.baseUrl + "/contrat/returnCondition";
   static String customerUpdate = RemoteConfig.baseUrl + "/customer/update";
   static String driverEdit = RemoteConfig.baseUrl + "/driver/edit";
-  static String vehicleEdit(String id) =>
-      RemoteConfig.baseUrl + "/vehicle/edit/$id";
+  static String vehicleEdit(String id) => RemoteConfig.baseUrl + "/vehicle/$id";
   static String vehicleSearch = RemoteConfig.baseUrl + "/vehicle/search";
   static String driverFilter = RemoteConfig.baseUrl + "/driver/filter";
   static String customerFilter =

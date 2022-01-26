@@ -81,11 +81,14 @@ class UpdateFileOfCameraInteriorPosEvent extends EdlEvent {
 
 class SearchContractEvent extends EdlEvent {
   final String keyWord;
-
-  const SearchContractEvent({required this.keyWord});
+  final TypeEdl? typeEdl;
+  const SearchContractEvent({
+    required this.keyWord,
+    this.typeEdl,
+  });
 
   @override
-  List<Object> get props => [keyWord];
+  List<Object?> get props => [keyWord, typeEdl];
 }
 
 class SearchBilledInfoEvent extends EdlEvent {

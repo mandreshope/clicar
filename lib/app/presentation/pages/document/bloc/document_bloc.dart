@@ -20,6 +20,7 @@ import 'package:clicar/app/presentation/pages/document/types/document_picker.dar
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:clicar/app/core/errors/message.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:rxdart/rxdart.dart';
 import 'package:clicar/app/core/utils/extension.dart';
@@ -43,6 +44,8 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
 
   int documentsUploadedCounter = 0;
 
+  ImageSource? imageSource;
+
   List<DocumentItem> typesLock = [
     DocumentItem(type: "CIN_recto", label: "Carte d’identité recto"),
     DocumentItem(type: "CIN_verso", label: "Carte d’identité verso"),
@@ -57,7 +60,7 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
     DocumentItem(type: "Vehicle_ADV", label: "Assurance du véhicule"),
     DocumentItem(type: "Vehicle_AP", label: "Assurance passagers"),
     DocumentItem(type: "Vehicle_CT", label: "Contrôle technique"),
-    DocumentItem(type: "Other", label: "Other")
+    DocumentItem(type: "Autres", label: "Autres")
   ];
 
   List<DocumentItem> types = [
@@ -74,7 +77,7 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
     DocumentItem(type: "Vehicle_ADV", label: "Assurance du véhicule"),
     DocumentItem(type: "Vehicle_AP", label: "Assurance passagers"),
     DocumentItem(type: "Vehicle_CT", label: "Contrôle technique"),
-    DocumentItem(type: "Other", label: "Other")
+    DocumentItem(type: "Autres", label: "Autres")
   ];
 
   List<DocumentItem> associatesLock = [
@@ -116,6 +119,7 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
     documentPickers.clear();
     documentsUploaded.clear();
     documentsUploadedCounter = 0;
+    imageSource = null;
   }
 
   void _addDocumentPickerEvent(AddDocumentPickerEvent event, Emitter emit) {

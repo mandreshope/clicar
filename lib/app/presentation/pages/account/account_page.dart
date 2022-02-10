@@ -217,7 +217,7 @@ class AccountPage extends StatelessWidget {
                                                       .pop(image);
                                                 },
                                                 title: const Text(
-                                                    "Capturer une photo"),
+                                                    "Prendre une photo"),
                                               ),
                                             ],
                                           ),
@@ -306,12 +306,12 @@ class AccountPage extends StatelessWidget {
               },
             ),
             //footer
-            const Positioned(
+            /*const Positioned(
               bottom: 20,
               left: 0,
               right: 0,
               child: BottomLogo(),
-            )
+            )*/
           ],
         ),
       ),

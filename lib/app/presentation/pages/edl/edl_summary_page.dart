@@ -152,12 +152,12 @@ class EdlSummaryPage extends StatelessWidget {
               },
             ),
             //footer
-            const Positioned(
+            /*const Positioned(
               bottom: 20,
               left: 0,
               right: 0,
               child: BottomLogo(),
-            )
+            )*/
           ],
         ),
       ),

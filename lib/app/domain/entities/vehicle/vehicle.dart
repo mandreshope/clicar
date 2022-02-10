@@ -13,7 +13,7 @@ class Vehicle extends Equatable {
   final List<dynamic>? maintenances;
   final List<dynamic>? pvs;
   final bool? deleted;
-  final List<Contract>? contrats;
+  final List<Contract?>? contrats;
   final List<dynamic>? locations;
   final String? number;
   final String? immat1;

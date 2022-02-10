@@ -20,6 +20,7 @@ import 'package:clicar/app/presentation/pages/edl/types/billed_info.dart';
 import 'package:clicar/app/presentation/pages/edl/types/camera_pos.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:clicar/app/core/errors/message.dart';
 import 'dart:math' as math;
@@ -36,6 +37,8 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
   final EdlRetourUseCase edlRetourUseCase;
 
   TypeEdl typeEdl = TypeEdl.departure;
+
+  ImageSource? imageSource;
 
   Contract contract = const Contract();
   UploadFile uploadSignatureFile = const UploadFile();
@@ -302,6 +305,7 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
           ),
         )
         .toList();
+    imageSource = null;
   }
 
   void resetAll() {
@@ -335,6 +339,7 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
           ),
         )
         .toList();
+    imageSource = null;
   }
 
   void _reloadEvent(ReloadEvent event, Emitter emit) {

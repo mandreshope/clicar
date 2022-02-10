@@ -171,6 +171,23 @@ class _DocumentPhotoPageState extends State<DocumentPhotoPage> {
                                   child: PrimaryButton(
                                     onPressed: () async {
                                       final ImagePicker _picker = ImagePicker();
+
+                                      if (documentBloc.imageSource != null) {
+                                        final XFile? image =
+                                            await _picker.pickImage(
+                                          source: documentBloc.imageSource!,
+                                          imageQuality: 50,
+                                        );
+                                        if (image != null) {
+                                          documentBloc.add(
+                                            AddDocumentPickerEvent(
+                                              file: File(image.path),
+                                            ),
+                                          );
+                                        }
+                                        return;
+                                      }
+
                                       final XFile? image =
                                           await showDialog<XFile?>(
                                         context: context,
@@ -192,6 +209,8 @@ class _DocumentPhotoPageState extends State<DocumentPhotoPage> {
                                                   source: ImageSource.gallery,
                                                   imageQuality: 50,
                                                 );
+                                                documentBloc.imageSource =
+                                                    ImageSource.gallery;
                                                 Navigator.of(context)
                                                     .pop(image);
                                               },
@@ -201,17 +220,19 @@ class _DocumentPhotoPageState extends State<DocumentPhotoPage> {
                                             ),
                                             ListTile(
                                               onTap: () async {
-                                                // Pick an image
+                                                // capture an image
                                                 final XFile? image =
                                                     await _picker.pickImage(
                                                   source: ImageSource.camera,
                                                   imageQuality: 50,
                                                 );
+                                                documentBloc.imageSource =
+                                                    ImageSource.camera;
                                                 Navigator.of(context)
                                                     .pop(image);
                                               },
                                               title: const Text(
-                                                  "Capturer une photo"),
+                                                  "Prendre une photo"),
                                             ),
                                           ],
                                         ),

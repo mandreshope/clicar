@@ -97,7 +97,7 @@ class DocumentExpandable extends StatelessWidget {
                                     );
                                     Navigator.of(context).pop(image);
                                   },
-                                  title: const Text("Capturer une photo"),
+                                  title: const Text("Prendre une photo"),
                                 ),
                               ],
                             ),

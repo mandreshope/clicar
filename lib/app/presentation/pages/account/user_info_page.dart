@@ -186,6 +186,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                                           initialValue: lastName.text,
                                           labelText: 'Nom',
                                           controller: lastName,
+                                          enabled: false,
                                           validator: (value) {
                                             if (value == null ||
                                                 value.trim().isEmpty) {
@@ -203,6 +204,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                                           initialValue: firstName.text,
                                           labelText: 'Prénom',
                                           controller: firstName,
+                                          enabled: false,
                                           validator: (value) {
                                             if (value == null ||
                                                 value.isEmpty) {
@@ -221,6 +223,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                                     initialValue: username.text,
                                     labelText: "Nom d'utilisateur",
                                     controller: username,
+                                    enabled: false,
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return "Veuillez saisir votre nom d'utilisateur";
@@ -236,6 +239,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                                     labelText: 'Email',
                                     controller: email,
                                     validator: Validator.email,
+                                    enabled: false,
                                   ),
                                   const SizedBox(
                                     height: CustomTheme.spacer,
@@ -244,6 +248,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                                     initialValue: role.text,
                                     labelText: 'Rôle',
                                     controller: role,
+                                    enabled: false,
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return 'Veuillez saisir votre rôle';

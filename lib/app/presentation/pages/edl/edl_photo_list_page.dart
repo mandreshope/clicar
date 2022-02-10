@@ -193,7 +193,7 @@ class EdlPhotoListPage extends StatelessWidget {
                                                             .pop(image);
                                                       },
                                                       title: const Text(
-                                                          "Capturer une photo"),
+                                                          "Prendre une photo"),
                                                     ),
                                                   ],
                                                 ),
@@ -316,7 +316,7 @@ class EdlPhotoListPage extends StatelessWidget {
                                                           .pop(image);
                                                     },
                                                     title: const Text(
-                                                        "Capturer une photo"),
+                                                        "Prendre une photo"),
                                                   ),
                                                 ],
                                               ),

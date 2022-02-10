@@ -219,7 +219,7 @@ class _HomePageState extends State<HomePage> {
                                   // TODO: implement Consulter les statistiques
                                   SnackBarWidget.show(
                                     isError: true,
-                                    message: "This feature is coming soon",
+                                    message: "Pas disponible",
                                     context: context,
                                   );
                                 },
@@ -237,12 +237,12 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             //footer
-            const Positioned(
+            /*const Positioned(
               bottom: 20,
               left: 0,
               right: 0,
               child: BottomLogo(),
-            )
+            )*/
           ],
         ),
       ),

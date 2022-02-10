@@ -110,7 +110,7 @@ class ChangePasswordPage extends StatelessWidget {
                                     return 'Veuillez saisir votre nouveau mot de passe';
                                   } else if (value.isValidatePassword() ==
                                       false) {
-                                    return 'Veuillez saisir au moin 6 caractères';
+                                    return 'Veuillez saisir au moins 4 caractères';
                                   }
                                   return null;
                                 },

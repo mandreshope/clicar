@@ -17,7 +17,7 @@ class VehicleModel extends Vehicle {
   final List<dynamic>? maintenances;
   final List<dynamic>? pvs;
   final bool? deleted;
-  final List<ContractModel>? contrats;
+  final List<ContractModel?>? contrats;
   final List<dynamic>? locations;
   final String? number;
   final String? immat1;

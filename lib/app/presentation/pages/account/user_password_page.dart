@@ -159,7 +159,7 @@ class UserPasswordPage extends StatelessWidget {
                                         return 'Veuillez saisir votre ancien mot de passe';
                                       } else if (value.isValidatePassword() ==
                                           false) {
-                                        return 'Veuillez saisir au moin 6 caractères';
+                                        return 'Veuillez saisir au moins 4 caractères';
                                       }
                                       return null;
                                     },
@@ -194,7 +194,7 @@ class UserPasswordPage extends StatelessWidget {
                                     obscureText: true,
                                     validator: (value) {
                                       if (value == null) {
-                                        return 'Veuillez saisir votre confirmation nouveau mot de passe';
+                                        return 'Veuillez saisir votre confirmation \n nouveau mot de passe';
                                       } else if (value != newPassword.text) {
                                         return 'les mots de passe saisis ne correspondent pas';
                                       }

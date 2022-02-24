@@ -11,6 +11,8 @@ class CustomerModel extends Customer {
   final int? deleted;
   final String? typeCustomer;
   final String? civility;
+  final String? companyName;
+  final String? typeOfClient;
   final String? knowSociety;
   final String? other;
   final String? adresse1;
@@ -43,6 +45,8 @@ class CustomerModel extends Customer {
     this.deleted,
     this.typeCustomer,
     this.civility,
+    this.companyName,
+    this.typeOfClient,
     this.knowSociety,
     this.other,
     this.adresse1,
@@ -74,6 +78,8 @@ class CustomerModel extends Customer {
           deleted: deleted,
           typeCustomer: typeCustomer,
           civility: civility,
+          companyName: companyName,
+          typeOfClient: typeOfClient,
           knowSociety: knowSociety,
           other: other,
           adresse1: adresse1,

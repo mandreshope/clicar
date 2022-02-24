@@ -15,6 +15,8 @@ import 'package:clicar/app/domain/repositories/vehicle/vehicle_repository.dart';
 import 'package:clicar/app/domain/usecases/auth/change_password_usecase.dart';
 import 'package:clicar/app/domain/usecases/auth/forgot_password_usecase.dart';
 import 'package:clicar/app/domain/usecases/auth/logout_usecase.dart';
+import 'package:clicar/app/domain/usecases/contract/download_file_usecase.dart';
+import 'package:clicar/app/domain/usecases/contract/get_pdf_contract_usecase.dart';
 import 'package:clicar/app/domain/usecases/contract/search_contract_usecase.dart';
 import 'package:clicar/app/domain/usecases/contract/sign_contract_usecase.dart';
 import 'package:clicar/app/domain/usecases/customer/customer_update_usecase.dart';
@@ -70,9 +72,11 @@ Future<void> init() async {
   sl.registerFactory(() => UserBloc(meUseCase: sl()));
   sl.registerFactory(() => UserInfoBloc(userInfoUpdateUseCase: sl()));
   sl.registerFactory(() => SignatureBloc(
+      getPdfContractUsecase: sl(),
       searchContractUseCase: sl(),
       uploadSingleFileUseCase: sl(),
-      signContractUseCase: sl()));
+      signContractUseCase: sl(),
+      downloadFileUsecase: sl()));
   sl.registerFactory(() => AcceptContractBloc());
   sl.registerFactory(() => AccountBloc(
       uploadSingleFileUseCase: sl(),
@@ -118,6 +122,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => DriverUpdateUseCase(repository: sl()));
   sl.registerLazySingleton(() => VehicleUpdateUseCase(repository: sl()));
   sl.registerLazySingleton(() => CustomerUpdateUseCase(repository: sl()));
+  sl.registerLazySingleton(() => GetPdfContractUsecase(repository: sl()));
+  sl.registerLazySingleton(() => DownloadFileUsecase(repository: sl()));
 
   ///Repositories
   sl.registerLazySingleton<AuthRepository>(

@@ -119,9 +119,11 @@ class DocumentSummaryPage extends StatelessWidget {
                           }
                         } else if (currState.status == Status.error) {
                           SnackBarWidget.show(
-                              context: context,
-                              message: currState.message,
-                              isError: true);
+                            context: context,
+                            message:
+                                "Une erreur s'est produite lors du téléversement",
+                            isError: true,
+                          );
                         }
 
                         return prevState != currState;

@@ -119,7 +119,7 @@ class SignatureDrawPage extends StatelessWidget {
                             context.read<SignatureBloc>().add(
                                   SignContractEvent(
                                     isAccepted:
-                                        (currState as SelectedContractState)
+                                        (currState as DownloadFileSuccessState)
                                             .isAccepted,
                                     contract:
                                         context.read<SignatureBloc>().contract,
@@ -191,9 +191,9 @@ class SignatureDrawPage extends StatelessWidget {
                                     context.read<SignatureBloc>().add(
                                         UploadSignatureFileEvent(
                                             file: file,
-                                            isAccepted:
-                                                (state as SelectedContractState)
-                                                    .isAccepted,
+                                            isAccepted: (state
+                                                    as DownloadFileSuccessState)
+                                                .isAccepted,
                                             contract: context
                                                 .read<SignatureBloc>()
                                                 .contract));

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:clicar/app/core/errors/exceptions.dart';
-import 'package:clicar/app/core/http/http_client.dart';
+import 'package:clicar/app/core/http/http_client.dart' as httpClient;
 import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/data/models/auth/forgot_password_model.dart';
 import 'package:clicar/app/data/models/auth/login_model.dart';
@@ -15,15 +15,18 @@ import 'package:clicar/app/data/models/user/user_model.dart';
 import 'package:clicar/app/data/models/vehicle/vehicle_model.dart';
 import 'package:clicar/app/data/sources/remote/remote_config.dart';
 import 'package:clicar/app/data/sources/remote/remote_source.dart';
+import 'package:clicar/app/domain/entities/contract/contract.dart';
 import 'package:clicar/app/domain/usecases/contract/sign_contract_usecase.dart';
 import 'package:clicar/di/injection_container.dart';
 import 'package:flutter/foundation.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:clicar/app/core/utils/extension.dart';
+import 'dart:io' show Platform;
 
 class RemoteSourceImpl extends RemoteSource {
-  late HttpClient client;
+  late httpClient.HttpClient client;
   RemoteSourceImpl({required this.client});
 
   Map<String, dynamic> _parseBody(String body) {
@@ -582,7 +585,8 @@ class RemoteSourceImpl extends RemoteSource {
       _refreshToken(response.headers);
       try {
         _refreshToken(response.headers);
-        final Iterable iterable = jsonDecode(response.body);
+        final body = jsonDecode(response.body);
+        Iterable iterable = body["vehicles"];
 
         return List.from(iterable)
             .map((x) => VehicleModel.fromJson(x))
@@ -596,6 +600,128 @@ class RemoteSourceImpl extends RemoteSource {
         message: response.reasonPhrase ?? 'Server Error',
         body: response.body,
       );
+    }
+  }
+
+  @override
+  Future<UploadFileModel> getPdfContract({required Contract contract}) async {
+    /* String endpoint = '/exportToPdfFASTT';
+    switch (contract.infoDiver?.contractTypeDetails) {
+      case "1":
+        endpoint = '/exportToPdfFASTT';
+        break;
+      case "2":
+        endpoint = '/exportToPdfPartLcd';
+        break;
+      case "3":
+        endpoint = '/exportToPdfPartLLD';
+        break;
+      case "4":
+        endpoint = '/exportToPdfProFormat';
+        break;
+      case "5":
+        endpoint = '/exportToPdfProLLD';
+        break;
+      case "6":
+        endpoint = '/exportToPdfNonRestitution';
+        break;
+      default:
+    }*/
+
+    final url = Uri.parse(
+        RemoteConfig.baseUrl + RemoteEndpoint.exportToPdfNonRestitution);
+    final response = await client.post(
+      url,
+      body: jsonEncode({
+        "id": contract.id,
+        "dureeEngagement": contract.rate?.rent?[0].duration,
+        "numero": contract.numberContrat,
+        "start": contract.info?.departureDate,
+        "numberCustomer": contract.customer?.numberCustomer,
+        "nom": "${contract.customer?.firstName} ${contract.customer?.lastName}",
+        "adresse1": contract.customer?.adresse1 ?? "",
+        "adresse2": contract.customer?.adresse2 ?? "",
+        "numberPhone": "${contract.customer?.numberPhone}",
+        "mail": "${contract.customer?.mail}",
+        "numvehicle": "${contract.vehicle?.immat1}",
+        "markModel": "${contract.vehicle?.mark} ${contract.vehicle?.modele}",
+        "votreContact":
+            "${contract.createdBy?.firstName} ${contract.createdBy?.lastName}",
+        "departureDate": "${contract.info?.departureDate}",
+        "departureAgency": "${contract.info?.departureAgency}",
+        "returnDate": "${contract.info?.returnDate}",
+        "returnAgency": "${contract.info?.returnAgency}",
+        "driverFirstName": "${contract.driver?.firstName}",
+        "driverLastName": "${contract.driver?.lastName}",
+        "prixLoyerNA": "${contract.rate?.rent?[0].unitPrice}",
+        "montantLoyerNA": "${contract.rate?.rent?[0].amount}",
+        "KmInclus": "${contract.rate?.rent?[0].kmInclus}",
+        "depotGarantie": "${contract.rate?.warranty?[0].amount}",
+        "dateDepotGarantie": "${contract.rate?.warranty?[0].echeanceBegin}",
+        "kmDepart": "${contract.info?.kmInclus}",
+        "kmRetour": "${contract.info?.kmReturn}",
+        "fuelReturn": "${contract.info?.fuelReturn}",
+        "companyName": contract.customer?.companyName ?? "",
+        "knowSociety": "${contract.customer?.knowSociety}",
+        "typeOfClient": contract.customer?.typeOfClient ?? "",
+        "immat1": "${contract.vehicle?.immat1}"
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      _refreshToken(response.headers);
+      try {
+        _refreshToken(response.headers);
+        return UploadFileModel.fromJson(jsonDecode(response.body));
+      } catch (e) {
+        rethrow;
+      }
+    } else {
+      throw ServerException(
+        statusCode: response.statusCode,
+        message: response.reasonPhrase ?? 'Server Error',
+        body: response.body,
+      );
+    }
+  }
+
+  @override
+  Future<File> downloadFile(
+      {required String path, required String fileName}) async {
+    try {
+      HttpClient httpClient = HttpClient();
+      File file;
+      String filePath = '';
+      final uri = Uri.parse(RemoteConfig.baseUrl +
+          "/uploadFile/file/" +
+          path.replaceAll("fichier/", ""));
+      debugPrint("$uri");
+      var request = await httpClient.getUrl(uri);
+      // request.headers.add("Authorization", 'Bearer $token');
+      var response = await request.close();
+      if (response.statusCode == 200) {
+        late String path;
+        if (Platform.isIOS) {
+          Directory appDocDir = await getApplicationDocumentsDirectory();
+          path = appDocDir.path;
+        } else if (Platform.isAndroid) {
+          Directory? extDir = await getExternalStorageDirectory();
+          Directory appDocDir = await getApplicationDocumentsDirectory();
+          path = extDir?.path ?? appDocDir.path;
+        } else {
+          Directory appDocDir = await getApplicationDocumentsDirectory();
+          path = appDocDir.path;
+        }
+        var bytes = await consolidateHttpClientResponseBytes(response);
+        filePath = "$path/$fileName.pdf";
+        file = File(filePath);
+        return await file.writeAsBytes(bytes);
+      } else {
+        throw filePath = 'Error code: ' + response.statusCode.toString();
+      }
+    } catch (e) {
+      debugPrint("$logTrace $e");
+      throw e;
     }
   }
 }

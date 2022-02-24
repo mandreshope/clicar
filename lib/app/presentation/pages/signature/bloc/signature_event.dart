@@ -53,3 +53,29 @@ class SignContractEvent extends SignatureEvent {
   @override
   List<Object> get props => [contract, isAccepted, uploadFile];
 }
+
+class GetPdfContractEvent extends SignatureEvent {
+  final Contract contract;
+
+  const GetPdfContractEvent({
+    required this.contract,
+  });
+
+  @override
+  List<Object> get props => [
+        contract,
+      ];
+}
+
+class DownloadFileEvent extends SignatureEvent {
+  final String path;
+  final String fileName;
+
+  const DownloadFileEvent({
+    required this.path,
+    required this.fileName,
+  });
+
+  @override
+  List<Object> get props => [path, fileName];
+}

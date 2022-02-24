@@ -43,31 +43,37 @@ class EdlPhotoListPage extends StatelessWidget {
             if (currState is UploadPhotosExteriorSuccess) {
               SnackBarWidget.show(
                 context: context,
-                message: "Photos exterior uploaded",
+                message: "Photos extérieures téléchargées",
                 isError: false,
               );
               context.read<EdlBloc>().add(EdlPhotosEvent());
             } else if (currState is UploadPhotosInteriorSuccess) {
               SnackBarWidget.show(
                 context: context,
-                message: "Photos interior uploaded",
+                message: "Photos intérieures téléchargées",
                 isError: false,
               );
               context.read<EdlBloc>().add(EdlPhotosEvent());
             } else if (currState is EdlPhotosSuccessState) {
               SnackBarWidget.show(
                 context: context,
-                message: "Contract updated",
+                message: "Contrat mis à jour avec succès",
                 isError: false,
               );
               Navigator.of(context).pop();
               Navigator.of(context).pop();
             } else if (currState.status == Status.error) {
               SnackBarWidget.show(
-                  context: context, message: currState.message, isError: true);
+                context: context,
+                message: "Une erreur s'est produite lors du téléversement",
+                isError: true,
+              );
             } else if (currState is ErrorState) {
               SnackBarWidget.show(
-                  context: context, message: currState.message, isError: true);
+                context: context,
+                message: "Une erreur s'est produite lors du téléversement",
+                isError: true,
+              );
             }
             return prevState != currState;
           },

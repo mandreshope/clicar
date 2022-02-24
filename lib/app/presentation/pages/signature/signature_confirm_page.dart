@@ -1,14 +1,17 @@
 import 'dart:io';
 
 import 'package:clicar/app/core/states/base_state.dart';
+import 'package:clicar/app/core/states/error_state.dart';
 import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
+import 'package:clicar/app/presentation/widgets/circular_progress_widget.dart';
 import 'package:clicar/app/presentation/widgets/contract_detail_card.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/auth_listener_widget.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
 import 'package:clicar/app/presentation/widgets/scaffold_body.dart';
+import 'package:clicar/app/presentation/widgets/snack_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -55,6 +58,21 @@ class SignatureConfimPage extends StatelessWidget {
         body: ScaffoldBody(
           child: BlocBuilder<SignatureBloc, BaseState>(
             buildWhen: (prevState, currState) {
+              if (currState is GetPdfContractSuccessState) {
+                context.read<SignatureBloc>().add(DownloadFileEvent(
+                      path: currState.uploadFile!.path!,
+                      fileName: currState.uploadFile!.filename!,
+                    ));
+              } else if (currState is DownloadFileSuccessState) {
+                Navigator.of(context).pushNamed(AppRoutes.signaturePdfViewer,
+                    arguments: currState.file);
+              } else if (currState is ErrorState) {
+                SnackBarWidget.show(
+                  context: context,
+                  message: currState.message,
+                  isError: true,
+                );
+              }
               return prevState != currState;
             },
             builder: (context, state) {
@@ -100,21 +118,29 @@ class SignatureConfimPage extends StatelessWidget {
                           const SizedBox(
                             height: CustomTheme.extraSpacer,
                           ),
-                          SecondaryButton(
-                            onPressed: () async {
-                              final pdfFile = await buildPdf();
-                              Navigator.of(context).pushNamed(
-                                  AppRoutes.signaturePdfViewer,
-                                  arguments: pdfFile);
-                            },
-                            height: 100,
-                            width: double.infinity,
-                            child: Text(
-                              "cliquer ici pour signer".toUpperCase(),
-                              style: TextStyle(
-                                fontSize: CustomTheme.mainBtnTextStyle.fontSize
-                                    ?.sp(context),
-                                color: Colors.grey,
+                          Visibility(
+                            visible: state.status == Status.loading,
+                            child: const SecondaryButton(
+                              height: 100,
+                              width: double.infinity,
+                              child: CircularProgress(),
+                            ),
+                            replacement: SecondaryButton(
+                              onPressed: () async {
+                                signatureBloc.add(GetPdfContractEvent(
+                                  contract: signatureBloc.contract,
+                                ));
+                              },
+                              height: 100,
+                              width: double.infinity,
+                              child: Text(
+                                "cliquer ici pour signer".toUpperCase(),
+                                style: TextStyle(
+                                  fontSize: CustomTheme
+                                      .mainBtnTextStyle.fontSize
+                                      ?.sp(context),
+                                  color: Colors.grey,
+                                ),
                               ),
                             ),
                           ),

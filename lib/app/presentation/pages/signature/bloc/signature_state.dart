@@ -27,3 +27,45 @@ class SelectedContractState extends BaseState {
   @override
   List<Object> get props => [isAccepted, isSigned];
 }
+
+class GetPdfContractSuccessState extends BaseState {
+  final UploadFile? uploadFile;
+  final bool isAccepted;
+  final bool isSigned;
+
+  const GetPdfContractSuccessState({
+    required Status status,
+    required String message,
+    required this.uploadFile,
+    required this.isSigned,
+    required this.isAccepted,
+  }) : super(status: status, message: message);
+
+  @override
+  List<Object?> get props => [
+        uploadFile,
+        isAccepted,
+        isSigned,
+      ];
+}
+
+class DownloadFileSuccessState extends BaseState {
+  final File file;
+  final bool isAccepted;
+  final bool isSigned;
+
+  const DownloadFileSuccessState({
+    required Status status,
+    required String message,
+    required this.file,
+    required this.isSigned,
+    required this.isAccepted,
+  }) : super(status: status, message: message);
+
+  @override
+  List<Object?> get props => [
+        file,
+        isAccepted,
+        isSigned,
+      ];
+}

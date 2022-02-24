@@ -5,6 +5,7 @@ import 'package:clicar/app/data/models/vehicle/options_model.dart';
 import 'package:clicar/app/data/models/vehicle/purchase_model.dart';
 import 'package:clicar/app/data/models/vehicle/registration_model.dart';
 import 'package:clicar/app/data/models/vehicle/sale_model.dart';
+import 'package:clicar/app/data/models/vehicle/vehicle_contrats_serialiser.dart';
 import 'package:clicar/app/domain/entities/vehicle/vehicle.dart';
 
 import 'package:json_annotation/json_annotation.dart';
@@ -17,6 +18,7 @@ class VehicleModel extends Vehicle {
   final List<dynamic>? maintenances;
   final List<dynamic>? pvs;
   final bool? deleted;
+  @VehicleContratsSerialiser()
   final List<ContractModel?>? contrats;
   final List<dynamic>? locations;
   final String? number;

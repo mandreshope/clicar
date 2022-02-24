@@ -8,7 +8,7 @@ part of 'contract_model.dart';
 
 ContractModel _$ContractModelFromJson(Map<String, dynamic> json) =>
     ContractModel(
-      id: json['id'] as String?,
+      id: json['_id'] as String?,
       note: json['note'] as String?,
       comment: json['comment'] as String?,
       deleted: json['deleted'] as bool?,
@@ -21,49 +21,41 @@ ContractModel _$ContractModelFromJson(Map<String, dynamic> json) =>
       info: json['info'] == null
           ? null
           : ContractInfoModel.fromJson(json['info'] as Map<String, dynamic>),
-      customer: json['customer'] == null
-          ? null
-          : json['customer'] is String
-              ? CustomerModel.fromJson({})
-              : CustomerModel.fromJson(
-                  json['customer'] as Map<String, dynamic>),
+      customer:
+          const ContractCustomerSerialiser().fromJson(json['customer'] as Map?),
       search: json['search'] == null
           ? null
           : SearchModel.fromJson(json['search'] as Map<String, dynamic>),
+      infoDiver: json['infoDiver'] == null
+          ? null
+          : InfoDiverModel.fromJson(json['infoDiver'] as Map<String, dynamic>),
       vehicle: json['vehicle'] == null
           ? null
-          : json['vehicle'] is String
-              ? VehicleModel.fromJson({})
-              : VehicleModel.fromJson(json['vehicle'] as Map<String, dynamic>),
+          : VehicleModel.fromJson(json['vehicle'] as Map<String, dynamic>),
       driver: json['driver'] == null
           ? null
-          : json['driver'] is String
-              ? DriverModel.fromJson({})
-              : DriverModel.fromJson(json['driver'] as Map<String, dynamic>),
+          : DriverModel.fromJson(json['driver'] as Map<String, dynamic>),
       reglement: (json['reglement'] as List<dynamic>?)
           ?.map((e) => ReglementModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       sumReglement: json['sumReglement'] as String?,
       rate: json['rate'] == null
           ? null
-          : json['rate'] is String
-              ? RateModel.fromJson({})
-              : RateModel.fromJson(json['rate'] as Map<String, dynamic>),
+          : RateModel.fromJson(json['rate'] as Map<String, dynamic>),
       historyReglement: (json['historyReglement'] as List<dynamic>?)
           ?.map(
               (e) => HistoryReglementModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       commentaires: json['commentaires'] as List<dynamic>?,
       numberContrat: json['numberContrat'] as String?,
-      createdBy: json['createdBy'] as String?,
+      createdBy: json['createdBy'] == null
+          ? null
+          : UserModel.fromJson(json['createdBy'] as Map<String, dynamic>),
       createdAt: json['createdAt'] as String?,
       v: json['v'] as int?,
       signature: json['signature'] == null
           ? null
-          : json['signature'] is String
-              ? SignatureModel.fromJson({})
-              : SignatureModel.fromJson(
-                  json['signature'] as Map<String, dynamic>),
+          : SignatureModel.fromJson(json['signature'] as Map<String, dynamic>),
       conditionAtStart: json['conditionAtStart'] == null
           ? null
           : ConditionAtStartModel.fromJson(
@@ -76,7 +68,7 @@ ContractModel _$ContractModelFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$ContractModelToJson(ContractModel instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      '_id': instance.id,
       'note': instance.note,
       'comment': instance.comment,
       'deleted': instance.deleted,
@@ -87,8 +79,9 @@ Map<String, dynamic> _$ContractModelToJson(ContractModel instance) =>
       'dontWarrantyBooking': instance.dontWarrantyBooking,
       'blockVehicleUntilStart': instance.blockVehicleUntilStart,
       'info': instance.info?.toJson(),
-      'customer': instance.customer?.toJson(),
+      'customer': const ContractCustomerSerialiser().toJson(instance.customer),
       'search': instance.search?.toJson(),
+      'infoDiver': instance.infoDiver?.toJson(),
       'vehicle': instance.vehicle?.toJson(),
       'driver': instance.driver?.toJson(),
       'reglement': instance.reglement?.map((e) => e.toJson()).toList(),
@@ -98,7 +91,7 @@ Map<String, dynamic> _$ContractModelToJson(ContractModel instance) =>
           instance.historyReglement?.map((e) => e.toJson()).toList(),
       'commentaires': instance.commentaires,
       'numberContrat': instance.numberContrat,
-      'createdBy': instance.createdBy,
+      'createdBy': instance.createdBy?.toJson(),
       'createdAt': instance.createdAt,
       'v': instance.v,
       'signature': instance.signature?.toJson(),

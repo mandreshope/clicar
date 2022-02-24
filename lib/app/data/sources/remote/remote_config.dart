@@ -25,4 +25,6 @@ abstract class RemoteEndpoint {
   static String driverFilter = RemoteConfig.baseUrl + "/driver/filter";
   static String customerFilter =
       RemoteConfig.baseUrl + "/customer/filterCustomer";
+  static String exportToPdfNonRestitution =
+      "/exportToPdf/exportToPdfNonRestitution";
 }

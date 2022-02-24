@@ -1,5 +1,7 @@
 import 'package:clicar/app/data/models/contract/condition_at_end_model.dart';
 import 'package:clicar/app/data/models/contract/condition_at_start_model.dart';
+import 'package:clicar/app/data/models/contract/contract_customer_serialiser.dart';
+import 'package:clicar/app/data/models/contract/info_diver_model.dart';
 import 'package:clicar/app/data/models/contract/info_model.dart';
 import 'package:clicar/app/data/models/contract/rate_model.dart';
 import 'package:clicar/app/data/models/contract/reglement_model.dart';
@@ -7,6 +9,7 @@ import 'package:clicar/app/data/models/contract/search_model.dart';
 import 'package:clicar/app/data/models/contract/signature_model.dart';
 import 'package:clicar/app/data/models/customer/customer_model.dart';
 import 'package:clicar/app/data/models/driver/driver_model.dart';
+import 'package:clicar/app/data/models/user/user_model.dart';
 import 'package:clicar/app/data/models/vehicle/vehicle_model.dart';
 import 'package:clicar/app/domain/entities/contract/contract.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -17,6 +20,7 @@ part 'contract_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class ContractModel extends Contract {
+  @JsonKey(name: "_id")
   final String? id;
   final String? note;
   final String? comment;
@@ -28,8 +32,10 @@ class ContractModel extends Contract {
   final bool? dontWarrantyBooking;
   final bool? blockVehicleUntilStart;
   final ContractInfoModel? info;
+  @ContractCustomerSerialiser()
   final CustomerModel? customer;
   final SearchModel? search;
+  final InfoDiverModel? infoDiver;
   final VehicleModel? vehicle;
   final DriverModel? driver;
   final List<ReglementModel>? reglement;
@@ -38,7 +44,7 @@ class ContractModel extends Contract {
   final List<HistoryReglementModel>? historyReglement;
   final List<dynamic>? commentaires;
   final String? numberContrat;
-  final String? createdBy;
+  final UserModel? createdBy;
   final String? createdAt;
   final int? v;
   final SignatureModel? signature;
@@ -59,6 +65,7 @@ class ContractModel extends Contract {
     this.info,
     this.customer,
     this.search,
+    this.infoDiver,
     this.vehicle,
     this.driver,
     this.reglement,
@@ -87,6 +94,7 @@ class ContractModel extends Contract {
           info: info,
           customer: customer,
           search: search,
+          infoDiver: infoDiver,
           vehicle: vehicle,
           driver: driver,
           reglement: reglement,

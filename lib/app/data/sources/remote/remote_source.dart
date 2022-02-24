@@ -9,6 +9,7 @@ import 'package:clicar/app/data/models/driver/driver_model.dart';
 import 'package:clicar/app/data/models/upload_file/upload_file_model.dart';
 import 'package:clicar/app/data/models/user/user_model.dart';
 import 'package:clicar/app/data/models/vehicle/vehicle_model.dart';
+import 'package:clicar/app/domain/entities/contract/contract.dart';
 import 'package:clicar/app/domain/usecases/contract/sign_contract_usecase.dart';
 
 abstract class RemoteSource {
@@ -54,6 +55,7 @@ abstract class RemoteSource {
       {required List<File> files, required String fileDestination});
   Future<ContractModel> signContract(
       {required SignContractParams signContractParams});
+  Future<UploadFileModel> getPdfContract({required Contract contract});
   Future<bool> userAddPhoto({
     required String photo,
     required String id,
@@ -81,4 +83,5 @@ abstract class RemoteSource {
   Future<List<DriverModel>> searchDriver({required String filter});
   Future<List<VehicleModel>> searchVehicle(
       {required Map<String, dynamic> filters});
+  Future<File> downloadFile({required String path, required String fileName});
 }

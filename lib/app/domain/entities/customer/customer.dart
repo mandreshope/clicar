@@ -8,7 +8,9 @@ class Customer extends Equatable {
   final int? deleted;
   final String? typeCustomer;
   final String? civility;
+  final String? companyName;
   final String? knowSociety;
+  final String? typeOfClient;
   final String? other;
   final String? adresse1;
   final String? adresse2;
@@ -40,6 +42,8 @@ class Customer extends Equatable {
     this.deleted,
     this.typeCustomer,
     this.civility,
+    this.companyName,
+    this.typeOfClient,
     this.knowSociety,
     this.other,
     this.adresse1,
@@ -74,6 +78,8 @@ class Customer extends Equatable {
         deleted,
         typeCustomer,
         civility,
+        companyName,
+        typeOfClient,
         knowSociety,
         other,
         adresse1,

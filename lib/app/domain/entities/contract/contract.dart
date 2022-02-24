@@ -3,12 +3,14 @@ import 'package:clicar/app/domain/entities/contract/condition_at_end.dart';
 import 'package:clicar/app/domain/entities/contract/condition_at_start.dart';
 import 'package:clicar/app/domain/entities/contract/history_reglement.dart';
 import 'package:clicar/app/domain/entities/contract/info.dart';
+import 'package:clicar/app/domain/entities/contract/info_diver.dart';
 import 'package:clicar/app/domain/entities/contract/rate.dart';
 import 'package:clicar/app/domain/entities/contract/reglement.dart';
 import 'package:clicar/app/domain/entities/contract/search.dart';
 import 'package:clicar/app/domain/entities/contract/signature.dart';
 import 'package:clicar/app/domain/entities/customer/customer.dart';
 import 'package:clicar/app/domain/entities/driver/driver.dart';
+import 'package:clicar/app/domain/entities/user/user.dart';
 import 'package:clicar/app/domain/entities/vehicle/vehicle.dart';
 import 'package:equatable/equatable.dart';
 
@@ -26,6 +28,7 @@ class Contract extends Equatable {
   final ContractInfo? info;
   final Customer? customer;
   final Search? search;
+  final InfoDiver? infoDiver;
   final Vehicle? vehicle;
   final Driver? driver;
   final List<Reglement>? reglement;
@@ -34,7 +37,7 @@ class Contract extends Equatable {
   final List<HistoryReglement>? historyReglement;
   final List<dynamic>? commentaires;
   final String? numberContrat;
-  final String? createdBy;
+  final User? createdBy;
   final String? createdAt;
   final int? v;
   final Signature? signature;
@@ -55,6 +58,7 @@ class Contract extends Equatable {
     this.info,
     this.customer,
     this.search,
+    this.infoDiver,
     this.vehicle,
     this.driver,
     this.reglement,
@@ -86,6 +90,7 @@ class Contract extends Equatable {
         info,
         customer,
         search,
+        infoDiver,
         vehicle,
         driver,
         reglement,

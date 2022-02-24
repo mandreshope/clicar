@@ -8,6 +8,8 @@ import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/domain/entities/contract/contract.dart';
 import 'package:clicar/app/domain/entities/upload_file/upload_file.dart';
+import 'package:clicar/app/domain/usecases/contract/download_file_usecase.dart';
+import 'package:clicar/app/domain/usecases/contract/get_pdf_contract_usecase.dart';
 import 'package:clicar/app/domain/usecases/contract/search_contract_usecase.dart';
 import 'package:clicar/app/domain/usecases/contract/sign_contract_usecase.dart';
 import 'package:clicar/app/domain/usecases/upload_file/upload_single_file_usecase.dart';
@@ -22,6 +24,8 @@ class SignatureBloc extends Bloc<SignatureEvent, BaseState> {
   final SearchContractUseCase searchContractUseCase;
   final UploadSingleFileUseCase uploadSingleFileUseCase;
   final SignContractUseCase signContractUseCase;
+  final GetPdfContractUsecase getPdfContractUsecase;
+  final DownloadFileUsecase downloadFileUsecase;
 
   Contract contract = const Contract();
   UploadFile uploadFile = const UploadFile();
@@ -30,6 +34,8 @@ class SignatureBloc extends Bloc<SignatureEvent, BaseState> {
     required this.searchContractUseCase,
     required this.uploadSingleFileUseCase,
     required this.signContractUseCase,
+    required this.getPdfContractUsecase,
+    required this.downloadFileUsecase,
   }) : super(const BaseState(status: Status.initial, message: "initial")) {
     on<SearchContractEvent>(_searchContractEvent,
         transformer: (Stream<SearchContractEvent> events, mapper) {
@@ -38,6 +44,8 @@ class SignatureBloc extends Bloc<SignatureEvent, BaseState> {
     on<SelectContractEvent>(_selectContractEvent);
     on<UploadSignatureFileEvent>(_uploadSignatureFileEvent);
     on<SignContractEvent>(_signContractEvent);
+    on<GetPdfContractEvent>(_getPdfContractEvent);
+    on<DownloadFileEvent>(_downloadFileEvent);
   }
 
   Future<void> _searchContractEvent(
@@ -100,11 +108,12 @@ class SignatureBloc extends Bloc<SignatureEvent, BaseState> {
         },
         (success) async {
           uploadFile = success;
-          emit(SelectedContractState(
+          emit(DownloadFileSuccessState(
             status: Status.uploadFileSuccess,
             message: "upload file success",
             isAccepted: event.isAccepted,
             isSigned: false,
+            file: File(""),
           ));
         },
       );
@@ -150,6 +159,75 @@ class SignatureBloc extends Bloc<SignatureEvent, BaseState> {
             message: "uploadFileSuccess",
             isAccepted: event.isAccepted,
             isSigned: true,
+          ));
+        },
+      );
+    } catch (_) {
+      emit(const ErrorState(status: Status.error, message: unknownError));
+    }
+  }
+
+  Future<void> _getPdfContractEvent(
+      GetPdfContractEvent event, Emitter emit) async {
+    emit(const BaseState(status: Status.loading, message: 'loading ⌛'));
+    try {
+      final sign =
+          await getPdfContractUsecase(GetPdfContractParams(contract: contract));
+      sign.fold(
+        (failure) {
+          if (failure is NoConnectionFailure) {
+            emit(const ErrorState(
+                status: Status.error, message: noConnexionMessage));
+          } else if (failure is ServerFailure) {
+            emit(const ErrorState(status: Status.error, message: serverError));
+          } else if (failure is TokenExpiredFailure) {
+            emit(const ErrorState(
+                status: Status.tokenExpired, message: tokenExpired));
+          } else {
+            emit(const ErrorState(status: Status.error, message: unknownError));
+          }
+        },
+        (success) {
+          emit(GetPdfContractSuccessState(
+            status: Status.success,
+            message: "GetPdfSuccess",
+            uploadFile: success,
+            isSigned: false,
+            isAccepted: false,
+          ));
+        },
+      );
+    } catch (_) {
+      emit(const ErrorState(status: Status.error, message: unknownError));
+    }
+  }
+
+  Future<void> _downloadFileEvent(DownloadFileEvent event, Emitter emit) async {
+    emit(const BaseState(status: Status.loading, message: 'loading ⌛'));
+    try {
+      final sign = await downloadFileUsecase(
+          DownloadFileParams(path: event.path, fileName: event.fileName));
+      sign.fold(
+        (failure) {
+          if (failure is NoConnectionFailure) {
+            emit(const ErrorState(
+                status: Status.error, message: noConnexionMessage));
+          } else if (failure is ServerFailure) {
+            emit(const ErrorState(status: Status.error, message: serverError));
+          } else if (failure is TokenExpiredFailure) {
+            emit(const ErrorState(
+                status: Status.tokenExpired, message: tokenExpired));
+          } else {
+            emit(const ErrorState(status: Status.error, message: unknownError));
+          }
+        },
+        (success) {
+          emit(DownloadFileSuccessState(
+            status: Status.success,
+            message: "GetPdfSuccess",
+            file: success,
+            isSigned: false,
+            isAccepted: false,
           ));
         },
       );

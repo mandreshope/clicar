@@ -41,7 +41,7 @@ class DocumentPage extends StatelessWidget {
             if (currState is EdlFuelLevelSuccessState) {
               SnackBarWidget.show(
                   context: context,
-                  message: "Contract updated",
+                  message: "Contract mis à jour avec succès",
                   isError: false);
               Navigator.of(context).pushNamed(AppRoutes.edlMileage);
             } else if (currState.status == Status.error) {

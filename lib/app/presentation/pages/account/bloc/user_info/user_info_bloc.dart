@@ -57,7 +57,7 @@ class UserInfoBloc extends Bloc<UserInfoEvent, BaseState> {
         (success) {
           emit(UserInfoUpdatedState(
             user: success,
-            message: "user info updated success",
+            message: "user info mis à jour avec succès",
             status: Status.userInfoUpdated,
           ));
         },

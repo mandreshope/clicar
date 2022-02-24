@@ -21,8 +21,7 @@ ContractModel _$ContractModelFromJson(Map<String, dynamic> json) =>
       info: json['info'] == null
           ? null
           : ContractInfoModel.fromJson(json['info'] as Map<String, dynamic>),
-      customer:
-          const ContractCustomerSerialiser().fromJson(json['customer'] as Map?),
+      customer: const ContractCustomerSerialiser().fromJson(json['customer']),
       search: json['search'] == null
           ? null
           : SearchModel.fromJson(json['search'] as Map<String, dynamic>),
@@ -48,9 +47,8 @@ ContractModel _$ContractModelFromJson(Map<String, dynamic> json) =>
           .toList(),
       commentaires: json['commentaires'] as List<dynamic>?,
       numberContrat: json['numberContrat'] as String?,
-      createdBy: json['createdBy'] == null
-          ? null
-          : UserModel.fromJson(json['createdBy'] as Map<String, dynamic>),
+      createdBy:
+          const ContractCreatedBySerialiser().fromJson(json['createdBy']),
       createdAt: json['createdAt'] as String?,
       v: json['v'] as int?,
       signature: json['signature'] == null
@@ -91,7 +89,8 @@ Map<String, dynamic> _$ContractModelToJson(ContractModel instance) =>
           instance.historyReglement?.map((e) => e.toJson()).toList(),
       'commentaires': instance.commentaires,
       'numberContrat': instance.numberContrat,
-      'createdBy': instance.createdBy?.toJson(),
+      'createdBy':
+          const ContractCreatedBySerialiser().toJson(instance.createdBy),
       'createdAt': instance.createdAt,
       'v': instance.v,
       'signature': instance.signature?.toJson(),

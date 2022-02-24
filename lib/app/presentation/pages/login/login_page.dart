@@ -21,7 +21,6 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("==========> widget rebuild");
     return Scaffold(
       body: Stack(
         children: [

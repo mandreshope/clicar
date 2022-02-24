@@ -1,5 +1,6 @@
 import 'package:clicar/app/data/models/contract/condition_at_end_model.dart';
 import 'package:clicar/app/data/models/contract/condition_at_start_model.dart';
+import 'package:clicar/app/data/models/contract/contract_created_by_serialiser.dart';
 import 'package:clicar/app/data/models/contract/contract_customer_serialiser.dart';
 import 'package:clicar/app/data/models/contract/info_diver_model.dart';
 import 'package:clicar/app/data/models/contract/info_model.dart';
@@ -44,6 +45,7 @@ class ContractModel extends Contract {
   final List<HistoryReglementModel>? historyReglement;
   final List<dynamic>? commentaires;
   final String? numberContrat;
+  @ContractCreatedBySerialiser()
   final UserModel? createdBy;
   final String? createdAt;
   final int? v;

@@ -37,7 +37,7 @@ class EdlBilledInfoSummaryPage extends StatelessWidget {
             if (currState is EdlBilledInfoSuccessState) {
               SnackBarWidget.show(
                   context: context,
-                  message: "Contract updated",
+                  message: "Contract mis à jour avec succès",
                   isError: false);
               Navigator.of(context).pushNamed(AppRoutes.edlSummaryChecklist);
             } else if (currState.status == Status.error) {

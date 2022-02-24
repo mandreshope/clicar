@@ -66,7 +66,14 @@ class AuthBloc extends Bloc<AuthEvent, BaseState> {
           emit(const ErrorState(
               status: Status.error, message: noConnexionMessage));
         } else if (failure is ServerFailure) {
-          emit(const ErrorState(status: Status.error, message: serverError));
+          String message = serverError;
+          if (failure.statusCode == 401) {
+            message = "Nom d'utilisateur ou mot de pase invalide";
+          }
+          emit(ErrorState(
+            status: Status.error,
+            message: message,
+          ));
         } else {
           emit(const ErrorState(status: Status.error, message: unknownError));
         }

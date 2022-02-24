@@ -42,12 +42,14 @@ class DocumentExpandable extends StatelessWidget {
                     ),
                     Visibility(
                       visible: fileSize(documentPicker.file) >= 2.0,
-                      child: const Positioned(
+                      child: Positioned(
                         top: 0,
                         bottom: 0,
                         left: 0,
                         right: 0,
-                        child: PhotoSizeMax(),
+                        child: PhotoSizeMax(
+                          file: documentPicker.file,
+                        ),
                       ),
                     ),
                     Positioned(

@@ -65,13 +65,13 @@ class EdlPhotoListPage extends StatelessWidget {
             } else if (currState.status == Status.error) {
               SnackBarWidget.show(
                 context: context,
-                message: "Une erreur s'est produite lors du téléversement",
+                message: currState.message,
                 isError: true,
               );
             } else if (currState is ErrorState) {
               SnackBarWidget.show(
                 context: context,
-                message: "Une erreur s'est produite lors du téléversement",
+                message: currState.message,
                 isError: true,
               );
             }
@@ -129,12 +129,14 @@ class EdlPhotoListPage extends StatelessWidget {
                                         ),
                                         Visibility(
                                           visible: fileSize(e.file) >= 2.0,
-                                          child: const Positioned(
+                                          child: Positioned(
                                             top: 0,
                                             bottom: 0,
                                             left: 0,
                                             right: 0,
-                                            child: PhotoSizeMax(),
+                                            child: PhotoSizeMax(
+                                              file: e.file,
+                                            ),
                                           ),
                                         ),
                                         Positioned(
@@ -254,12 +256,14 @@ class EdlPhotoListPage extends StatelessWidget {
                                       ),
                                       Visibility(
                                         visible: fileSize(e.file) >= 2.0,
-                                        child: const Positioned(
+                                        child: Positioned(
                                           top: 0,
                                           bottom: 0,
                                           left: 0,
                                           right: 0,
-                                          child: PhotoSizeMax(),
+                                          child: PhotoSizeMax(
+                                            file: e.file,
+                                          ),
                                         ),
                                       ),
                                       Positioned(

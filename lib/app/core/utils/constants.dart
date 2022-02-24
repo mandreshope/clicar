@@ -52,6 +52,7 @@ Future<String> get localPath async {
   return directory.path;
 }
 
+/// in Megabyte
 double fileSize(File? file) {
   if (file == null) {
     return 0;
@@ -60,5 +61,5 @@ double fileSize(File? file) {
   final kb = bytes / 1024;
   final mb = kb / 1024;
   // debugPrint("$mb Mo");
-  return mb;
+  return double.parse(mb.toStringAsFixed(2));
 }

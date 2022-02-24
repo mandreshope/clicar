@@ -30,7 +30,6 @@ class SplashPage extends StatelessWidget {
                 .pushNamedAndRemoveUntil(Routes.home, (route) => false);
           });*/
         } else {
-          print(">>>>>>>>>>>>>>>>>>>>>NOT LOGGED");
           Navigator.pushNamedAndRemoveUntil(
               context, AppRoutes.login, (route) => false);
           /* WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {

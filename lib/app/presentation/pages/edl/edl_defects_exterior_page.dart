@@ -85,7 +85,7 @@ class _EdlDefectsExteriorPageState extends State<EdlDefectsExteriorPage> {
               } else if (currState is EdlPhotoDefectsSuccessState) {
                 SnackBarWidget.show(
                   context: context,
-                  message: "Contract updated",
+                  message: "Contract mis à jour avec succès",
                   isError: false,
                 );
                 Navigator.of(context).pushNamed(

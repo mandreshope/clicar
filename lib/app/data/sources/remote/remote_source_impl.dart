@@ -401,11 +401,15 @@ class RemoteSourceImpl extends RemoteSource {
       body: jsonEncode(data),
     );
     if (response.statusCode == 200) {
-      _refreshToken(response.headers);
-      final body = _parseBody(response.body);
+      try {
+        _refreshToken(response.headers);
+        final body = _parseBody(response.body);
 
-      final contract = body['contract'];
-      return ContractModel.fromJson(contract);
+        final contract = body['contract'];
+        return ContractModel.fromJson(contract);
+      } catch (e) {
+        throw e;
+      }
     } else {
       throw ServerException(
         statusCode: response.statusCode,

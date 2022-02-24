@@ -1,3 +1,4 @@
+import 'package:clicar/app/data/models/contract/contract_customer_serialiser.dart';
 import 'package:clicar/app/data/models/customer/customer_model.dart';
 import 'package:clicar/app/domain/entities/driver/driver.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -7,6 +8,7 @@ part 'driver_model.g.dart';
 class DriverModel extends Driver {
   final String? id;
   final bool? deleted;
+  @ContractCustomerSerialiser()
   final CustomerModel? customer;
   final String? firstName;
   final String? lastName;

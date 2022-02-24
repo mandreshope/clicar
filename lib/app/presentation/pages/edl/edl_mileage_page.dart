@@ -54,7 +54,7 @@ class EdlMileagePage extends StatelessWidget {
               if (currState is EdlMileageSuccessState) {
                 SnackBarWidget.show(
                     context: context,
-                    message: "Contract updated",
+                    message: "Contract mis à jour avec succès",
                     isError: false);
                 if (edlBloc.typeEdl == TypeEdl.departure) {
                   Navigator.of(context)

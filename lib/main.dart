@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
+import 'package:clicar/app/core/http/http_overrides.dart';
 import 'package:clicar/app/presentation/routes/app_observer.dart';
 import 'package:clicar/app/core/utils/theme.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
@@ -23,6 +26,8 @@ Future<void> main() async {
 
   await di
       .init(); //Inject all the dependencies and wait for it is done (i.e. UI won't built until all the dependencies are injected)
+
+  HttpOverrides.global = MyHttpOverrides();
 
   BlocOverrides.runZoned(
     () {

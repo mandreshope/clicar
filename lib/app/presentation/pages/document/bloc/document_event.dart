@@ -81,11 +81,21 @@ class AssociateDocumentsEvent extends DocumentEvent {
 
 class SearchAssociateEvent extends DocumentEvent {
   final String keyWord;
-  final DocumentAssociate documentAssociate;
+  final String  documentAssociate;
 
   const SearchAssociateEvent(
       {required this.keyWord, required this.documentAssociate});
 
   @override
   List<Object> get props => [keyWord];
+}
+
+class OtherDocumentType extends DocumentEvent {
+  final DocumentItem documentItem;
+  final DocumentPicker documentPicker;
+
+  const OtherDocumentType({required this.documentItem, required this.documentPicker});
+
+  @override 
+  List<Object> get props => [documentItem];
 }

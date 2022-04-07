@@ -38,6 +38,7 @@ class ContractRepositoryImpl implements ContractRepository {
             hasStartingEdl: hasStartingEdl,
             hasEndingEdl: hasEndingEdl,
           );
+          
           return Right(remoteData);
         } on ServerException catch (_) {
           return Left(ServerFailure(
@@ -52,6 +53,7 @@ class ContractRepositoryImpl implements ContractRepository {
             statusCode: 0,
           ));
         } catch (_) {
+          print("error contrat ${_.toString()}");
           return Left(ServerFailure(
             message: _.toString(),
             body: '',

@@ -126,82 +126,6 @@ class DocumentExpandable extends StatelessWidget {
               height: 10,
             ),
 
-            ///type de documents
-            ExpandableNotifier(
-              controller: documentPicker.expandableTypeController,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.grey, width: 0.5),
-                  color: CustomTheme.greyColor,
-                ),
-                child: ScrollOnExpand(
-                  scrollOnExpand: true,
-                  scrollOnCollapse: false,
-                  child: ExpandablePanel(
-                    theme: const ExpandableThemeData(
-                      headerAlignment: ExpandablePanelHeaderAlignment.center,
-                      tapBodyToCollapse: true,
-                    ),
-                    header: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20.0, vertical: 0.0),
-                        child: Text(
-                          documentPicker.type != null
-                              ? documentPicker.type!.label
-                              : 'type de document'.toUpperCase(),
-                          style: CustomTheme.mainBtnTextStyle.copyWith(
-                            color: CustomTheme.primaryColor,
-                            fontSize: CustomTheme.mainBtnTextStyle.fontSize
-                                ?.sp(context),
-                          ),
-                        )),
-                    collapsed: const SizedBox.shrink(),
-                    expanded: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        ...documentBloc.types
-                            .map((documentItem) => InkWell(
-                                  onTap: () {
-                                    documentPicker.expandableTypeController
-                                        .expanded = false;
-                                    documentBloc.add(SelectTypeDocumentEvent(
-                                        documentPicker: documentPicker,
-                                        documentItem: documentItem));
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 5.0),
-                                    child: Text(documentItem.label),
-                                  ),
-                                ))
-                            .toList(),
-                      ],
-                    ),
-                    builder: (_, collapsed, expanded) {
-                      return Padding(
-                        padding: const EdgeInsets.only(
-                          left: 10,
-                          right: 10,
-                        ),
-                        child: Expandable(
-                          collapsed: collapsed,
-                          expanded: expanded,
-                          theme: const ExpandableThemeData(crossFadePoint: 0),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-
             ///associer
             ExpandableNotifier(
               controller: documentPicker.expandableAssociateController,
@@ -242,24 +166,23 @@ class DocumentExpandable extends StatelessWidget {
                             const SizedBox(
                               height: 10,
                             ),
-                            ...documentBloc.associates
-                                .map((documentItem) => InkWell(
-                                      onTap: () {
-                                        documentPicker
-                                            .expandableAssociateController
-                                            .expanded = false;
-                                        documentBloc.add(
-                                            SelectAssociatedDocumentEvent(
-                                                documentPicker: documentPicker,
-                                                documentItem: documentItem));
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 5.0),
-                                        child: Text(documentItem.label),
-                                      ),
-                                    ))
-                                .toList(),
+                            ...documentBloc.associates.map((documentItem) {
+                              return InkWell(
+                                onTap: () {
+                                  documentPicker.expandableAssociateController
+                                      .expanded = false;
+                                  documentBloc.add(
+                                      SelectAssociatedDocumentEvent(
+                                          documentPicker: documentPicker,
+                                          documentItem: documentItem));
+                                },
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 5.0),
+                                  child: Text(documentItem.label),
+                                ),
+                              );
+                            }).toList(),
                           ],
                         ),
                         builder: (_, collapsed, expanded) {
@@ -318,14 +241,14 @@ class DocumentExpandable extends StatelessWidget {
                                 documentPicker
                                     .expandableSearchController.expanded = true;
                                 documentBloc.add(SearchAssociateEvent(
-                                    documentAssociate:
-                                        documentPicker.associated!.type ==
-                                                "Conducteur"
-                                            ? DocumentAssociate.driver
-                                            : documentPicker.associated!.type ==
-                                                    "Client"
-                                                ? DocumentAssociate.customer
-                                                : DocumentAssociate.vehicle,
+                                    documentAssociate: documentPicker.associated!.type,
+                                        // documentPicker.associated!.type ==
+                                        //         "Conducteur"
+                                        //     ? DocumentAssociate.driver
+                                        //     : documentPicker.associated!.type ==
+                                        //             "Client"
+                                        //         ? DocumentAssociate.customer
+                                        //         : DocumentAssociate.vehicle,
                                     keyWord:
                                         documentPicker.search?.text ?? ""));
                               },
@@ -402,6 +325,154 @@ class DocumentExpandable extends StatelessWidget {
                 height: 10,
               ),
             ],
+
+            ///type de documents
+            ExpandableNotifier(
+              controller: documentPicker.expandableTypeController,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.grey, width: 0.5),
+                  color: CustomTheme.greyColor,
+                ),
+                child: ScrollOnExpand(
+                  scrollOnExpand: true,
+                  scrollOnCollapse: false,
+                  child: ExpandablePanel(
+                    theme: const ExpandableThemeData(
+                      headerAlignment: ExpandablePanelHeaderAlignment.center,
+                      tapBodyToCollapse: true,
+                    ),
+                    header: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20.0, vertical: 0.0),
+                        child: Text(
+                          documentPicker.type != null
+                              ? documentPicker.type!.label
+                              : 'type de document'.toUpperCase(),
+                          style: CustomTheme.mainBtnTextStyle.copyWith(
+                            color: CustomTheme.primaryColor,
+                            fontSize: CustomTheme.mainBtnTextStyle.fontSize
+                                ?.sp(context),
+                          ),
+                        )),
+                    collapsed: const SizedBox.shrink(),
+                    expanded: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        ...documentBloc.types
+                            .map((documentItem) => InkWell(
+                                  onTap: () {
+                                    documentPicker.expandableTypeController
+                                        .expanded = false;
+                                    documentBloc.add(SelectTypeDocumentEvent(
+                                        documentPicker: documentPicker,
+                                        documentItem: documentItem));
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 5.0),
+                                    child: Text(documentItem.label),
+                                  ),
+                                ))
+                            .toList(),
+                      ],
+                    ),
+                    builder: (_, collapsed, expanded) {
+                      return Padding(
+                        padding: const EdgeInsets.only(
+                          left: 10,
+                          right: 10,
+                        ),
+                        child: Expandable(
+                          collapsed: collapsed,
+                          expanded: expanded,
+                          theme: const ExpandableThemeData(crossFadePoint: 0),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            if (documentPicker.type != null &&
+                documentPicker.type!.type == "Autres") ...[
+              ExpandableNotifier(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.grey, width: 0.5),
+                    color: CustomTheme.greyColor,
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                      ScrollOnExpand(
+                        scrollOnExpand: true,
+                        scrollOnCollapse: false,
+                        child: ExpandablePanel(
+                          theme: const ExpandableThemeData(
+                            headerAlignment:
+                                ExpandablePanelHeaderAlignment.center,
+                            tapBodyToCollapse: true,
+                          ),
+                          header: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20.0, vertical: 0.0),
+                            child: OtherDocumentTypeTextFieldUnderlined(
+                              controller: documentPicker.documentTypeController,
+                              hintText: "saisir le type du document",
+                              onToggleSuffixIcon: () {
+                                if (documentPicker
+                                    .documentTypeController.text.isNotEmpty) {
+                                  documentBloc.add(
+                                    OtherDocumentType(
+                                      documentPicker: documentPicker,
+                                      documentItem: DocumentItem(
+                                        type: documentPicker
+                                            .documentTypeController.text,
+                                        label: documentPicker
+                                            .documentTypeController.text,
+                                      ),
+                                    ),
+                                  );
+                                  documentPicker.documentTypeController.clear();
+                                }
+                              },
+                            ),
+                          ),
+                          collapsed: const SizedBox.shrink(),
+                          expanded: Align(
+                              alignment: Alignment.center, child: Container()),
+                          builder: (_, collapsed, expanded) {
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                left: 10,
+                                right: 10,
+                              ),
+                              child: Expandable(
+                                collapsed: collapsed,
+                                expanded: expanded,
+                                theme: const ExpandableThemeData(
+                                    crossFadePoint: 0),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+            const SizedBox(
+              height: 10,
+            ),
             const Divider(),
           ],
         );

@@ -208,7 +208,7 @@ class EdlFuelLevelPage extends StatelessWidget {
                                         0)) {
                                   edlBloc.billedInfoList.add(
                                     BilledInfo(
-                                      label: "Frais de carburant (100 €)",
+                                      label: "Frais de carburant (50 €)",
                                       amount: 50,
                                       isSelected: true,
                                     ),

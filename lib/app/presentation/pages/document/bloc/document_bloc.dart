@@ -6,6 +6,7 @@ import 'package:clicar/app/core/errors/failures.dart';
 import 'package:clicar/app/core/states/base_state.dart';
 import 'package:clicar/app/core/states/error_state.dart';
 import 'package:clicar/app/domain/entities/upload_file/upload_file.dart';
+import 'package:clicar/app/domain/usecases/contravention/search_contravention_usecase.dart';
 import 'package:clicar/app/domain/usecases/customer/customer_update_usecase.dart';
 import 'package:clicar/app/domain/usecases/customer/search_customer_usecase.dart';
 import 'package:clicar/app/domain/usecases/driver/driver_update_usecase.dart';
@@ -37,6 +38,7 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
   final SearchDriverUseCase searchDriverUseCase;
   final VehicleUpdateUseCase vehicleUpdateUseCase;
   final SearchVehicleUseCase searchVehicleUseCase;
+  final SearchContraventionUseCase searchContraventionUseCase;
 
   List<DocumentPicker> documentPickers = [];
 
@@ -64,21 +66,63 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
   ];
 
   List<DocumentItem> types = [
+    // DocumentItem(type: "CIN_recto", label: "Carte d’identité recto"),
+    // DocumentItem(type: "CIN_verso", label: "Carte d’identité verso"),
+    // DocumentItem(type: "Passeport", label: "Passeport"),
+    // DocumentItem(type: "Justificatif", label: "justificatif de domicile"),
+    // DocumentItem(type: "kbis", label: "K-bis"),
+    // DocumentItem(type: "CVTC", label: "Carte VTC"),
+    // DocumentItem(type: "Permis_recto", label: "Permis de conduire recto"),
+    // DocumentItem(type: "Permis_verso", label: "Permis de conduire verso"),
+    // DocumentItem(type: "Vehicle_CG", label: "Carte grise"),
+    // DocumentItem(type: "Vehicle_CPIP", label: "CPI provisoire"),
+    // DocumentItem(type: "Vehicle_ADV", label: "Assurance du véhicule"),
+    // DocumentItem(type: "Vehicle_AP", label: "Assurance passagers"),
+    // DocumentItem(type: "Vehicle_CT", label: "Contrôle technique"),
+    // DocumentItem(type: "Autres", label: "Autres")
+  ];
+
+  //List types du document pour chaque associer
+  List<DocumentItem> typesDocForClient = [
     DocumentItem(type: "CIN_recto", label: "Carte d’identité recto"),
     DocumentItem(type: "CIN_verso", label: "Carte d’identité verso"),
-    DocumentItem(type: "Passeport", label: "Passeport"),
+    DocumentItem(type: "Passport", label: "Passport"),
     DocumentItem(type: "Justificatif", label: "justificatif de domicile"),
     DocumentItem(type: "kbis", label: "K-bis"),
     DocumentItem(type: "CVTC", label: "Carte VTC"),
+    DocumentItem(type: "Autres", label: "Autres"),
+  ];
+  List<DocumentItem> typesDocForDriver = [
+    DocumentItem(type: "CIN_recto", label: "Carte d’identité recto"),
+    DocumentItem(type: "CIN_verso", label: "Carte d’identité verso"),
+    DocumentItem(type: "Passport", label: "Passport"),
+    DocumentItem(type: "Justificatif", label: "justificatif de domicile"),
     DocumentItem(type: "Permis_recto", label: "Permis de conduire recto"),
     DocumentItem(type: "Permis_verso", label: "Permis de conduire verso"),
-    DocumentItem(type: "Vehicle_CG", label: "Carte grise"),
-    DocumentItem(type: "Vehicle_CPIP", label: "CPI provisoire"),
-    DocumentItem(type: "Vehicle_ADV", label: "Assurance du véhicule"),
-    DocumentItem(type: "Vehicle_AP", label: "Assurance passagers"),
-    DocumentItem(type: "Vehicle_CT", label: "Contrôle technique"),
-    DocumentItem(type: "Autres", label: "Autres")
   ];
+  List<DocumentItem> typesDocForVehicule = [
+    DocumentItem(type: "carte_grise", label: "Carte grise"),
+    DocumentItem(type: "CPI", label: "CPI provisoire"),
+    DocumentItem(type: "Assurance_vehicule", label: "Assurance de véhicule"),
+    DocumentItem(type: "Assurance_passagers", label: "Assurance passagers"),
+    DocumentItem(type: "c_technique", label: "Contrôle technique"),
+    DocumentItem(type: "Autres", label: "Autres"),
+  ];
+  List<DocumentItem> typesDocForContravention = [
+    DocumentItem(type: "FPS", label: "FPS"),
+    DocumentItem(type: "ANTAI", label: "ANTAI"),
+    DocumentItem(type: "etrangere", label: "Étrangère"),
+    DocumentItem(type: "majoration", label: "Majoration"),
+    DocumentItem(type: "Autres", label: "Autres"),
+  ];
+  List<DocumentItem> typesDocForClientGFlotte = [
+    DocumentItem(type: "constat", label: "Constat"),
+    DocumentItem(type: "DVF", label: "Déclarations circonstancielle des faits"),
+    DocumentItem(type: "Proces_verbal", label: "Procès verbal"),
+    DocumentItem(type: "Main_courante", label: "Main courante"),
+    DocumentItem(type: "Mise_en_cause", label: "Mise en cause"),
+  ];
+  //
 
   List<DocumentItem> associatesLock = [
     DocumentItem(type: "Conducteur", label: "Conducteur"),
@@ -90,6 +134,8 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
     DocumentItem(type: "Conducteur", label: "Conducteur"),
     DocumentItem(type: "Client", label: "Client"),
     DocumentItem(type: "Vehicule", label: "Véhicule"),
+    DocumentItem(type: "Contraventions", label: "Contraventions"),
+    DocumentItem(type: "Gestion de flotte", label: "Gestion de flotte"),
   ];
 
   DocumentBloc({
@@ -101,6 +147,7 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
     required this.driverUpdateUseCase,
     required this.searchCustomerUseCase,
     required this.customerUpdateUseCase,
+    required this.searchContraventionUseCase
   }) : super(const BaseState(status: Status.initial, message: "initial")) {
     on<AddDocumentPickerEvent>(_addDocumentPickerEvent);
     on<UpdateDocumentPickerEvent>(_updateDocumentPickerEvent);
@@ -113,6 +160,7 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
       return events.debounceTime(const Duration(seconds: 1)).switchMap(mapper);
     });
     on<AssociateDocumentsEvent>(_associateDocumentsEvent);
+    on<OtherDocumentType>(_otherDocumentType);
   }
 
   void reset() {
@@ -136,31 +184,32 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
   void _selectTypeDocumentEvent(SelectTypeDocumentEvent event, Emitter emit) {
     documentPickers[documentPickers.indexOf(event.documentPicker)].type =
         event.documentItem;
-    documentPickers[documentPickers.indexOf(event.documentPicker)].associated =
-        null;
-    associates = associatesLock
-        .map((e) => e.copyWith(
-              label: e.label,
-              id: e.id,
-              type: e.type,
-            ))
-        .toList();
 
-    if (["CIN_recto", "CIN_verso", "Passeport", "Permis_recto", "Permis_verso"]
-        .contains(event.documentItem.type)) {
-      associates = associatesLock
-          .where((e) => ["Conducteur", "Client"].contains(e.type))
-          .toList();
-    } else if ([
-      "Vehicle_CG",
-      "Vehicle_CPIP",
-      "Vehicle_ADV",
-      "Vehicle_AP",
-      "Vehicle_CT",
-    ].contains(event.documentItem.type)) {
-      associates =
-          associatesLock.where((e) => ["Vehicule"].contains(e.type)).toList();
-    }
+    // documentPickers[documentPickers.indexOf(event.documentPicker)].associated =
+    //     null;
+    // associates = associatesLock
+    //     .map((e) => e.copyWith(
+    //           label: e.label,
+    //           id: e.id,
+    //           type: e.type,
+    //         ))
+    //     .toList();
+
+    // if (["CIN_recto", "CIN_verso", "Passeport", "Permis_recto", "Permis_verso"]
+    //     .contains(event.documentItem.type)) {
+    //   associates = associatesLock
+    //       .where((e) => ["Conducteur", "Client"].contains(e.type))
+    //       .toList();
+    // } else if ([
+    //   "Vehicle_CG",
+    //   "Vehicle_CPIP",
+    //   "Vehicle_ADV",
+    //   "Vehicle_AP",
+    //   "Vehicle_CT",
+    // ].contains(event.documentItem.type)) {
+    //   associates =
+    //       associatesLock.where((e) => ["Vehicule"].contains(e.type)).toList();
+    // }
     emit(BaseState(
         status: Status.success,
         message:
@@ -169,6 +218,32 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
 
   void _selectAssociatedDocumentEvent(
       SelectAssociatedDocumentEvent event, Emitter emit) {
+    documentPickers[documentPickers.indexOf(event.documentPicker)].type = null;
+    switch (event.documentItem.type) {
+      case "Conducteur":
+        {
+          types = typesDocForDriver;
+        }
+        break;
+      case "Client":
+        {
+          types = typesDocForClient;
+        }
+        break;
+      case "Vehicule":
+        {
+          types = typesDocForVehicule;
+        }
+        break;
+      case "Contraventions":
+        {
+          types = typesDocForContravention;
+        }
+        break;
+      default:
+        types = typesDocForClientGFlotte;
+        break;
+    }
     documentPickers[documentPickers.indexOf(event.documentPicker)].associated =
         event.documentItem;
     emit(BaseState(
@@ -239,7 +314,7 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
       SearchAssociateEvent event, Emitter emit) async {
     emit(const BaseState(status: Status.loading, message: 'loading ⌛'));
     try {
-      if (event.documentAssociate == DocumentAssociate.customer) {
+      if (event.documentAssociate == "Client") {
         final result = await searchCustomerUseCase(SearchCustomerParams(
           filter: event.keyWord,
         ));
@@ -273,7 +348,7 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
                 message: 'update ${event.keyWord} ${event.documentAssociate}'));
           },
         );
-      } else if (event.documentAssociate == DocumentAssociate.driver) {
+      } else if (event.documentAssociate == "Conducteur") {
         final result = await searchDriverUseCase(SearchDriverParams(
           filter: event.keyWord,
         ));
@@ -307,7 +382,7 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
                 message: 'update ${event.keyWord} ${event.documentAssociate}'));
           },
         );
-      } else if (event.documentAssociate == DocumentAssociate.vehicle) {
+      } else if (event.documentAssociate == "Vehicule") {
         final result = await searchVehicleUseCase(SearchVehicleParams(filters: {
           "keyword": event.keyWord,
           "available": true,
@@ -344,6 +419,45 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
                 message: 'update ${event.keyWord} ${event.documentAssociate}'));
           },
         );
+      } else if (event.documentAssociate == "Contraventions") {
+        final result = await searchContraventionUseCase(SearchContraventionParams(
+          filter: event.keyWord,
+        ));
+        result.fold(
+          (failure) {
+            if (failure is NoConnectionFailure) {
+              emit(const ErrorState(
+                  status: Status.error, message: noConnexionMessage));
+            } else if (failure is ServerFailure) {
+              emit(
+                  const ErrorState(status: Status.error, message: serverError));
+            } else if (failure is TokenExpiredFailure) {
+              emit(const ErrorState(
+                  status: Status.tokenExpired, message: tokenExpired));
+            } else {
+              emit(const ErrorState(
+                  status: Status.error, message: unknownError));
+            }
+          },
+          (success) {
+            final splitResult =
+                success.length > 20 ? success.sublist(0, 10) : success;
+            emit(SearchAssociateSuccessState(
+                result: splitResult
+                    .map((e) => DocumentItem(
+                        id: e.id,
+                        type: "Contravention",
+                        label: "${e.immat} ${e.immat}"))
+                    .toList(),
+                status: Status.success,
+                message: 'update ${event.keyWord} ${event.documentAssociate}'));
+          },
+        );
+      } else if (event.documentAssociate == "Gestion de flotte") {
+        emit(SearchAssociateSuccessState(
+            result: const [],
+            status: Status.success,
+            message: 'update ${event.keyWord} ${event.documentAssociate}'));
       }
     } catch (_) {
       emit(const ErrorState(status: Status.error, message: unknownError));
@@ -483,5 +597,14 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
     } catch (_) {
       emit(const ErrorState(status: Status.error, message: unknownError));
     }
+  }
+
+  void _otherDocumentType(OtherDocumentType event, Emitter emit) {
+    documentPickers[documentPickers.indexOf(event.documentPicker)].type =
+        event.documentItem;
+    emit(BaseState(
+        status: Status.success,
+        message:
+            "tag: ${event.documentPicker.file}${event.documentItem.type}"));
   }
 }

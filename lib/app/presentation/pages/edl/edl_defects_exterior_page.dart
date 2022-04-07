@@ -103,6 +103,26 @@ class _EdlDefectsExteriorPageState extends State<EdlDefectsExteriorPage> {
               final edlBloc = context.read<EdlBloc>();
               final typeVehicle =
                   edlBloc.contract.vehicle?.registration?.vehicleKind ?? "";
+              print(edlBloc.contract.vehicle?.registration?.vehicleKind);
+              String imageDefectsExterior = "${assetsImages}citadine_defeacts_exterior.png";
+              if (typeVehicle.isNotEmpty) {
+                switch (typeVehicle.toLowerCase()) {
+                  case "citadine":
+                    imageDefectsExterior = "${assetsImages}citadine_defeacts_exterior.png";
+                    break;
+                  case "break":
+                    imageDefectsExterior = "${assetsImages}break_defeacts_exterior.png";
+                    break;
+                  case "utilitaire":
+                    imageDefectsExterior = "${assetsImages}utilitaire_defeacts_exterior.png";
+                    break;
+                  case "berline":
+                    imageDefectsExterior = "${assetsImages}berline_defeacts_exterior.png";
+                    break;
+                  default:
+                    break;
+                }
+              }
               return SingleChildScrollView(
                 child: Column(
                   children: [
@@ -289,9 +309,7 @@ class _EdlDefectsExteriorPageState extends State<EdlDefectsExteriorPage> {
                                           TypeEdl.departure) ...[
                                         Center(
                                           child: Image.asset(
-                                            typeVehicle.contains("Citadine")
-                                                ? "${assetsImages}citadine_defeacts_exterior.png"
-                                                : "${assetsImages}berline_defeacts_exterior.png",
+                                            imageDefectsExterior,
                                           ),
                                         ),
                                       ] else ...[

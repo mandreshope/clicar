@@ -8,6 +8,7 @@ import 'package:clicar/app/data/models/auth/forgot_password_model.dart';
 import 'package:clicar/app/data/models/auth/login_model.dart';
 import 'package:clicar/app/data/models/auth/register_model.dart';
 import 'package:clicar/app/data/models/contract/contract_model.dart';
+import 'package:clicar/app/data/models/contravention/contravention_model.dart';
 import 'package:clicar/app/data/models/customer/customer_model.dart';
 import 'package:clicar/app/data/models/driver/driver_model.dart';
 import 'package:clicar/app/data/models/upload_file/upload_file_model.dart';
@@ -240,11 +241,48 @@ class RemoteSourceImpl extends RemoteSource {
     if (response.statusCode == 200) {
       _refreshToken(response.headers);
       Map<String, dynamic> map = _parseBody(response.body);
-
       try {
         return List.from(map['data'])
-            .map((x) => ContractModel.fromJson(x))
+            .map((x){
+              print("runtype ==  ${x.runtimeType}");
+              return ContractModel.fromJson(x);
+            })
             .toList();
+      } catch (e) {
+        rethrow;
+      }
+    } else {
+      throw ServerException(
+        statusCode: response.statusCode,
+        message: response.reasonPhrase ?? 'Server Error',
+        body: response.body,
+      );
+    }
+  }
+
+// search contravention
+  @override
+  Future<List<ContraventionModel>> searchContravention(
+      {required String filter}) async {
+    final url = Uri.parse(RemoteEndpoint.contraventionFilter);
+
+    debugPrint("$url");
+    final body = jsonEncode({
+      "filter": filter,
+      "isMajore": false,
+      "contrats": true
+    });
+    final response = await client.post(url, body: body);
+    if (response.statusCode == 200) {
+      _refreshToken(response.headers);
+      try {
+        final Iterable iterable = jsonDecode(response.body);
+        return List.from(iterable)
+            .map((x) => ContraventionModel.fromJson(x))
+            .toList();
+        // return List.from(map['data'])
+        //     .map((x) => ContraventionModel.fromJson(x))
+        //     .toList();
       } catch (e) {
         rethrow;
       }

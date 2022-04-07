@@ -114,6 +114,72 @@ class SecondaryButton extends StatelessWidget {
   }
 }
 
+
+class OtherDocumentTypeTextFieldUnderlined extends StatelessWidget {
+  final TextEditingController? controller;
+  final Function()? onToggleSuffixIcon;
+  final VoidCallback? onEditingComplete;
+  final String? hintText;
+  const OtherDocumentTypeTextFieldUnderlined({
+    Key? key,
+    this.controller,
+    this.onEditingComplete,
+    this.hintText,
+    this.onToggleSuffixIcon
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      onEditingComplete: onEditingComplete,
+      decoration: InputDecoration(
+        hintText: hintText,
+        suffixIcon: IconButton(
+          onPressed: onToggleSuffixIcon, 
+          icon: const Icon(Icons.done)
+        ),        
+        border: const UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.grey,
+            width: 0.5,
+          ),
+        ),
+        errorBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.grey,
+            width: 0.5,
+          ),
+        ),
+        disabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.grey,
+            width: 0.5,
+          ),
+        ),
+        focusedErrorBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.grey,
+            width: 0.5,
+          ),
+        ),
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.grey,
+            width: 0.5,
+          ),
+        ),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: CustomTheme.primaryColor,
+            width: 0.5,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class SearchTextFieldUnderlined extends StatelessWidget {
   final TextEditingController? controller;
   final Function(String)? onChanged;
@@ -142,31 +208,31 @@ class SearchTextFieldUnderlined extends StatelessWidget {
             width: 0.5,
           ),
         ),
-        errorBorder: UnderlineInputBorder(
+        errorBorder: const UnderlineInputBorder(
           borderSide: BorderSide(
             color: Colors.grey,
             width: 0.5,
           ),
         ),
-        disabledBorder: UnderlineInputBorder(
+        disabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(
             color: Colors.grey,
             width: 0.5,
           ),
         ),
-        focusedErrorBorder: UnderlineInputBorder(
+        focusedErrorBorder: const UnderlineInputBorder(
           borderSide: BorderSide(
             color: Colors.grey,
             width: 0.5,
           ),
         ),
-        enabledBorder: UnderlineInputBorder(
+        enabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(
             color: Colors.grey,
             width: 0.5,
           ),
         ),
-        focusedBorder: UnderlineInputBorder(
+        focusedBorder: const UnderlineInputBorder(
           borderSide: BorderSide(
             color: CustomTheme.primaryColor,
             width: 0.5,

@@ -12,6 +12,8 @@ class DocumentPicker {
   String? associatedSelectedName;
   ExpandableController expandableSearchController = ExpandableController();
   TextEditingController? search = TextEditingController();
+  TextEditingController documentTypeController = TextEditingController();
+
 
   ExpandableController expandableTypeController = ExpandableController();
   ExpandableController expandableAssociateController = ExpandableController();

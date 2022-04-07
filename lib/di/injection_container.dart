@@ -1,12 +1,14 @@
 import 'package:clicar/app/core/http/http_client.dart';
 import 'package:clicar/app/core/usecases/fetch_token_usecase.dart';
 import 'package:clicar/app/data/repositories/contract/contract_repository_impl.dart';
+import 'package:clicar/app/data/repositories/contravention/contravention_repository_impl.dart';
 import 'package:clicar/app/data/repositories/customer/customer_repository_impl.dart';
 import 'package:clicar/app/data/repositories/driver/driver_repository_impl.dart';
 import 'package:clicar/app/data/repositories/edl/edl_repository_impl.dart';
 import 'package:clicar/app/data/repositories/upload_file/upload_file_repository_impl.dart';
 import 'package:clicar/app/data/repositories/vehicle/vehicle_repository.dart';
 import 'package:clicar/app/domain/repositories/contract/contract_repository.dart';
+import 'package:clicar/app/domain/repositories/contravention/contravention_repository.dart';
 import 'package:clicar/app/domain/repositories/customer/customer_repository.dart';
 import 'package:clicar/app/domain/repositories/driver/driver_repository.dart';
 import 'package:clicar/app/domain/repositories/edl/edl_repository.dart';
@@ -19,6 +21,7 @@ import 'package:clicar/app/domain/usecases/contract/download_file_usecase.dart';
 import 'package:clicar/app/domain/usecases/contract/get_pdf_contract_usecase.dart';
 import 'package:clicar/app/domain/usecases/contract/search_contract_usecase.dart';
 import 'package:clicar/app/domain/usecases/contract/sign_contract_usecase.dart';
+import 'package:clicar/app/domain/usecases/contravention/search_contravention_usecase.dart';
 import 'package:clicar/app/domain/usecases/customer/customer_update_usecase.dart';
 import 'package:clicar/app/domain/usecases/customer/search_customer_usecase.dart';
 import 'package:clicar/app/domain/usecases/driver/driver_update_usecase.dart';
@@ -89,7 +92,8 @@ Future<void> init() async {
       uploadMultiFileUseCase: sl(),
       edlDepartureUseCase: sl(),
       edlRetourUseCase: sl()));
-  sl.registerFactory(() => DocumentBloc(
+  sl.registerFactory(
+    () => DocumentBloc(
       uploadSingleFileUseCase: sl(),
       uploadMultiFileUseCase: sl(),
       searchCustomerUseCase: sl(),
@@ -97,7 +101,10 @@ Future<void> init() async {
       searchVehicleUseCase: sl(),
       driverUpdateUseCase: sl(),
       customerUpdateUseCase: sl(),
-      vehicleUpdateUseCase: sl()));
+      vehicleUpdateUseCase: sl(),
+      searchContraventionUseCase: sl(),
+    ),
+  );
 
   ///Use cases
   sl.registerLazySingleton(() => LoginUseCase(repository: sl()));
@@ -124,6 +131,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => CustomerUpdateUseCase(repository: sl()));
   sl.registerLazySingleton(() => GetPdfContractUsecase(repository: sl()));
   sl.registerLazySingleton(() => DownloadFileUsecase(repository: sl()));
+  sl.registerLazySingleton(() => SearchContraventionUseCase(repository: sl()));
 
   ///Repositories
   sl.registerLazySingleton<AuthRepository>(
@@ -151,6 +159,9 @@ Future<void> init() async {
   sl.registerLazySingleton<DriverRepository>(() => DriverRepositoryImpl(
       networkInfo: sl(), localDataSource: sl(), remoteDataSource: sl()));
   sl.registerLazySingleton<VehicleRepository>(() => VehicleRepositoryImpl(
+      networkInfo: sl(), localDataSource: sl(), remoteDataSource: sl()));
+  
+  sl.registerLazySingleton<ContraventionRepository>(() => ContraventionRepositoryImpl(
       networkInfo: sl(), localDataSource: sl(), remoteDataSource: sl()));
 
   ///Data sources

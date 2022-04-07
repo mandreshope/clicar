@@ -80,7 +80,7 @@ class DocumentPage extends StatelessWidget {
                         Visibility(
                           visible: documentBloc.documentPickers
                                   .where((e) =>
-                                      e.type != null &&
+                                      e.type != null && e.type!.type != "Autres" &&
                                       e.associated != null &&
                                       e.associatedSelectedName != null)
                                   .length ==

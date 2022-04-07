@@ -12,7 +12,7 @@ RegistrationModel _$RegistrationModelFromJson(Map<String, dynamic> json) =>
       serialNumber: json['serialNumber'] as String?,
       placeNumber: json['placeNumber'] as String?,
       doorNumber: json['doorNumber'] as String?,
-      certificatePrice: json['certificatePrice'] as int?,
+      certificatePrice: json['certificatePrice'] as String?,
       cvNumber: json['cvNumber'] as String?,
       fuelType: json['fuelType'] as String?,
       vehicleKind: json['vehicleKind'] as String?,

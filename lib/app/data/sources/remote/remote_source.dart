@@ -4,6 +4,7 @@ import 'package:clicar/app/data/models/auth/forgot_password_model.dart';
 import 'package:clicar/app/data/models/auth/login_model.dart';
 import 'package:clicar/app/data/models/auth/register_model.dart';
 import 'package:clicar/app/data/models/contract/contract_model.dart';
+import 'package:clicar/app/data/models/contravention/contravention_model.dart';
 import 'package:clicar/app/data/models/customer/customer_model.dart';
 import 'package:clicar/app/data/models/driver/driver_model.dart';
 import 'package:clicar/app/data/models/upload_file/upload_file_model.dart';
@@ -83,5 +84,7 @@ abstract class RemoteSource {
   Future<List<DriverModel>> searchDriver({required String filter});
   Future<List<VehicleModel>> searchVehicle(
       {required Map<String, dynamic> filters});
+  Future<List<ContraventionModel>> searchContravention(
+      {required String filter});
   Future<File> downloadFile({required String path, required String fileName});
 }

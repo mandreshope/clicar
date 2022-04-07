@@ -234,7 +234,7 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
       amount: 100,
     ),
   ];
-
+  Map<String, dynamic> facture = {};
   EdlBloc({
     required this.signContractUseCase,
     required this.uploadSingleFileUseCase,
@@ -793,6 +793,7 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
       EdlBilledInfoEvent event, Emitter emit) async {
     emit(const BaseState(status: Status.loading, message: 'loading ⌛'));
     try {
+      print("fuel start == ${contract.conditionAtStart?.fuelQuantity}");
       final data = {
         "numberContrat": "${contract.numberContrat}",
         "conditionDate": DateTime.now().formatDatePayload,
@@ -802,7 +803,13 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
               .map((e) => e.toMap())
               .toList()
         ],
+        "jaugeCarburantDebut": contract.conditionAtStart?.fuelQuantity,
+        "jaugeCarburantArrive": contract.conditionAtEnd?.fuelQuantity,
+        "KmDepart": contract.conditionAtStart?.km,
+        "KmArrive": contract.conditionAtEnd?.km,
+        "KmInclu": contract.rate?.rent?.first.kmInclus ?? "",
       };
+      print("data before send to retourCondition $data");
       final result = typeEdl == TypeEdl.departure
           ? await edlDepartureUseCase(EdlDepartureParams(data: data))
           : await edlRetourUseCase(EdlRetourParams(data: data));

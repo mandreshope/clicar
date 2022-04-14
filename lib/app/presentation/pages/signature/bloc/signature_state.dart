@@ -13,6 +13,31 @@ class SearchContractState extends BaseState {
   List<Object> get props => [contracts];
 }
 
+class SearchReservationState extends BaseState {
+  final List<Reservation> reservations;
+
+  const SearchReservationState({
+    required this.reservations,
+    required Status status,
+    required String message,
+  }) : super(status: status, message: message);
+
+  @override
+  List<Object> get props => [reservations];
+}
+
+class SearchBdcState extends BaseState {
+  final List<Bdc> bdcs;
+
+  const SearchBdcState({
+    required this.bdcs,
+    required Status status,
+    required String message,
+  }) : super(status: status, message: message);
+
+  @override
+  List<Object> get props => [bdcs];
+}
 class SelectedContractState extends BaseState {
   final bool isAccepted;
   final bool isSigned;
@@ -34,6 +59,27 @@ class GetPdfContractSuccessState extends BaseState {
   final bool isSigned;
 
   const GetPdfContractSuccessState({
+    required Status status,
+    required String message,
+    required this.uploadFile,
+    required this.isSigned,
+    required this.isAccepted,
+  }) : super(status: status, message: message);
+
+  @override
+  List<Object?> get props => [
+        uploadFile,
+        isAccepted,
+        isSigned,
+      ];
+}
+
+class GetPdfReservationSuccessState extends BaseState {
+  final UploadFile? uploadFile;
+  final bool isAccepted;
+  final bool isSigned;
+
+  const GetPdfReservationSuccessState({
     required Status status,
     required String message,
     required this.uploadFile,

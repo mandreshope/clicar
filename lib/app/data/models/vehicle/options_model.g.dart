@@ -9,7 +9,7 @@ part of 'options_model.dart';
 OptionsModel _$OptionsModelFromJson(Map<String, dynamic> json) => OptionsModel(
       gearBox: json['gearBox'] as String?,
       color: json['color'] as String?,
-      options: json['options'] as List<dynamic>?,
+      options: json['options'],
       equipments: json['equipments'] as List<dynamic>?,
       category: json['category'] as String?,
       motor: json['motor'] as int?,

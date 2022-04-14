@@ -5,8 +5,8 @@ part 'insurance_model.g.dart';
 @JsonSerializable(explicitToJson: true)
 class InsuranceModel extends Insurance {
   final String? handledByClient;
-  final String? insurer;
-  final String? optionalInsurance;
+  final dynamic insurer;
+  final dynamic optionalInsurance;
   final String? type;
 
   const InsuranceModel({

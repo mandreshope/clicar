@@ -6,7 +6,7 @@ part 'options_model.g.dart';
 class OptionsModel extends Options {
   final String? gearBox;
   final String? color;
-  final List<dynamic>? options;
+  final dynamic options;
   final List<dynamic>? equipments;
   final String? category;
   final int? motor;

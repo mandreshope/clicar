@@ -5,11 +5,14 @@ import 'package:clicar/app/core/states/error_state.dart';
 import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
+import 'package:clicar/app/presentation/pages/signature/enums/signature_associate.dart';
+import 'package:clicar/app/presentation/widgets/bdc_detail_card.dart';
 import 'package:clicar/app/presentation/widgets/circular_progress_widget.dart';
 import 'package:clicar/app/presentation/widgets/contract_detail_card.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/auth_listener_widget.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
+import 'package:clicar/app/presentation/widgets/reservation_detail_card.dart';
 import 'package:clicar/app/presentation/widgets/scaffold_body.dart';
 import 'package:clicar/app/presentation/widgets/snack_bar_widget.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +52,8 @@ class SignatureConfimPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SignatureAssociate signatureAssociate =
+        navigatorArgs(context) as SignatureAssociate;
     return AuthListenerWidget(
       child: Scaffold(
         backgroundColor: CustomTheme.primaryColor,
@@ -63,7 +68,13 @@ class SignatureConfimPage extends StatelessWidget {
                       path: currState.uploadFile!.path!,
                       fileName: currState.uploadFile!.filename!,
                     ));
+              } else if(currState is GetPdfReservationSuccessState) {
+                context.read<SignatureBloc>().add(DownloadFileEvent(
+                      path: currState.uploadFile!.path!,
+                      fileName: currState.uploadFile!.filename!,
+                    ));
               } else if (currState is DownloadFileSuccessState) {
+                print("currstate == ${currState.file.path}");
                 Navigator.of(context).pushNamed(AppRoutes.signaturePdfViewer,
                     arguments: currState.file);
               } else if (currState is ErrorState) {
@@ -105,16 +116,45 @@ class SignatureConfimPage extends StatelessWidget {
                           const SizedBox(
                             height: CustomTheme.extraSpacer,
                           ),
-                          ContractDetailCard(
-                            contract: signatureBloc.contract.numberContrat,
-                            intutile: signatureBloc.contract.driver?.address,
-                            vehicle: signatureBloc.contract.vehicle?.mark,
-                            typeLocation: signatureBloc
-                                .contract.rate?.rent?.first.locationType,
-                            departureDate:
-                                signatureBloc.contract.info?.departureDate,
-                            returnDate: signatureBloc.contract.info?.returnDate,
-                          ),
+                          if (signatureAssociate ==
+                              SignatureAssociate.contract) ...[
+                            ContractDetailCard(
+                              contract: signatureBloc.contract.numberContrat,
+                              intutile: signatureBloc.contract.driver?.address,
+                              vehicle: signatureBloc.contract.vehicle?.mark,
+                              typeLocation: signatureBloc
+                                  .contract.rate?.rent?.first.locationType,
+                              departureDate:
+                                  signatureBloc.contract.info?.departureDate,
+                              returnDate:
+                                  signatureBloc.contract.info?.returnDate,
+                            ),
+                          ] else if (signatureAssociate ==
+                              SignatureAssociate.reservation) ...[
+                            ReservationtDetailCard(
+                              reservation:
+                                  signatureBloc.reservation.numberReservation,
+                              vehicle: signatureBloc.reservation.vehicule?.mark,
+                              typeLocation: signatureBloc
+                                  .reservation.rate?.rent?.first.locationType,
+                              departureDate:
+                                  signatureBloc.reservation.info?.departureDate,
+                              returnDate:
+                                  signatureBloc.reservation.info?.returnDate,
+                            )
+                          ] else if (signatureAssociate ==
+                              SignatureAssociate.bdc) ...[
+                            BdcDetailCard(
+                              bdc:
+                                  signatureBloc.bdc.numberContrat,
+                              typeLocation: signatureBloc
+                                  .bdc.rate?.rent?.first.locationType,
+                              departureDate:
+                                  signatureBloc.bdc.info?.departureDate,
+                              returnDate:
+                                  signatureBloc.bdc.info?.returnDate,
+                            )
+                          ],
                           const SizedBox(
                             height: CustomTheme.extraSpacer,
                           ),
@@ -127,9 +167,29 @@ class SignatureConfimPage extends StatelessWidget {
                             ),
                             replacement: SecondaryButton(
                               onPressed: () async {
-                                signatureBloc.add(GetPdfContractEvent(
-                                  contract: signatureBloc.contract,
-                                ));
+                                switch (signatureAssociate) {
+                                  case SignatureAssociate.contract:
+                                    {
+                                      signatureBloc.add(GetPdfContractEvent(
+                                        contract: signatureBloc.contract,
+                                      ));
+                                    }
+                                    break;
+                                  case SignatureAssociate.reservation:
+                                    {
+                                      signatureBloc.add(GetPdfReservationEvent(
+                                        reservation: signatureBloc.reservation,
+                                      ));
+                                    }
+                                    break;
+                                  default:
+                                    {
+                                      signatureBloc.add(GetPdfBdcEvent(
+                                        bdc: signatureBloc.bdc,
+                                      ));
+                                    }
+                                    break;
+                                }
                               },
                               height: 100,
                               width: double.infinity,

@@ -9,8 +9,8 @@ part of 'insurance_model.dart';
 InsuranceModel _$InsuranceModelFromJson(Map<String, dynamic> json) =>
     InsuranceModel(
       handledByClient: json['handledByClient'] as String?,
-      insurer: json['insurer'] as String?,
-      optionalInsurance: json['optionalInsurance'] as String?,
+      insurer: json['insurer'],
+      optionalInsurance: json['optionalInsurance'],
       type: json['type'] as String?,
     );
 

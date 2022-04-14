@@ -1,11 +1,9 @@
-import 'package:clicar/app/data/models/contract/contract_model.dart';
 import 'package:clicar/app/data/models/vehicle/general_model.dart';
 import 'package:clicar/app/data/models/vehicle/insurance_model.dart';
 import 'package:clicar/app/data/models/vehicle/options_model.dart';
 import 'package:clicar/app/data/models/vehicle/purchase_model.dart';
 import 'package:clicar/app/data/models/vehicle/registration_model.dart';
 import 'package:clicar/app/data/models/vehicle/sale_model.dart';
-import 'package:clicar/app/data/models/vehicle/vehicle_contrats_serialiser.dart';
 import 'package:clicar/app/domain/entities/vehicle/vehicle.dart';
 
 import 'package:json_annotation/json_annotation.dart';
@@ -18,8 +16,8 @@ class VehicleModel extends Vehicle {
   final List<dynamic>? maintenances;
   final List<dynamic>? pvs;
   final bool? deleted;
-  @VehicleContratsSerialiser()
-  final List<ContractModel?>? contrats;
+  // @VehicleContratsSerialiser()
+  // final List<ContractModel?>? contrats;
   final List<dynamic>? locations;
   final String? number;
   final String? immat1;
@@ -45,7 +43,7 @@ class VehicleModel extends Vehicle {
     this.maintenances,
     this.pvs,
     this.deleted,
-    this.contrats,
+    // this.contrats,
     this.locations,
     this.number,
     this.immat1,
@@ -70,7 +68,7 @@ class VehicleModel extends Vehicle {
           maintenances: maintenances,
           pvs: pvs,
           deleted: deleted,
-          contrats: contrats,
+          // contrats: contrats,
           locations: locations,
           number: number,
           immat1: immat1,

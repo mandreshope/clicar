@@ -3,15 +3,19 @@ import 'dart:io';
 import 'package:clicar/app/data/models/auth/forgot_password_model.dart';
 import 'package:clicar/app/data/models/auth/login_model.dart';
 import 'package:clicar/app/data/models/auth/register_model.dart';
+import 'package:clicar/app/data/models/bdc/bdc_model.dart';
 import 'package:clicar/app/data/models/contract/contract_model.dart';
 import 'package:clicar/app/data/models/contravention/contravention_model.dart';
 import 'package:clicar/app/data/models/customer/customer_model.dart';
 import 'package:clicar/app/data/models/driver/driver_model.dart';
+import 'package:clicar/app/data/models/reservation/reservation_model.dart';
 import 'package:clicar/app/data/models/upload_file/upload_file_model.dart';
 import 'package:clicar/app/data/models/user/user_model.dart';
 import 'package:clicar/app/data/models/vehicle/vehicle_model.dart';
 import 'package:clicar/app/domain/entities/contract/contract.dart';
+import 'package:clicar/app/domain/entities/reservation/reservation.dart';
 import 'package:clicar/app/domain/usecases/contract/sign_contract_usecase.dart';
+import 'package:clicar/app/domain/usecases/reservation/sign_reservation_usecase.dart';
 
 abstract class RemoteSource {
   Future<LoginModel> login({
@@ -86,5 +90,15 @@ abstract class RemoteSource {
       {required Map<String, dynamic> filters});
   Future<List<ContraventionModel>> searchContravention(
       {required String filter});
+
+  Future<List<ReservationModel>> searchReservation(
+      {required String filter});
+  
+  Future<List<BdcModel>> searchBdc(
+      {required String filter});
   Future<File> downloadFile({required String path, required String fileName});
+  Future<UploadFileModel> getPdfReservation({required String reservationId});
+  Future<UploadFileModel> getPdfBdc({required String bdcId});
+  Future<Reservation> signReservation(
+      {required SignReservationParams signReservationParams});
 }

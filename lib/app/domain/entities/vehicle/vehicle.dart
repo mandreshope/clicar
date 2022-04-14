@@ -13,7 +13,7 @@ class Vehicle extends Equatable {
   final List<dynamic>? maintenances;
   final List<dynamic>? pvs;
   final bool? deleted;
-  final List<Contract?>? contrats;
+  // final List<Contract?>? contrats;
   final List<dynamic>? locations;
   final String? number;
   final String? immat1;
@@ -39,7 +39,7 @@ class Vehicle extends Equatable {
     this.maintenances,
     this.pvs,
     this.deleted,
-    this.contrats,
+    // this.contrats,
     this.locations,
     this.number,
     this.immat1,
@@ -67,7 +67,7 @@ class Vehicle extends Equatable {
         maintenances,
         pvs,
         deleted,
-        contrats,
+        // contrats,
         locations,
         number,
         immat1,

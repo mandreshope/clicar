@@ -5,8 +5,8 @@ class Registration extends Equatable {
   final String? serialNumber;
   final String? placeNumber;
   final String? doorNumber;
-  final String? certificatePrice;
-  final String? cvNumber;
+  final dynamic certificatePrice;
+  final dynamic cvNumber;
   final String? fuelType;
   final String? vehicleKind;
   final String? vehicleType;

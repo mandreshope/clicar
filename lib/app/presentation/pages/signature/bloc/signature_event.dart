@@ -6,8 +6,8 @@ abstract class SignatureEvent extends Equatable {
 
 class SearchContractEvent extends SignatureEvent {
   final String keyWord;
-
-  const SearchContractEvent({required this.keyWord});
+  final SignatureAssociate signatureAssociate;
+  const SearchContractEvent({required this.keyWord, required this.signatureAssociate});
 
   @override
   List<Object> get props => [keyWord];
@@ -22,6 +22,28 @@ class SelectContractEvent extends SignatureEvent {
 
   @override
   List<Object> get props => [contract];
+}
+
+class SelectReservationEvent extends SignatureEvent {
+  final Reservation reservation;
+
+  const SelectReservationEvent({
+    required this.reservation,
+  });
+
+  @override
+  List<Object> get props => [reservation];
+}
+
+class SelectBdcEvent extends SignatureEvent {
+  final Bdc bdc;
+
+  const SelectBdcEvent({
+    required this.bdc,
+  });
+
+  @override
+  List<Object> get props => [bdc];
 }
 
 class UploadSignatureFileEvent extends SignatureEvent {
@@ -42,16 +64,19 @@ class UploadSignatureFileEvent extends SignatureEvent {
 class SignContractEvent extends SignatureEvent {
   final Contract contract;
   final bool isAccepted;
+  final Bdc bdc;
   final UploadFile uploadFile;
-
+  final Reservation reservation;
   const SignContractEvent({
+    required this.bdc,
     required this.contract,
     required this.isAccepted,
     required this.uploadFile,
+    required this.reservation
   });
 
   @override
-  List<Object> get props => [contract, isAccepted, uploadFile];
+  List<Object> get props => [bdc, contract, isAccepted, uploadFile, reservation];
 }
 
 class GetPdfContractEvent extends SignatureEvent {
@@ -64,6 +89,32 @@ class GetPdfContractEvent extends SignatureEvent {
   @override
   List<Object> get props => [
         contract,
+      ];
+}
+
+class GetPdfReservationEvent extends SignatureEvent {
+  final Reservation reservation;
+
+  const GetPdfReservationEvent({
+    required this.reservation,
+  });
+
+  @override
+  List<Object> get props => [
+        reservation,
+      ];
+}
+
+class GetPdfBdcEvent extends SignatureEvent {
+  final Bdc bdc;
+
+  const GetPdfBdcEvent({
+    required this.bdc,
+  });
+
+  @override
+  List<Object> get props => [
+        bdc,
       ];
 }
 

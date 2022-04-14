@@ -123,6 +123,9 @@ class SignatureDrawPage extends StatelessWidget {
                                             .isAccepted,
                                     contract:
                                         context.read<SignatureBloc>().contract,
+                                    reservation:
+                                        context.read<SignatureBloc>().reservation,
+                                    bdc: context.read<SignatureBloc>().bdc,
                                     uploadFile: context
                                         .read<SignatureBloc>()
                                         .uploadFile,

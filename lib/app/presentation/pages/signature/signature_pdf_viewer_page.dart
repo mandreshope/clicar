@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/presentation/pages/signature/bloc/signature_bloc.dart';
+import 'package:clicar/app/presentation/pages/signature/enums/signature_associate.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,10 +23,26 @@ class _SignaturePdfViewerPageState extends State<SignaturePdfViewerPage> {
   Widget build(BuildContext context) {
     final file = navigatorArgs(context) as File?;
     final signatureBloc = context.read<SignatureBloc>();
+    String typeText = "";
+    dynamic num;
+    switch (signatureBloc.signatureAssociate) {
+      case SignatureAssociate.contract:
+        typeText = "Contrat";
+        num = signatureBloc.contract.numberContrat;
+        break;
+      case SignatureAssociate.reservation:
+        typeText = "Réservation";
+        num = signatureBloc.reservation.numberReservation;
+        break;
+      default:
+        typeText = "Bon de commande";
+        num = signatureBloc.bdc.numberContrat;
+        break;
+    }
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text("Contrat : ${signatureBloc.contract.numberContrat}"),
+        title: Text("$typeText : $num"),
         actions: [
           Visibility(
             visible: isLastPage,

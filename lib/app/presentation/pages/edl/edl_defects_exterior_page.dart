@@ -104,20 +104,25 @@ class _EdlDefectsExteriorPageState extends State<EdlDefectsExteriorPage> {
               final typeVehicle =
                   edlBloc.contract.vehicle?.registration?.vehicleKind ?? "";
               print(edlBloc.contract.vehicle?.registration?.vehicleKind);
-              String imageDefectsExterior = "${assetsImages}citadine_defeacts_exterior.png";
+              String imageDefectsExterior =
+                  "${assetsImages}citadine_defeacts_exterior.png";
               if (typeVehicle.isNotEmpty) {
                 switch (typeVehicle.toLowerCase()) {
                   case "citadine":
-                    imageDefectsExterior = "${assetsImages}citadine_defeacts_exterior.png";
+                    imageDefectsExterior =
+                        "${assetsImages}citadine_defeacts_exterior.png";
                     break;
                   case "break":
-                    imageDefectsExterior = "${assetsImages}break_defeacts_exterior.png";
+                    imageDefectsExterior =
+                        "${assetsImages}break_defeacts_exterior.png";
                     break;
                   case "utilitaire":
-                    imageDefectsExterior = "${assetsImages}utilitaire_defeacts_exterior.png";
+                    imageDefectsExterior =
+                        "${assetsImages}utilitaire_defeacts_exterior.png";
                     break;
                   case "berline":
-                    imageDefectsExterior = "${assetsImages}berline_defeacts_exterior.png";
+                    imageDefectsExterior =
+                        "${assetsImages}berline_defeacts_exterior.png";
                     break;
                   default:
                     break;
@@ -126,299 +131,293 @@ class _EdlDefectsExteriorPageState extends State<EdlDefectsExteriorPage> {
               return SingleChildScrollView(
                 child: Column(
                   children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 05.h(context).sp(context),
-                        horizontal: 10.w(context).sp(context),
-                      ),
-                      child: Column(
-                        children: [
-                          TitleWithSeparator(
+                    Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 02.h(context).sp(context),
+                            horizontal: 10.w(context).sp(context),
+                          ),
+                          child: TitleWithSeparator(
                             title: edlBloc.typeEdl == TypeEdl.departure
                                 ? "Départ".toUpperCase()
                                 : "Retour".toUpperCase(),
                           ),
-                          const SizedBox(
-                            height: 30,
-                          ),
-
-                          ///Photos exterior
-                          SecondaryButton(
-                            width: double.infinity,
-                            child: Text(
-                              "défauts extérieures".toUpperCase(),
-                              style: TextStyle(
-                                fontSize: CustomTheme.mainBtnTextStyle.fontSize
-                                    ?.sp(context),
-                                color: CustomTheme.primaryColor,
-                              ),
+                        ),
+                        Text("défauts extérieures".toUpperCase()),
+                        ///Photos exterior
+                        // SecondaryButton(
+                        //   width: double.infinity,
+                        //   child: Text(
+                        //     "défauts extérieures".toUpperCase(),
+                        //     style: TextStyle(
+                        //       fontSize: CustomTheme.mainBtnTextStyle.fontSize
+                        //           ?.sp(context),
+                        //       color: CustomTheme.primaryColor,
+                        //     ),
+                        //   ),
+                        // ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Column(
+                              children: [
+                                Draggable(
+                                  data: edlBloc.typeEdl == TypeEdl.departure
+                                      ? "${assetsImages}casse.png"
+                                      : "${assetsImages}casse_retour.png",
+                                  feedback: SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: edlBloc.typeEdl == TypeEdl.departure
+                                        ? Image.asset(
+                                            "${assetsImages}casse.png")
+                                        : Image.asset(
+                                            "${assetsImages}casse_retour.png"),
+                                  ),
+                                  onDragCompleted: () {},
+                                  child: SizedBox(
+                                    width: 25,
+                                    height: 25,
+                                    child: edlBloc.typeEdl == TypeEdl.departure
+                                        ? Image.asset(
+                                            "${assetsImages}casse.png")
+                                        : Image.asset(
+                                            "${assetsImages}casse_retour.png"),
+                                  ),
+                                ),
+                                Text(
+                                  "casse".toUpperCase(),
+                                  style: const TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          const SizedBox(
-                            height: CustomTheme.spacer,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Column(
-                                children: [
-                                  Draggable(
-                                    data: edlBloc.typeEdl == TypeEdl.departure
-                                        ? "${assetsImages}casse.png"
-                                        : "${assetsImages}casse_retour.png",
-                                    feedback: SizedBox(
-                                      width: 20,
-                                      height: 20,
-                                      child: edlBloc.typeEdl ==
-                                              TypeEdl.departure
-                                          ? Image.asset(
-                                              "${assetsImages}casse.png")
-                                          : Image.asset(
-                                              "${assetsImages}casse_retour.png"),
-                                    ),
-                                    onDragCompleted: () {},
-                                    child: SizedBox(
-                                      width: 50,
-                                      height: 50,
-                                      child: edlBloc.typeEdl ==
-                                              TypeEdl.departure
-                                          ? Image.asset(
-                                              "${assetsImages}casse.png")
-                                          : Image.asset(
-                                              "${assetsImages}casse_retour.png"),
-                                    ),
+                            const SizedBox(
+                              width: 10.0,
+                            ),
+                            Column(
+                              children: [
+                                Draggable(
+                                  data: edlBloc.typeEdl == TypeEdl.departure
+                                      ? "${assetsImages}rayure.png"
+                                      : "${assetsImages}rayure_retour.png",
+                                  feedback: SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: edlBloc.typeEdl == TypeEdl.departure
+                                        ? Image.asset(
+                                            "${assetsImages}rayure.png")
+                                        : Image.asset(
+                                            "${assetsImages}rayure_retour.png"),
                                   ),
-                                  Text(
-                                    "casse".toUpperCase(),
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                  onDragCompleted: () {},
+                                  child: SizedBox(
+                                    width: 25,
+                                    height: 25,
+                                    child: edlBloc.typeEdl == TypeEdl.departure
+                                        ? Image.asset(
+                                            "${assetsImages}rayure.png")
+                                        : Image.asset(
+                                            "${assetsImages}rayure_retour.png"),
                                   ),
-                                ],
-                              ),
-                              const SizedBox(
-                                width: 10.0,
-                              ),
-                              Column(
-                                children: [
-                                  Draggable(
-                                    data: edlBloc.typeEdl == TypeEdl.departure
-                                        ? "${assetsImages}rayure.png"
-                                        : "${assetsImages}rayure_retour.png",
-                                    feedback: SizedBox(
-                                      width: 20,
-                                      height: 20,
-                                      child: edlBloc.typeEdl ==
-                                              TypeEdl.departure
-                                          ? Image.asset(
-                                              "${assetsImages}rayure.png")
-                                          : Image.asset(
-                                              "${assetsImages}rayure_retour.png"),
-                                    ),
-                                    onDragCompleted: () {},
-                                    child: SizedBox(
-                                      width: 50,
-                                      height: 50,
-                                      child: edlBloc.typeEdl ==
-                                              TypeEdl.departure
-                                          ? Image.asset(
-                                              "${assetsImages}rayure.png")
-                                          : Image.asset(
-                                              "${assetsImages}rayure_retour.png"),
-                                    ),
+                                ),
+                                Text(
+                                  "rayure".toUpperCase(),
+                                  style: const TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.normal,
                                   ),
-                                  Text(
-                                    "rayure".toUpperCase(),
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              width: 10.0,
+                            ),
+                            Column(
+                              children: [
+                                Draggable(
+                                  data: edlBloc.typeEdl == TypeEdl.departure
+                                      ? "${assetsImages}choc.png"
+                                      : "${assetsImages}choc_retour.png",
+                                  feedback: SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: edlBloc.typeEdl == TypeEdl.departure
+                                        ? Image.asset("${assetsImages}choc.png")
+                                        : Image.asset(
+                                            "${assetsImages}choc_retour.png"),
                                   ),
-                                ],
-                              ),
-                              const SizedBox(
-                                width: 10.0,
-                              ),
-                              Column(
-                                children: [
-                                  Draggable(
-                                    data: edlBloc.typeEdl == TypeEdl.departure
-                                        ? "${assetsImages}choc.png"
-                                        : "${assetsImages}choc_retour.png",
-                                    feedback: SizedBox(
-                                      width: 20,
-                                      height: 20,
-                                      child: edlBloc.typeEdl ==
-                                              TypeEdl.departure
-                                          ? Image.asset(
-                                              "${assetsImages}choc.png")
-                                          : Image.asset(
-                                              "${assetsImages}choc_retour.png"),
-                                    ),
-                                    onDragCompleted: () {},
-                                    child: SizedBox(
-                                      width: 50,
-                                      height: 50,
-                                      child: edlBloc.typeEdl ==
-                                              TypeEdl.departure
-                                          ? Image.asset(
-                                              "${assetsImages}choc.png")
-                                          : Image.asset(
-                                              "${assetsImages}choc_retour.png"),
-                                    ),
+                                  onDragCompleted: () {},
+                                  child: SizedBox(
+                                    width: 25,
+                                    height: 25,
+                                    child: edlBloc.typeEdl == TypeEdl.departure
+                                        ? Image.asset("${assetsImages}choc.png")
+                                        : Image.asset(
+                                            "${assetsImages}choc_retour.png"),
                                   ),
-                                  Text(
-                                    "choc".toUpperCase(),
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                ),
+                                Text(
+                                  "choc".toUpperCase(),
+                                  style: const TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.normal,
                                   ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: CustomTheme.spacer,
-                          ),
-                          SizedBox(
-                            key: _widgetKey,
-                            height: 40.h(context),
-                            width: 300.w(context),
-                            // color: Colors.amber.withOpacity(0.5),
-                            child: Screenshot(
-                              controller: screenshotController,
-                              child: DragTarget(
-                                onAcceptWithDetails: (_) {
-                                  final dragTargetDetails =
-                                      (_ as DragTargetDetails);
-                                  context.read<DraggableCubit>().addDrags(
-                                        Drag(
-                                          offset: Offset(
-                                              dragTargetDetails.offset.dx -
-                                                  _widgetOffset.dx,
-                                              dragTargetDetails.offset.dy -
-                                                  _widgetOffset.dy),
-                                          url: dragTargetDetails.data,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: CustomTheme.spacer,
+                        ),
+                        SizedBox(
+                          key: _widgetKey,
+                          //40
+                          height: 40.h(context),
+                          width: MediaQuery.of(context).size.width,
+                          //width: 300.w(context),
+                          // color: Colors.amber.withOpacity(0.5),
+                          child: Screenshot(
+                            controller: screenshotController,
+                            child: DragTarget(
+                              onAcceptWithDetails: (_) {
+                                final dragTargetDetails =
+                                    (_ as DragTargetDetails);
+                                context.read<DraggableCubit>().addDrags(
+                                      Drag(
+                                        offset: Offset(
+                                            dragTargetDetails.offset.dx -
+                                                _widgetOffset.dx,
+                                            dragTargetDetails.offset.dy -
+                                                _widgetOffset.dy),
+                                        url: dragTargetDetails.data,
+                                      ),
+                                    );
+                              },
+                              builder:
+                                  (context, candidateItems, rejectedItems) {
+                                print("rebuild == ${edlBloc.contract.conditionAtStart?.faults?.first}");
+                                return Stack(
+                                  children: [
+                                    if (edlBloc.typeEdl ==
+                                        TypeEdl.departure) ...[
+                                      Center(
+                                        child: Image.asset(
+                                          imageDefectsExterior,
                                         ),
-                                      );
-                                },
-                                builder:
-                                    (context, candidateItems, rejectedItems) {
-                                  return Stack(
-                                    children: [
-                                      if (edlBloc.typeEdl ==
-                                          TypeEdl.departure) ...[
-                                        Center(
-                                          child: Image.asset(
-                                            imageDefectsExterior,
-                                          ),
+                                      ),
+                                    ] else ...[
+                                      Center(
+                                        child: Image.network(
+                                          "${RemoteConfig.baseUrl}${edlBloc.contract.conditionAtStart?.faults?.first}",
+                                          fit: BoxFit.cover,
+                                          loadingBuilder: (BuildContext context,
+                                              Widget child,
+                                              ImageChunkEvent?
+                                                  loadingProgress) {
+                                            if (loadingProgress == null) {
+                                              return child;
+                                            }
+                                            return Center(
+                                              child: CircularProgress(
+                                                value: loadingProgress
+                                                            .expectedTotalBytes !=
+                                                        null
+                                                    ? loadingProgress
+                                                            .cumulativeBytesLoaded /
+                                                        loadingProgress
+                                                            .expectedTotalBytes!
+                                                    : null,
+                                              ),
+                                            );
+                                          },
+                                          errorBuilder: (context, _, __) {
+                                            return Image.asset(
+                                              "${assetsImages}citadine_defeacts_exterior.png",
+                                            );
+                                          },
                                         ),
-                                      ] else ...[
-                                        Center(
-                                          child: Image.network(
-                                            "${RemoteConfig.baseUrl}${edlBloc.contract.conditionAtStart?.faults?.first}",
-                                            fit: BoxFit.cover,
-                                            loadingBuilder:
-                                                (BuildContext context,
-                                                    Widget child,
-                                                    ImageChunkEvent?
-                                                        loadingProgress) {
-                                              if (loadingProgress == null) {
-                                                return child;
-                                              }
-                                              return Center(
-                                                child: CircularProgress(
-                                                  value: loadingProgress
-                                                              .expectedTotalBytes !=
-                                                          null
-                                                      ? loadingProgress
-                                                              .cumulativeBytesLoaded /
-                                                          loadingProgress
-                                                              .expectedTotalBytes!
-                                                      : null,
-                                                ),
-                                              );
-                                            },
-                                            errorBuilder: (context, _, __) {
-                                              return Image.asset(
-                                                "${assetsImages}citadine_defeacts_exterior.png",
-                                              );
-                                            },
-                                          ),
+                                      ),
+                                      /*Center(
+                                        child: Image.asset(
+                                          "${assetsImages}citadine_defeacts_exterior.png",
                                         ),
-                                        /*Center(
-                                          child: Image.asset(
-                                            "${assetsImages}citadine_defeacts_exterior.png",
-                                          ),
-                                        ),*/
-                                      ],
-                                      ...context
-                                          .read<DraggableCubit>()
-                                          .drags
-                                          .map(
-                                            (e) => Positioned(
-                                              left: e.offset.dx,
-                                              top: e.offset.dy,
-                                              child: SizedBox(
-                                                width: 20.0,
-                                                height: 20.0,
-                                                child: Image.asset(
-                                                  e.url,
-                                                ),
+                                      ),*/
+                                    ],
+                                    ...context
+                                        .read<DraggableCubit>()
+                                        .drags
+                                        .map(
+                                          (e) => Positioned(
+                                            left: e.offset.dx,
+                                            top: e.offset.dy,
+                                            child: SizedBox(
+                                              width: 20.0,
+                                              height: 20.0,
+                                              child: Image.asset(
+                                                e.url,
                                               ),
                                             ),
-                                          )
-                                          .toList(),
-                                    ],
-                                  );
-                                },
-                              ),
+                                          ),
+                                        )
+                                        .toList(),
+                                  ],
+                                );
+                              },
                             ),
                           ),
-                          const SizedBox(
-                            height: CustomTheme.spacer,
-                          ),
+                        ),
+                        const SizedBox(
+                          height: CustomTheme.spacer,
+                        ),
 
-                          Visibility(
-                            visible: state.status == Status.loading,
-                            child: PrimaryButton(
-                              height: 50.0,
-                              width: 40.w(context),
-                              child: const CircularProgress(
+                        Visibility(
+                          visible: state.status == Status.loading,
+                          child: PrimaryButton(
+                            height: 50.0,
+                            width: 40.w(context),
+                            child: const CircularProgress(
+                              color: Colors.white,
+                            ),
+                          ),
+                          replacement: PrimaryButton(
+                            width: 40.w(context),
+                            onPressed: () async {
+                              imgByte.value =
+                                  await screenshotController.capture();
+
+                              if (imgByte.value != null) {
+                                ///convert pngBytes to file
+                                final path = await localPath;
+                                File file =
+                                    File('$path/edl_defects_exterior.png');
+                                file.writeAsBytesSync(
+                                    List.from(imgByte.value!));
+
+                                edlBloc.add(
+                                  UploadPhotoDefectsExteriorEvent(
+                                    file: file,
+                                  ),
+                                );
+                              }
+                            },
+                            child: Text(
+                              'Suivant'.toUpperCase(),
+                              style: TextStyle(
+                                fontSize: CustomTheme.button.sp(context),
                                 color: Colors.white,
                               ),
                             ),
-                            replacement: PrimaryButton(
-                              width: 40.w(context),
-                              onPressed: () async {
-                                imgByte.value =
-                                    await screenshotController.capture();
-
-                                if (imgByte.value != null) {
-                                  ///convert pngBytes to file
-                                  final path = await localPath;
-                                  File file =
-                                      File('$path/edl_defects_exterior.png');
-                                  file.writeAsBytesSync(
-                                      List.from(imgByte.value!));
-
-                                  edlBloc.add(
-                                    UploadPhotoDefectsExteriorEvent(
-                                      file: file,
-                                    ),
-                                  );
-                                }
-                              },
-                              child: Text(
-                                'Suivant'.toUpperCase(),
-                                style: TextStyle(
-                                  fontSize: CustomTheme.button.sp(context),
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     )
                   ],
                 ),

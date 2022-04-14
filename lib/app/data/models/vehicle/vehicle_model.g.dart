@@ -12,8 +12,6 @@ VehicleModel _$VehicleModelFromJson(Map<String, dynamic> json) => VehicleModel(
       maintenances: json['maintenances'] as List<dynamic>?,
       pvs: json['pvs'] as List<dynamic>?,
       deleted: json['deleted'] as bool?,
-      contrats:
-          const VehicleContratsSerialiser().fromJson(json['contrats'] as List?),
       locations: json['locations'] as List<dynamic>?,
       number: json['number'] as String?,
       immat1: json['immat1'] as String?,
@@ -54,7 +52,6 @@ Map<String, dynamic> _$VehicleModelToJson(VehicleModel instance) =>
       'maintenances': instance.maintenances,
       'pvs': instance.pvs,
       'deleted': instance.deleted,
-      'contrats': const VehicleContratsSerialiser().toJson(instance.contrats),
       'locations': instance.locations,
       'number': instance.number,
       'immat1': instance.immat1,

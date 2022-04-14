@@ -242,13 +242,6 @@ class DocumentExpandable extends StatelessWidget {
                                     .expandableSearchController.expanded = true;
                                 documentBloc.add(SearchAssociateEvent(
                                     documentAssociate: documentPicker.associated!.type,
-                                        // documentPicker.associated!.type ==
-                                        //         "Conducteur"
-                                        //     ? DocumentAssociate.driver
-                                        //     : documentPicker.associated!.type ==
-                                        //             "Client"
-                                        //         ? DocumentAssociate.customer
-                                        //         : DocumentAssociate.vehicle,
                                     keyWord:
                                         documentPicker.search?.text ?? ""));
                               },

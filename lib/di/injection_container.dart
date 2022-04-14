@@ -1,22 +1,28 @@
 import 'package:clicar/app/core/http/http_client.dart';
 import 'package:clicar/app/core/usecases/fetch_token_usecase.dart';
+import 'package:clicar/app/data/repositories/bdc/bdc_repository_impl.dart';
 import 'package:clicar/app/data/repositories/contract/contract_repository_impl.dart';
 import 'package:clicar/app/data/repositories/contravention/contravention_repository_impl.dart';
 import 'package:clicar/app/data/repositories/customer/customer_repository_impl.dart';
 import 'package:clicar/app/data/repositories/driver/driver_repository_impl.dart';
 import 'package:clicar/app/data/repositories/edl/edl_repository_impl.dart';
+import 'package:clicar/app/data/repositories/reservation/reservation_repository_impl.dart';
 import 'package:clicar/app/data/repositories/upload_file/upload_file_repository_impl.dart';
 import 'package:clicar/app/data/repositories/vehicle/vehicle_repository.dart';
+import 'package:clicar/app/domain/repositories/bdc/bdc_repository.dart';
 import 'package:clicar/app/domain/repositories/contract/contract_repository.dart';
 import 'package:clicar/app/domain/repositories/contravention/contravention_repository.dart';
 import 'package:clicar/app/domain/repositories/customer/customer_repository.dart';
 import 'package:clicar/app/domain/repositories/driver/driver_repository.dart';
 import 'package:clicar/app/domain/repositories/edl/edl_repository.dart';
+import 'package:clicar/app/domain/repositories/reservation/reservation_repository.dart';
 import 'package:clicar/app/domain/repositories/upload_file/upload_file_repository.dart';
 import 'package:clicar/app/domain/repositories/vehicle/vehicle_repository.dart';
 import 'package:clicar/app/domain/usecases/auth/change_password_usecase.dart';
 import 'package:clicar/app/domain/usecases/auth/forgot_password_usecase.dart';
 import 'package:clicar/app/domain/usecases/auth/logout_usecase.dart';
+import 'package:clicar/app/domain/usecases/bdc/get_pdf_bdc_usecase.dart';
+import 'package:clicar/app/domain/usecases/bdc/search_bdc_usecase.dart';
 import 'package:clicar/app/domain/usecases/contract/download_file_usecase.dart';
 import 'package:clicar/app/domain/usecases/contract/get_pdf_contract_usecase.dart';
 import 'package:clicar/app/domain/usecases/contract/search_contract_usecase.dart';
@@ -28,6 +34,9 @@ import 'package:clicar/app/domain/usecases/driver/driver_update_usecase.dart';
 import 'package:clicar/app/domain/usecases/driver/search_driver_usecase.dart';
 import 'package:clicar/app/domain/usecases/edl/edl_departure_usecase.dart';
 import 'package:clicar/app/domain/usecases/edl/edl_retour_usecase.dart';
+import 'package:clicar/app/domain/usecases/reservation/get_pdf_reservation_usecase.dart';
+import 'package:clicar/app/domain/usecases/reservation/search_reservation_usecase.dart';
+import 'package:clicar/app/domain/usecases/reservation/sign_reservation_usecase.dart';
 import 'package:clicar/app/domain/usecases/upload_file/upload_multi_file_usecase.dart';
 import 'package:clicar/app/domain/usecases/upload_file/upload_single_file_usecase.dart';
 import 'package:clicar/app/domain/usecases/user/me_usecase.dart';
@@ -79,7 +88,13 @@ Future<void> init() async {
       searchContractUseCase: sl(),
       uploadSingleFileUseCase: sl(),
       signContractUseCase: sl(),
-      downloadFileUsecase: sl()));
+      downloadFileUsecase: sl(),
+      searchReservationUseCase: sl(),
+      getPdfReservationUsecase: sl(),
+      searchBdcUseCase: sl(),
+      getPdfBdcUsecase: sl(),
+      signReservationUseCase: sl(),
+      ));
   sl.registerFactory(() => AcceptContractBloc());
   sl.registerFactory(() => AccountBloc(
       uploadSingleFileUseCase: sl(),
@@ -132,6 +147,12 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetPdfContractUsecase(repository: sl()));
   sl.registerLazySingleton(() => DownloadFileUsecase(repository: sl()));
   sl.registerLazySingleton(() => SearchContraventionUseCase(repository: sl()));
+  sl.registerLazySingleton(() => SearchReservationUseCase(repository: sl()));
+  sl.registerLazySingleton(() => GetPdfReservationUsecase(repository: sl()));
+  sl.registerLazySingleton(() => SearchBdcUseCase(repository: sl()));
+  sl.registerLazySingleton(() => GetPdfBdcUsecase(repository: sl()));
+  sl.registerLazySingleton(() => SignReservationUseCase(repository: sl()));
+
 
   ///Repositories
   sl.registerLazySingleton<AuthRepository>(
@@ -163,7 +184,10 @@ Future<void> init() async {
   
   sl.registerLazySingleton<ContraventionRepository>(() => ContraventionRepositoryImpl(
       networkInfo: sl(), localDataSource: sl(), remoteDataSource: sl()));
-
+  sl.registerLazySingleton<ReservationRepository>(() => ReservationRepositoryImpl(
+      networkInfo: sl(), localDataSource: sl(), remoteDataSource: sl()));
+  sl.registerLazySingleton<BdcRepository>(() => BdcRepositoryImpl(
+      networkInfo: sl(), localDataSource: sl(), remoteDataSource: sl()));
   ///Data sources
   sl.registerLazySingleton<RemoteSource>(() => RemoteSourceImpl(client: sl()));
   sl.registerLazySingleton<LocalSource>(

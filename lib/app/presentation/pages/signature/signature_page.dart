@@ -1,13 +1,17 @@
 import 'package:clicar/app/core/states/base_state.dart';
+import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
 import 'package:clicar/app/presentation/pages/signature/bloc/signature_bloc.dart';
+import 'package:clicar/app/presentation/pages/signature/enums/signature_associate.dart';
+import 'package:clicar/app/presentation/widgets/search_bdc_result.dart';
 import 'package:clicar/app/presentation/widgets/search_contract_result.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/auth_listener_widget.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
 import 'package:clicar/app/presentation/widgets/circular_progress_widget.dart';
 import 'package:clicar/app/presentation/widgets/scaffold_body.dart';
+import 'package:clicar/app/presentation/widgets/search_reservation_result.dart';
 import 'package:clicar/app/presentation/widgets/snack_bar_widget.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +24,20 @@ class SignaturePage extends StatelessWidget {
   final ExpandableController expandableController = ExpandableController();
   @override
   Widget build(BuildContext context) {
+    SignatureAssociate signatureAssociate =
+        navigatorArgs(context) as SignatureAssociate;
+    String typeText = "";
+    switch (signatureAssociate) {
+      case SignatureAssociate.contract:
+        typeText = "Contrats";
+        break;
+      case SignatureAssociate.reservation:
+        typeText = "Réservations";
+        break;
+      default:
+        typeText = "Bon de commande";
+        break;
+    }
     return AuthListenerWidget(
       child: Scaffold(
         appBar: AppBar(
@@ -85,7 +103,7 @@ class SignaturePage extends StatelessWidget {
                                       header: Padding(
                                           padding: const EdgeInsets.all(20),
                                           child: Text(
-                                            'Contrats à signer'.toUpperCase(),
+                                            '$typeText à signer'.toUpperCase(),
                                             style: CustomTheme.mainBtnTextStyle
                                                 .copyWith(
                                               color: CustomTheme.primaryColor,
@@ -107,7 +125,9 @@ class SignaturePage extends StatelessWidget {
                                               }
                                               context.read<SignatureBloc>().add(
                                                   SearchContractEvent(
-                                                      keyWord: search.text));
+                                                      keyWord: search.text,
+                                                      signatureAssociate:
+                                                          signatureAssociate));
                                             },
                                           ),
                                           const SizedBox(
@@ -120,7 +140,7 @@ class SignaturePage extends StatelessWidget {
                                               child: CircularProgress(),
                                             ),
                                           ] else if (state
-                                              is SearchContractState) ...[
+                                              is SearchContractState && signatureAssociate == SignatureAssociate.contract) ...[
                                             if (state.contracts.isEmpty)
                                               const Padding(
                                                 padding: EdgeInsets.all(8.0),
@@ -129,8 +149,45 @@ class SignaturePage extends StatelessWidget {
                                               )
                                             else
                                               ...state.contracts
-                                                  .map((contract) =>
-                                                      SearchContractResult(
+                                                  .map(
+                                                    (contract) =>
+                                                        SearchContractResult(
+                                                      onTap: () {
+                                                        search.clear();
+                                                        expandableController
+                                                            .toggle();
+                                                        final signatureBloc =
+                                                            context.read<
+                                                                SignatureBloc>();
+                                                        signatureBloc.contract =
+                                                            contract;
+                                                        signatureBloc.add(
+                                                            SelectContractEvent(
+                                                          contract: contract,
+                                                        ));
+
+                                                        Navigator.of(context).pushNamed(
+                                                            AppRoutes
+                                                                .signatureSummary,
+                                                            arguments:
+                                                                signatureAssociate);
+                                                      },
+                                                      contract: contract,
+                                                    ),
+                                                  )
+                                                  .toList(),
+                                          ] else if (state
+                                              is SearchReservationState && signatureAssociate == SignatureAssociate.reservation) ...[
+                                            if (state.reservations.isEmpty)
+                                              const Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Text(
+                                                    "Aucun contrat trouvé"),
+                                              )
+                                            else
+                                              ...state.reservations
+                                                  .map((reservation) =>
+                                                      SearchReservationResult(
                                                           onTap: () {
                                                             search.clear();
                                                             expandableController
@@ -139,20 +196,63 @@ class SignaturePage extends StatelessWidget {
                                                                 context.read<
                                                                     SignatureBloc>();
                                                             signatureBloc
-                                                                    .contract =
-                                                                contract;
+                                                                    .reservation =
+                                                                reservation;
                                                             signatureBloc.add(
-                                                                SelectContractEvent(
-                                                              contract:
-                                                                  contract,
+                                                                SelectReservationEvent(
+                                                              reservation:
+                                                                  reservation,
                                                             ));
 
                                                             Navigator.of(
                                                                     context)
-                                                                .pushNamed(AppRoutes
-                                                                    .signatureSummary);
+                                                                .pushNamed(
+                                                                    AppRoutes
+                                                                        .signatureSummary,
+                                                                    arguments:
+                                                                        signatureAssociate);
                                                           },
-                                                          contract: contract))
+                                                          reservation:
+                                                              reservation))
+                                                  .toList(),
+                                          ] else if (state
+                                              is SearchBdcState && signatureAssociate == SignatureAssociate.bdc) ...[
+                                            if (state.bdcs.isEmpty)
+                                              const Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Text(
+                                                    "Aucun contrat trouvé"),
+                                              )
+                                            else
+                                              ...state.bdcs
+                                                  .map((bdc) =>
+                                                      SearchBdcResult(
+                                                          onTap: () {
+                                                            search.clear();
+                                                            expandableController
+                                                                .toggle();
+                                                            final signatureBloc =
+                                                                context.read<
+                                                                    SignatureBloc>();
+                                                            signatureBloc
+                                                                    .bdc =
+                                                                bdc;
+                                                            signatureBloc.add(
+                                                                SelectBdcEvent(
+                                                              bdc:
+                                                                  bdc,
+                                                            ));
+
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pushNamed(
+                                                                    AppRoutes
+                                                                        .signatureSummary,
+                                                                    arguments:
+                                                                        signatureAssociate);
+                                                          },
+                                                          bdc:
+                                                              bdc))
                                                   .toList(),
                                           ]
                                         ],

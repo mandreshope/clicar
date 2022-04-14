@@ -131,7 +131,7 @@ class _HomePageState extends State<HomePage> {
                               SecondaryButton(
                                 width: double.infinity,
                                 child: Text(
-                                  'Signature des contrats',
+                                  'Signature',
                                   style: CustomTheme.mainBtnTextStyle.copyWith(
                                     fontSize: CustomTheme
                                         .mainBtnTextStyle.fontSize
@@ -140,7 +140,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 onPressed: () {
                                   Navigator.of(context)
-                                      .pushNamed(AppRoutes.signature);
+                                      .pushNamed(AppRoutes.signatureChoice);
                                 },
                               ),
                               const SizedBox(

@@ -4,12 +4,12 @@ class General extends Equatable {
   final String? cases;
   final String? datelastKm;
   final String? keyDouble;
-  final String? lastKm;
+  final dynamic lastKm;
   final String? geoloc;
   final String? lastControlDate;
   final String? entryDate;
   final String? fuelType;
-  final int? fuelGauge;
+  final double? fuelGauge;
   final String? gaugeDate;
   final String? category;
 

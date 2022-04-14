@@ -7,10 +7,12 @@ import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/data/models/auth/forgot_password_model.dart';
 import 'package:clicar/app/data/models/auth/login_model.dart';
 import 'package:clicar/app/data/models/auth/register_model.dart';
+import 'package:clicar/app/data/models/bdc/bdc_model.dart';
 import 'package:clicar/app/data/models/contract/contract_model.dart';
 import 'package:clicar/app/data/models/contravention/contravention_model.dart';
 import 'package:clicar/app/data/models/customer/customer_model.dart';
 import 'package:clicar/app/data/models/driver/driver_model.dart';
+import 'package:clicar/app/data/models/reservation/reservation_model.dart';
 import 'package:clicar/app/data/models/upload_file/upload_file_model.dart';
 import 'package:clicar/app/data/models/user/user_model.dart';
 import 'package:clicar/app/data/models/vehicle/vehicle_model.dart';
@@ -18,13 +20,13 @@ import 'package:clicar/app/data/sources/remote/remote_config.dart';
 import 'package:clicar/app/data/sources/remote/remote_source.dart';
 import 'package:clicar/app/domain/entities/contract/contract.dart';
 import 'package:clicar/app/domain/usecases/contract/sign_contract_usecase.dart';
+import 'package:clicar/app/domain/usecases/reservation/sign_reservation_usecase.dart';
 import 'package:clicar/di/injection_container.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:clicar/app/core/utils/extension.dart';
-import 'dart:io' show Platform;
 
 class RemoteSourceImpl extends RemoteSource {
   late httpClient.HttpClient client;
@@ -242,10 +244,68 @@ class RemoteSourceImpl extends RemoteSource {
       _refreshToken(response.headers);
       Map<String, dynamic> map = _parseBody(response.body);
       try {
-        return List.from(map['data'])
+        return List.from(map['data']).map((x) {
+          return ContractModel.fromJson(x);
+        }).toList();
+      } catch (e) {
+        rethrow;
+      }
+    } else {
+      throw ServerException(
+        statusCode: response.statusCode,
+        message: response.reasonPhrase ?? 'Server Error',
+        body: response.body,
+      );
+    }
+  }
+
+// search reservation
+  @override
+  Future<List<ReservationModel>> searchReservation(
+      {required String filter}) async {
+    final url = Uri.parse(RemoteEndpoint.searchReservation);
+    final body = jsonEncode({
+      'filter': {"filter": filter},
+      'current': true
+    }.removeNulls);
+    final response = await client.post(url, body: body);
+    if (response.statusCode == 200) {
+      _refreshToken(response.headers);
+      try {
+        final Iterable iterable = jsonDecode(response.body);
+        return List.from(iterable)
             .map((x){
-              print("runtype ==  ${x.runtimeType}");
-              return ContractModel.fromJson(x);
+              return ReservationModel.fromJson(x);
+            })
+            .toList();
+      } catch (e) {
+        rethrow;
+      }
+    } else {
+      throw ServerException(
+        statusCode: response.statusCode,
+        message: response.reasonPhrase ?? 'Server Error',
+        body: response.body,
+      );
+    }
+  }
+
+  @override
+  Future<List<BdcModel>> searchBdc(
+      {required String filter}) async {
+    final url = Uri.parse(RemoteEndpoint.searchBdc);
+    final body = jsonEncode({
+      'filter': {"filter": filter},
+      'current': true
+    }.removeNulls);
+    final response = await client.post(url, body: body);
+    if (response.statusCode == 200) {
+      _refreshToken(response.headers);
+      try {
+        final Iterable iterable = jsonDecode(response.body);
+        return List.from(iterable)
+            .map((x){
+              return BdcModel.fromJson(x);
             })
             .toList();
       } catch (e) {
@@ -267,11 +327,8 @@ class RemoteSourceImpl extends RemoteSource {
     final url = Uri.parse(RemoteEndpoint.contraventionFilter);
 
     debugPrint("$url");
-    final body = jsonEncode({
-      "filter": filter,
-      "isMajore": false,
-      "contrats": true
-    });
+    final body =
+        jsonEncode({"filter": filter, "isMajore": false, "contrats": true});
     final response = await client.post(url, body: body);
     if (response.statusCode == 200) {
       _refreshToken(response.headers);
@@ -336,6 +393,30 @@ class RemoteSourceImpl extends RemoteSource {
       ///TODO RETURN ALL ID TO OBJECT IN CONTRACT DATA
       /*final contract = body['contract'];*/
       return ContractModel.fromJson({});
+    } else {
+      throw ServerException(
+        statusCode: response.statusCode,
+        message: response.reasonPhrase ?? 'Server Error',
+        body: response.body,
+      );
+    }
+  }
+
+  @override
+  Future<ReservationModel> signReservation(
+      {required SignReservationParams signReservationParams}) async {
+    final url = Uri.parse(RemoteEndpoint.signReservation);
+    final response = await client.post(
+      url,
+      body: jsonEncode(signReservationParams.toMap()),
+    );
+    if (response.statusCode == 200) {
+      _refreshToken(response.headers);
+      final body = _parseBody(response.body);
+
+      ///TODO RETURN ALL ID TO OBJECT IN CONTRACT DATA
+      /*final contract = body['contract'];*/
+      return ReservationModel.fromJson({});
     } else {
       throw ServerException(
         statusCode: response.statusCode,
@@ -628,10 +709,17 @@ class RemoteSourceImpl extends RemoteSource {
       try {
         _refreshToken(response.headers);
         final body = jsonDecode(response.body);
+        print(body['vehicles'].runtimeType);
         Iterable iterable = body["vehicles"];
-
+        print(iterable.length);
         return List.from(iterable)
-            .map((x) => VehicleModel.fromJson(x))
+            .map((x){
+              
+              if(x['options'].runtimeType == String) {
+                x['options'] = null;
+              }
+              return VehicleModel.fromJson(x);
+            })
             .toList();
       } catch (e) {
         rethrow;
@@ -710,6 +798,52 @@ class RemoteSourceImpl extends RemoteSource {
       }),
     );
 
+    if (response.statusCode == 200) {
+      _refreshToken(response.headers);
+      try {
+        _refreshToken(response.headers);
+        return UploadFileModel.fromJson(jsonDecode(response.body));
+      } catch (e) {
+        rethrow;
+      }
+    } else {
+      throw ServerException(
+        statusCode: response.statusCode,
+        message: response.reasonPhrase ?? 'Server Error',
+        body: response.body,
+      );
+    }
+  }
+
+  @override
+  Future<UploadFileModel> getPdfReservation(
+      {required String reservationId}) async {
+    final url = Uri.parse(RemoteEndpoint.exportToPdfReservation);
+    final response =
+        await client.post(url, body: jsonEncode({"bookingId": reservationId}));
+    if (response.statusCode == 200) {
+      _refreshToken(response.headers);
+      try {
+        _refreshToken(response.headers);
+        return UploadFileModel.fromJson(jsonDecode(response.body));
+      } catch (e) {
+        rethrow;
+      }
+    } else {
+      throw ServerException(
+        statusCode: response.statusCode,
+        message: response.reasonPhrase ?? 'Server Error',
+        body: response.body,
+      );
+    }
+  }
+
+  @override
+  Future<UploadFileModel> getPdfBdc(
+      {required String bdcId}) async {
+    final url = Uri.parse(RemoteEndpoint.exportToPdfBdc);
+    final response =
+        await client.post(url, body: jsonEncode({"id": bdcId}));
     if (response.statusCode == 200) {
       _refreshToken(response.headers);
       try {

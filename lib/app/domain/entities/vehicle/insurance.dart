@@ -2,8 +2,8 @@ import 'package:equatable/equatable.dart';
 
 class Insurance extends Equatable {
   final String? handledByClient;
-  final String? insurer;
-  final String? optionalInsurance;
+  final dynamic insurer;
+  final dynamic optionalInsurance;
   final String? type;
 
   const Insurance({

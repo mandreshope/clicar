@@ -3,10 +3,12 @@ import 'dart:typed_data';
 import 'package:clicar/app/core/states/base_state.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
+import 'package:clicar/app/presentation/pages/signature/enums/signature_associate.dart';
 import 'package:clicar/app/presentation/widgets/contract_detail_card.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/auth_listener_widget.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
+import 'package:clicar/app/presentation/widgets/reservation_detail_card.dart';
 import 'package:clicar/app/presentation/widgets/scaffold_body.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -60,39 +62,72 @@ class SignatureDetailPage extends StatelessWidget {
                           const SizedBox(
                             height: CustomTheme.spacer,
                           ),
-                          ContractDetailCard(
-                            contract: context
-                                .read<SignatureBloc>()
-                                .contract
-                                .numberContrat,
-                            intutile: context
-                                .read<SignatureBloc>()
-                                .contract
-                                .driver
-                                ?.address,
-                            vehicle: context
-                                .read<SignatureBloc>()
-                                .contract
-                                .vehicle
-                                ?.mark,
-                            typeLocation: context
-                                .read<SignatureBloc>()
-                                .contract
-                                .rate
-                                ?.rent
-                                ?.first
-                                .locationType,
-                            departureDate: context
-                                .read<SignatureBloc>()
-                                .contract
-                                .info
-                                ?.departureDate,
-                            returnDate: context
-                                .read<SignatureBloc>()
-                                .contract
-                                .info
-                                ?.returnDate,
-                          ),
+                          if (context
+                                  .read<SignatureBloc>()
+                                  .signatureAssociate ==
+                              SignatureAssociate.contract) ...[
+                            ContractDetailCard(
+                              contract: context
+                                  .read<SignatureBloc>()
+                                  .contract
+                                  .numberContrat,
+                              intutile: context
+                                  .read<SignatureBloc>()
+                                  .contract
+                                  .driver
+                                  ?.address,
+                              vehicle: context
+                                  .read<SignatureBloc>()
+                                  .contract
+                                  .vehicle
+                                  ?.mark,
+                              typeLocation: context
+                                  .read<SignatureBloc>()
+                                  .contract
+                                  .rate
+                                  ?.rent
+                                  ?.first
+                                  .locationType,
+                              departureDate: context
+                                  .read<SignatureBloc>()
+                                  .contract
+                                  .info
+                                  ?.departureDate,
+                              returnDate: context
+                                  .read<SignatureBloc>()
+                                  .contract
+                                  .info
+                                  ?.returnDate,
+                            ),
+                          ] else if (context
+                                  .read<SignatureBloc>()
+                                  .signatureAssociate ==
+                              SignatureAssociate.reservation) ...[
+                            ReservationtDetailCard(
+                              vehicle: context
+                                  .read<SignatureBloc>()
+                                  .reservation
+                                  .vehicule
+                                  ?.mark,
+                              typeLocation: context
+                                  .read<SignatureBloc>()
+                                  .reservation
+                                  .rate
+                                  ?.rent
+                                  ?.first
+                                  .locationType,
+                              departureDate: context
+                                  .read<SignatureBloc>()
+                                  .reservation
+                                  .info
+                                  ?.departureDate,
+                              returnDate: context
+                                  .read<SignatureBloc>()
+                                  .reservation
+                                  .info
+                                  ?.returnDate,
+                            ),
+                          ],
                           CheckboxListTile(
                             activeColor: CustomTheme.primaryColor,
                             controlAffinity: ListTileControlAffinity.leading,

@@ -53,7 +53,6 @@ class ContractRepositoryImpl implements ContractRepository {
             statusCode: 0,
           ));
         } catch (_) {
-          print("error contrat ${_.toString()}");
           return Left(ServerFailure(
             message: _.toString(),
             body: '',

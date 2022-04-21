@@ -40,7 +40,6 @@ class ContraventionRepositoryImpl implements ContraventionRepository {
             statusCode: 0,
           ),);
         } catch (_) {
-          print("error; ${_.toString()}");
           return Left(ServerFailure(
             message: _.toString(),
             body: '',

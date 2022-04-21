@@ -1,7 +1,7 @@
 abstract class RemoteConfig {
   // static String baseUrl = "https://api-new.clicar.fr";
-  static String baseUrl = "https://preprod-api.clicar.fr";
-  // static String baseUrl = "http://192.168.88.16:4400";
+  // static String baseUrl = "https://preprod-api.clicar.fr";
+  static String baseUrl = "http://192.168.88.15:4400";
 }
 
 abstract class RemoteEndpoint {
@@ -11,7 +11,8 @@ abstract class RemoteEndpoint {
   static String changePassword = RemoteConfig.baseUrl + "/auth/changePassword";
   static String me = RemoteConfig.baseUrl + "/user/me";
   static String userInfoUpdate = RemoteConfig.baseUrl + "/user/edit";
-  static String searchContract = RemoteConfig.baseUrl + "/contrat/find";
+  static String searchContractSigned = RemoteConfig.baseUrl + "/contrat/find";
+  static String searchContract = RemoteConfig.baseUrl + "/contrat/findWithoutSign";
   static String signContract = RemoteConfig.baseUrl + "/contrat/sign";
   static String uploadSingleFile = RemoteConfig.baseUrl + "/uploadFile/upload/";
   static String uploadMultiFile =
@@ -29,8 +30,8 @@ abstract class RemoteEndpoint {
   static String exportToPdfNonRestitution =
       "/exportToPdf/exportToPdfNonRestitution";
   static String contraventionFilter = RemoteConfig.baseUrl + "/contravention/filter";
-  static String searchReservation = RemoteConfig.baseUrl + "/reservation/filter";
-  static String searchBdc = RemoteConfig.baseUrl + "/PurchaseOrder/filter";
+  static String searchReservation = RemoteConfig.baseUrl + "/reservation/findReservationtWithoutSign";
+  static String searchBdc = RemoteConfig.baseUrl + "/PurchaseOrder/filterWithoutSign";
   static String exportToPdfReservation =
       RemoteConfig.baseUrl + "/exportToPdf/ExportPdfReservation";
   static String exportToPdfBdc =

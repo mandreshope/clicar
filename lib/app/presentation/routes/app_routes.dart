@@ -12,6 +12,7 @@ import 'package:clicar/app/presentation/pages/edl/edl_defects_exterior_page.dart
 import 'package:clicar/app/presentation/pages/edl/edl_departure_page.dart';
 import 'package:clicar/app/presentation/pages/edl/edl_fuel_level_page.dart';
 import 'package:clicar/app/presentation/pages/edl/edl_mileage_page.dart';
+import 'package:clicar/app/presentation/pages/edl/edl_photo_cle_page.dart';
 import 'package:clicar/app/presentation/pages/edl/edl_photo_exterior_page.dart';
 import 'package:clicar/app/presentation/pages/edl/edl_photo_interior_page.dart';
 import 'package:clicar/app/presentation/pages/edl/edl_photo_list_page.dart';
@@ -69,6 +70,7 @@ abstract class AppRoutes {
   static const edlSummaryChecklist = '/edl-summary-checklist';
   static const edlPhotoExterior = '/edl-photo-exterior';
   static const edlPhotoInterior = '/edl-photo-interior';
+  static const edlPhotoCle = '/edl-photo-cle';
   static const edlPhotoList = '/edl-photo-list';
   static const edlDefectsExteriorNote = '/edl-defects-exterior-note';
   static const edlSignatureConfim = '/edl-signature-confim';
@@ -122,6 +124,7 @@ abstract class AppRoutes {
         const EdlPhotoExteriorPage(),
     AppRoutes.edlPhotoInterior: (BuildContext context) =>
         const EdlPhotoInteriorPage(),
+    AppRoutes.edlPhotoCle: (BuildContext context) => EdlPhotoClePage(),
     AppRoutes.edlPhotoList: (BuildContext context) => const EdlPhotoListPage(),
     AppRoutes.edlDefectsExteriorNote: (BuildContext context) =>
         const EdlDefectsExteriorNotePage(),

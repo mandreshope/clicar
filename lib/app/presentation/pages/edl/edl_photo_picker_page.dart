@@ -144,6 +144,43 @@ class EdlPhotoPickerPage extends StatelessWidget {
                           const SizedBox(
                             height: CustomTheme.spacer,
                           ),
+                          // SecondaryButton(
+                          //   width: double.infinity,
+                          //   child: Text(
+                          //     "photos clé".toUpperCase(),
+                          //     style: TextStyle(
+                          //       fontSize: CustomTheme.mainBtnTextStyle.fontSize
+                          //           ?.sp(context),
+                          //       color: CustomTheme.primaryColor,
+                          //     ),
+                          //   ),
+                          // ),
+                          // const SizedBox(
+                          //   height: CustomTheme.spacer,
+                          // ),
+                          // SecondaryButton(
+                          //   onPressed: edlBloc.uploadPhotosExterior.isNotEmpty
+                          //       ? null
+                          //       : () {
+                          //           Navigator.of(context)
+                          //               .pushNamed(AppRoutes.edlPhotoCle)
+                          //               .then((value) => null);
+                          //         },
+                          //   height: 100,
+                          //   width: double.infinity,
+                          //   child: edlBloc.uploadPhotosExterior.isNotEmpty
+                          //       ? Image.asset(
+                          //           "${assetsImages}success.png",
+                          //           width: 30.0,
+                          //         )
+                          //       : const Icon(
+                          //           Icons.camera_alt,
+                          //           color: Colors.grey,
+                          //         ),
+                          // ),
+                          const SizedBox(
+                            height: CustomTheme.spacer,
+                          ),
                           PrimaryButton(
                             width: 40.w(context),
                             onPressed: () {

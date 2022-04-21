@@ -232,7 +232,10 @@ class RemoteSourceImpl extends RemoteSource {
     bool? hasStartingEdl,
     bool? hasEndingEdl,
   }) async {
-    final url = Uri.parse(RemoteEndpoint.searchContract);
+    Uri url = Uri.parse(RemoteEndpoint.searchContract);
+    if(isSigned) {
+      url = Uri.parse(RemoteEndpoint.searchContractSigned);
+    } 
     final body = jsonEncode({
       'keyWord': keyWord,
       'isSigned': isSigned,
@@ -709,9 +712,7 @@ class RemoteSourceImpl extends RemoteSource {
       try {
         _refreshToken(response.headers);
         final body = jsonDecode(response.body);
-        print(body['vehicles'].runtimeType);
         Iterable iterable = body["vehicles"];
-        print(iterable.length);
         return List.from(iterable)
             .map((x){
               

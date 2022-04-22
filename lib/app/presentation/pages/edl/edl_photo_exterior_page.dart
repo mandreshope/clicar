@@ -166,7 +166,7 @@ class _EdlPhotoExteriorPageState extends State<EdlPhotoExteriorPage> {
                                         final XFile? image =
                                             await _picker.pickImage(
                                           source: edlBloc.imageSource!,
-                                          imageQuality: 50,
+                                          imageQuality: 35,
                                         );
                                         if (edlBloc.imageSource ==
                                             ImageSource.camera) {
@@ -203,7 +203,7 @@ class _EdlPhotoExteriorPageState extends State<EdlPhotoExteriorPage> {
                                                 final XFile? image =
                                                     await _picker.pickImage(
                                                   source: ImageSource.gallery,
-                                                  imageQuality: 50,
+                                                  imageQuality: 35,
                                                 );
                                                 edlBloc.imageSource =
                                                     ImageSource.gallery;

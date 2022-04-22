@@ -59,6 +59,16 @@ class AddFileOfCameraPosState extends BaseState {
   List<Object> get props => [status, message];
 }
 
+class AddFileOfCleState extends BaseState {
+  const AddFileOfCleState({
+    required Status status,
+    required String message,
+  }) : super(status: status, message: message);
+
+  @override
+  List<Object> get props => [status, message];
+}
+
 class SelectCameraPosState extends BaseState {
   final CameraPos cameraPos;
 
@@ -136,6 +146,15 @@ class EdlRetourNoteSuccessState extends BaseState {
 
 class UploadPhotoDefectsExteriorSuccessState extends BaseState {
   const UploadPhotoDefectsExteriorSuccessState(
+      {required Status status, required String message})
+      : super(
+          status: status,
+          message: message,
+        );
+}
+
+class UploadPhotoCleSuccessState extends BaseState {
+  const UploadPhotoCleSuccessState(
       {required Status status, required String message})
       : super(
           status: status,

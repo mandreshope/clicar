@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
 import 'package:clicar/app/core/errors/failures.dart';
@@ -45,9 +47,12 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
   List<UploadFile> uploadPhotosExterior = [];
   List<UploadFile> uploadPhotosInterior = [];
   UploadFile uploadDefectsExterior = const UploadFile();
-
+  UploadFile uploadCle = const UploadFile();
   int currentCameraPos = 0;
   int currentCameraInteriorPos = 0;
+
+  File? cle;
+  String? cleFileName;
 
   List<CameraPos> cameraInteriorPosListLock = [
     CameraPos(
@@ -129,7 +134,6 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
       alignment: Alignment.bottomCenter,
     ),
   ];
-
   List<CameraPos> cameraPosList = [
     CameraPos(
       rotation: math.pi * 2,
@@ -259,6 +263,7 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
     on<SelectCameraPosEvent>(_selectCameraPosEvent);
     on<SelectCameraInteriorPosEvent>(_selectCameraInteriorPosEvent);
     on<AddFileOfCameraPosEvent>(_addFileOfCameraPosEvent);
+    on<AddFileOfCleEvent>(_addFileOfCleEvent);
     on<AddFileOfCameraInteriorPosEvent>(_addFileOfCameraInteriorPosEvent);
     on<UpdateFileOfCameraInteriorPosEvent>(_updateFileOfCameraInteriorPosEvent);
     on<UpdateFileOfCameraPosEvent>(_updateFileOfCameraPosEvent);
@@ -274,6 +279,7 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
     on<EdlRetourSignEvent>(_edlRetourSignEvent);
     on<UploadSignatureFileEvent>(_uploadSignatureFileEvent);
     on<ReloadEvent>(_reloadEvent);
+    on<UploadPhotoCleEvent>(_uploadPhotosCleEvent);
   }
 
   void resetUploadPhoto() {
@@ -306,6 +312,8 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         )
         .toList();
     imageSource = null;
+    cle = null;
+    cleFileName = "";
   }
 
   void resetAll() {
@@ -340,6 +348,8 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         )
         .toList();
     imageSource = null;
+    cle = null;
+    cleFileName = "";
   }
 
   void _reloadEvent(ReloadEvent event, Emitter emit) {
@@ -430,7 +440,13 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
   Future<void> _uploadPhotosExteriorEvent(
       UploadPhotosExteriorEvent event, Emitter emit) async {
     emit(const BaseState(status: Status.loading, message: 'loading ⌛'));
+    // List<String> images = [];
     try {
+      // for (var imagefile in event.files) {
+      //   Uint8List imagebytes = await imagefile.readAsBytes();
+      //   String base64string = base64.encode(imagebytes);
+      //   images.add(base64string);
+      // }
       final upload = await uploadMultiFileUseCase(
         UploadMultiFileParams(
           files: event.files,
@@ -517,6 +533,36 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
     }
   }
 
+  Future<void> _uploadPhotosCleEvent(
+      UploadPhotoCleEvent event, Emitter emit) async {
+    emit(const BaseState(status: Status.loading, message: 'loading ⌛'));
+    try {
+      final upload = await uploadSingleFileUseCase(
+        UploadSingleFileParams(
+          file: event.file,
+          fileDestination: "edl",
+        ),
+      );
+      upload.fold(
+        (failure) {
+          emit(const ErrorState(
+            status: Status.uploadFileFailed,
+            message: "upload file failed",
+          ));
+        },
+        (success) async {
+          cleFileName = success.filename;
+          emit(const UploadPhotoCleSuccessState(
+            status: Status.uploadFileSuccess,
+            message: "upload file success",
+          ));
+        },
+      );
+    } catch (_) {
+      emit(const ErrorState(status: Status.error, message: unknownError));
+    }
+  }
+
   void _selectCameraPosEvent(SelectCameraPosEvent event, Emitter emit) {
     for (var e in cameraPosList) {
       e.isActive = false;
@@ -562,6 +608,16 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         status: Status.success,
         message:
             "$currentCameraPos ${cameraPosList[currentCameraPos].file} reload",
+      ),
+    );
+  }
+
+  void _addFileOfCleEvent(AddFileOfCleEvent event, Emitter emit) {
+    cle = event.file;
+    emit(
+      AddFileOfCleState(
+        status: Status.success,
+        message: "${cle!.path}} reload",
       ),
     );
   }
@@ -612,12 +668,17 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
   ///add contract photos exterior & interior
   Future<void> _edlPhotosEvent(EdlPhotosEvent event, Emitter emit) async {
     emit(const BaseState(status: Status.loading, message: 'loading ⌛'));
+    // List<String> images = [];
     try {
       //https://api-new.clicar.fr/uploadFile/file/signatures/41-418338_success1640557427707.png
       /*final urlPhoto =
               "${RemoteConfig.baseUrl}/uploadFile/file/signatures/${success.filename}";*/
       /// add baseUrl to display this path
-
+      // for (var imagefile in event.files) {
+      //   Uint8List imagebytes = await imagefile.readAsBytes();
+      //   String base64string = base64.encode(imagebytes);
+      //   images.add(base64string);
+      // }
       List<String> photosExterior = uploadPhotosExterior.map((e) {
         final urlPhoto = "$edlServerFilePath${e.filename}";
         return urlPhoto;
@@ -627,11 +688,12 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         final urlPhoto = "$edlServerFilePath${e.filename}";
         return urlPhoto;
       }).toList();
-
       final data = {
         "numberContrat": "${contract.numberContrat}",
         "conditionDate": DateTime.now().formatDatePayload,
         "conditions": [...photosExterior, ...photosInterior],
+        "cle": cle!=null? "$edlServerFilePath$cleFileName" : "",
+        // "conditions": images,
         //"comment": "quelconque commentaire",
         //"km": "2000",
         //"fuelQuantity": "15",

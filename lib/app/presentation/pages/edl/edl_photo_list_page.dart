@@ -54,6 +54,13 @@ class EdlPhotoListPage extends StatelessWidget {
                 isError: false,
               );
               context.read<EdlBloc>().add(EdlPhotosEvent());
+            } else if(currState is UploadPhotoCleSuccessState){
+              SnackBarWidget.show(
+                context: context,
+                message: "Photo clé téléchargée",
+                isError: false,
+              );
+              context.read<EdlBloc>().add(EdlPhotosEvent());
             } else if (currState is EdlPhotosSuccessState) {
               SnackBarWidget.show(
                 context: context,
@@ -353,8 +360,105 @@ class EdlPhotoListPage extends StatelessWidget {
                                 ),
                               )
                               .toList(),
+                        ] else ...[
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 2.0),
+                            child: Stack(
+                              children: [
+                                Image.file(
+                                  edlBloc.cle!,
+                                  width: 100.w(context),
+                                  height: 20.h(context),
+                                  fit: BoxFit.cover,
+                                ),
+                                Visibility(
+                                  visible: fileSize(edlBloc.cle) >= 2.0,
+                                  child: Positioned(
+                                    top: 0,
+                                    bottom: 0,
+                                    left: 0,
+                                    right: 0,
+                                    child: PhotoSizeMax(
+                                      file: edlBloc.cle,
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  right: 10.0,
+                                  top: 10.0,
+                                  child: PrimaryButton(
+                                    width: 50.0,
+                                    height: 50.0,
+                                    backgroundColor: Theme.of(context)
+                                        .primaryColor
+                                        .withOpacity(0.7),
+                                    padding: MaterialStateProperty.all(
+                                        const EdgeInsets.all(0.0)),
+                                    onPressed: () async {
+                                      final ImagePicker _picker = ImagePicker();
+                                      final XFile? image =
+                                          await showDialog<XFile?>(
+                                        context: context,
+                                        barrierDismissible: true,
+                                        barrierColor: Colors.transparent,
+                                        builder: (BuildContext context) =>
+                                            SimpleDialog(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              CustomTheme.defaultBorderRadius,
+                                            ),
+                                          ),
+                                          children: [
+                                            ListTile(
+                                              onTap: () async {
+                                                // Pick an image
+                                                final XFile? image =
+                                                    await _picker.pickImage(
+                                                  source: ImageSource.gallery,
+                                                  imageQuality: 50,
+                                                );
+                                                Navigator.of(context)
+                                                    .pop(image);
+                                              },
+                                              title: const Text(
+                                                "Importer une photo",
+                                              ),
+                                            ),
+                                            ListTile(
+                                              onTap: () async {
+                                                // Pick an image
+                                                final XFile? image =
+                                                    await _picker.pickImage(
+                                                  source: ImageSource.camera,
+                                                  imageQuality: 50,
+                                                );
+                                                Navigator.of(context)
+                                                    .pop(image);
+                                              },
+                                              title: const Text(
+                                                  "Prendre une photo"),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                      if (image != null) {
+                                        edlBloc.add(
+                                          AddFileOfCleEvent(
+                                            file: File(image.path),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                    child: const Icon(
+                                      Icons.edit,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
                         ],
-
                         const SizedBox(
                           height: CustomTheme.spacer,
                         ),
@@ -403,6 +507,13 @@ class EdlPhotoListPage extends StatelessWidget {
                                   ...edlBloc.cameraInteriorPosList
                                       .map((e) => e.file!)
                                 ]));
+                              } else if (typePhotoArgs == TypePhotoArgs.cle) {
+                                print("upload cle");
+                                edlBloc.add(UploadPhotoCleEvent(file: edlBloc.cle!));
+                                // edlBloc.add(UploadPhotosInteriorEvent(files: [
+                                //   ...edlBloc.cameraInteriorPosList
+                                //       .map((e) => e.file!)
+                                // ]));
                               } else {
                                 throw UnimplementedError();
                               }

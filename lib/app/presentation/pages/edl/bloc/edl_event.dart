@@ -37,6 +37,17 @@ class AddFileOfCameraPosEvent extends EdlEvent {
   List<Object> get props => [file];
 }
 
+class AddFileOfCleEvent extends EdlEvent {
+  final File file;
+
+  const AddFileOfCleEvent({
+    required this.file,
+  });
+
+  @override
+  List<Object> get props => [file];
+}
+
 class ReloadEvent extends EdlEvent {
   @override
   List<Object> get props => [];
@@ -154,6 +165,7 @@ class UploadPhotosExteriorEvent extends EdlEvent {
 }
 
 class EdlPhotosEvent extends EdlEvent {
+
   @override
   List<Object> get props => [];
 }
@@ -180,7 +192,23 @@ class UploadPhotoDefectsExteriorEvent extends EdlEvent {
   List<Object> get props => [file];
 }
 
+class UploadPhotoCleEvent extends EdlEvent {
+  final File file;
+
+  const UploadPhotoCleEvent({
+    required this.file,
+  });
+
+  @override
+  List<Object> get props => [file];
+}
+
 class EdlPhotoDefectsEvent extends EdlEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class EdlPhotoCleEvent extends EdlEvent {
   @override
   List<Object> get props => [];
 }

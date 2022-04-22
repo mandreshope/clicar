@@ -141,43 +141,45 @@ class EdlPhotoPickerPage extends StatelessWidget {
                                     color: Colors.grey,
                                   ),
                           ),
+
+                          // edl cle
                           const SizedBox(
                             height: CustomTheme.spacer,
                           ),
-                          // SecondaryButton(
-                          //   width: double.infinity,
-                          //   child: Text(
-                          //     "photos clé".toUpperCase(),
-                          //     style: TextStyle(
-                          //       fontSize: CustomTheme.mainBtnTextStyle.fontSize
-                          //           ?.sp(context),
-                          //       color: CustomTheme.primaryColor,
-                          //     ),
-                          //   ),
-                          // ),
-                          // const SizedBox(
-                          //   height: CustomTheme.spacer,
-                          // ),
-                          // SecondaryButton(
-                          //   onPressed: edlBloc.uploadPhotosExterior.isNotEmpty
-                          //       ? null
-                          //       : () {
-                          //           Navigator.of(context)
-                          //               .pushNamed(AppRoutes.edlPhotoCle)
-                          //               .then((value) => null);
-                          //         },
-                          //   height: 100,
-                          //   width: double.infinity,
-                          //   child: edlBloc.uploadPhotosExterior.isNotEmpty
-                          //       ? Image.asset(
-                          //           "${assetsImages}success.png",
-                          //           width: 30.0,
-                          //         )
-                          //       : const Icon(
-                          //           Icons.camera_alt,
-                          //           color: Colors.grey,
-                          //         ),
-                          // ),
+                          SecondaryButton(
+                            width: double.infinity,
+                            child: Text(
+                              "photos clé".toUpperCase(),
+                              style: TextStyle(
+                                fontSize: CustomTheme.mainBtnTextStyle.fontSize
+                                    ?.sp(context),
+                                color: CustomTheme.primaryColor,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: CustomTheme.spacer,
+                          ),
+                          SecondaryButton(
+                            onPressed: edlBloc.cle != null
+                                ? null
+                                : () {
+                                    Navigator.of(context)
+                                        .pushNamed(AppRoutes.edlPhotoCle)
+                                        .then((value) => null);
+                                  },
+                            height: 100,
+                            width: double.infinity,
+                            child: edlBloc.cle != null
+                                ? Image.asset(
+                                    "${assetsImages}success.png",
+                                    width: 30.0,
+                                  )
+                                : const Icon(
+                                    Icons.camera_alt,
+                                    color: Colors.grey,
+                                  ),
+                          ),
                           const SizedBox(
                             height: CustomTheme.spacer,
                           ),
@@ -187,7 +189,7 @@ class EdlPhotoPickerPage extends StatelessWidget {
                               /*Navigator.of(context)
                                   .pushNamed(AppRoutes.edlDefectsExterior);*/
                               if (edlBloc.uploadPhotosExterior.isNotEmpty &&
-                                  edlBloc.uploadPhotosInterior.isNotEmpty) {
+                                  edlBloc.uploadPhotosInterior.isNotEmpty && edlBloc.cle != null) {
                                 Navigator.of(context)
                                     .pushNamed(AppRoutes.edlDefectsExterior);
                               } else {

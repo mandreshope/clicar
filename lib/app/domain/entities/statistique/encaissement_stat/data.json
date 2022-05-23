@@ -1,0 +1,19 @@
+{
+    "retardPayingInClosedAmount": 0,
+    "montantTotalClosed": 0,
+    "calculPoucentageretardPayingInClosedAmount": "0.00",
+    "MothSelected": [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jull",
+        "Aout",
+        "Sep",
+        "oct",
+        "Nov",
+        "Dec"
+    ]
+}

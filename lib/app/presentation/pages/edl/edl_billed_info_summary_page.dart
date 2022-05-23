@@ -80,36 +80,37 @@ class EdlBilledInfoSummaryPage extends StatelessWidget {
                         const SizedBox(
                           height: CustomTheme.spacer,
                         ),
-                        ...edlBloc.billedInfoList
-                            .where((e) => e.isSelected)
-                            .map((e) => Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 2.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        e.label,
-                                        style: TextStyle(
-                                          color: CustomTheme.secondaryColor,
-                                          fontSize:
-                                              CustomTheme.subtitle2.sp(context),
+                        if (edlBloc.billedInfoList.isNotEmpty)
+                          ...edlBloc.billedInfoList
+                              .where((e) => e.isSelected)
+                              .map((e) => Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 2.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          e.label,
+                                          style: TextStyle(
+                                            color: CustomTheme.secondaryColor,
+                                            fontSize: CustomTheme.subtitle2
+                                                .sp(context),
+                                          ),
                                         ),
-                                      ),
-                                      Text(
-                                        "${e.amount.round()} €",
-                                        style: TextStyle(
-                                          color: CustomTheme.primaryColor,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize:
-                                              CustomTheme.subtitle2.sp(context),
+                                        Text(
+                                          "${e.amount.round()} €",
+                                          style: TextStyle(
+                                            color: CustomTheme.primaryColor,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: CustomTheme.subtitle2
+                                                .sp(context),
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ))
-                            .toList(),
+                                      ],
+                                    ),
+                                  ))
+                              .toList(),
                         const SizedBox(
                           height: CustomTheme.spacer,
                         ),

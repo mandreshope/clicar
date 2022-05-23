@@ -16,7 +16,7 @@ class AuthListenerWidget extends StatelessWidget {
     return BlocListener<AuthBloc, BaseState>(
       listener: (context, state) {
         if (state.status == Status.notLogged) {
-          WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
             Navigator.of(context)
                 .pushNamedAndRemoveUntil(AppRoutes.login, (route) => false);
           });

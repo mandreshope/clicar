@@ -7,6 +7,7 @@ part 'condition_at_start_model.g.dart';
 class ConditionAtStartModel extends ConditionAtStart {
   final List<String>? conditions;
   final List<String>? faults;
+  @JsonKey(name: "_id")
   final String? id;
   final String? conditionDate;
   final String? comment;

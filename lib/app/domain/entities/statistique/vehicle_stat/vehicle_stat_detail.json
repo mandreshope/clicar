@@ -1,0 +1,67 @@
+{
+    "chiffreAffaire": 0,
+    "loyerMoyern": {
+        "Mensuel": {
+            "nbr": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "poucentage": [
+                {
+                    "label": "€ +4000",
+                    "color": "#55b6ff",
+                    "value": null
+                },
+                {
+                    "label": "€3000 - €4000",
+                    "color": "#b8dfff",
+                    "value": null
+                },
+                {
+                    "label": "€2000 - €3000",
+                    "color": "rgb(127, 164, 176)",
+                    "value": null
+                },
+                {
+                    "label": "€ -2000",
+                    "color": "#383fb4",
+                    "value": null
+                }
+            ]
+        },
+        "Hebdomadaire": {
+            "nbr": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "poucentage": [
+                {
+                    "label": "€ +4000 ",
+                    "color": "#55b6ff",
+                    "value": null
+                },
+                {
+                    "label": "€3000 - €4000",
+                    "color": "#b8dfff",
+                    "value": null
+                },
+                {
+                    "label": "€2000 - €3000",
+                    "color": "rgb(127, 164, 176)",
+                    "value": null
+                },
+                {
+                    "label": "€ -2000",
+                    "color": "#383fb4",
+                    "value": null
+                }
+            ]
+        }
+    },
+    "pourentage": "0.00",
+    "jour": 0
+}

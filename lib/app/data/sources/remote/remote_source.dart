@@ -9,6 +9,7 @@ import 'package:clicar/app/data/models/contravention/contravention_model.dart';
 import 'package:clicar/app/data/models/customer/customer_model.dart';
 import 'package:clicar/app/data/models/driver/driver_model.dart';
 import 'package:clicar/app/data/models/reservation/reservation_model.dart';
+import 'package:clicar/app/data/models/statistique/sale_turnover/sale_turnover_model.dart';
 import 'package:clicar/app/data/models/upload_file/upload_file_model.dart';
 import 'package:clicar/app/data/models/user/user_model.dart';
 import 'package:clicar/app/data/models/vehicle/vehicle_model.dart';
@@ -101,4 +102,5 @@ abstract class RemoteSource {
   Future<UploadFileModel> getPdfBdc({required String bdcId});
   Future<Reservation> signReservation(
       {required SignReservationParams signReservationParams});
+  Future<SaleTurnoverModel> getStatSaleTurnover({required Map<String, dynamic> data});
 }

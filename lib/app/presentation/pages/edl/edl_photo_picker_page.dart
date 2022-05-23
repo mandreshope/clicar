@@ -126,8 +126,15 @@ class EdlPhotoPickerPage extends StatelessWidget {
                             onPressed: edlBloc.uploadPhotosInterior.isNotEmpty
                                 ? null
                                 : () {
-                                    Navigator.of(context)
-                                        .pushNamed(AppRoutes.edlPhotoInterior);
+                                    if (edlBloc.uploadPhotosExterior.isEmpty) {
+                                      SnackBarWidget.show(
+                                          context: context,
+                                          message: "Ajouter les photos extérieurs d'abord",
+                                          isError: true);
+                                    } else {
+                                      Navigator.of(context).pushNamed(
+                                          AppRoutes.edlPhotoInterior);
+                                    }
                                   },
                             height: 100,
                             width: double.infinity,
@@ -189,7 +196,8 @@ class EdlPhotoPickerPage extends StatelessWidget {
                               /*Navigator.of(context)
                                   .pushNamed(AppRoutes.edlDefectsExterior);*/
                               if (edlBloc.uploadPhotosExterior.isNotEmpty &&
-                                  edlBloc.uploadPhotosInterior.isNotEmpty && edlBloc.cle != null) {
+                                  edlBloc.uploadPhotosInterior.isNotEmpty &&
+                                  edlBloc.cle != null) {
                                 Navigator.of(context)
                                     .pushNamed(AppRoutes.edlDefectsExterior);
                               } else {

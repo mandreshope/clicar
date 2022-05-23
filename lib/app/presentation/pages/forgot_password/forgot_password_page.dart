@@ -94,7 +94,7 @@ class ForgotPasswordPage extends StatelessWidget {
                                           "un code est envoyé à votre adresse email",
                                       context: context,
                                     );
-                                    WidgetsBinding.instance!
+                                    WidgetsBinding.instance
                                         .addPostFrameCallback((timeStamp) {
                                       Navigator.of(context).pushNamed(
                                         AppRoutes.changePassword,

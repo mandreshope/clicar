@@ -128,7 +128,7 @@ class ChangePasswordPage extends StatelessWidget {
                                           "Votre mot de passe a été modifié avec succès",
                                       context: context,
                                     );
-                                    WidgetsBinding.instance!
+                                    WidgetsBinding.instance
                                         .addPostFrameCallback((timeStamp) {
                                       Navigator.of(context)
                                           .pushNamedAndRemoveUntil(

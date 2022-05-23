@@ -39,6 +39,8 @@ import 'package:clicar/app/presentation/pages/signature/signature_success_page.d
 import 'package:clicar/app/presentation/pages/signature/signature_summary_page.dart';
 import 'package:clicar/app/presentation/pages/signature/signature_choice_page.dart';
 import 'package:clicar/app/presentation/pages/splash/splash_page.dart';
+import 'package:clicar/app/presentation/pages/statistique/sale_turnover_page.dart';
+import 'package:clicar/app/presentation/pages/statistique/statistique_page.dart';
 import 'package:flutter/cupertino.dart';
 
 abstract class AppRoutes {
@@ -85,6 +87,8 @@ abstract class AppRoutes {
   static const edlCameraExterior = '/edl-camera-exterior';
   static const signaturePdfViewer = '/signature-pdf-Viewer';
   static const signatureChoice = '/signature-choice';
+  static const statistique = '/statistique';
+    static const saleTurnover = '/sale-turnover';
 
 
   static Map<String, Widget Function(BuildContext)> routes = {
@@ -150,5 +154,8 @@ abstract class AppRoutes {
         const SignaturePdfViewerPage(),
     AppRoutes.signatureChoice: (BuildContext context) =>
         const SignatureChoicePage(),
+    AppRoutes.statistique: (BuildContext context) => const StatistiquePage(),
+    AppRoutes.saleTurnover: (BuildContext context) => const SaleTurnoverPage(),
+
   };
 }

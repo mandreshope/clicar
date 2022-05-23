@@ -14,7 +14,7 @@ ConditionAtStartModel _$ConditionAtStartModelFromJson(
           .toList(),
       faults:
           (json['faults'] as List<dynamic>?)?.map((e) => e as String).toList(),
-      id: json['id'] as String?,
+      id: json['_id'] as String?,
       conditionDate: json['conditionDate'] as String?,
       comment: json['comment'] as String?,
       km: json['km'] as int?,
@@ -28,7 +28,7 @@ Map<String, dynamic> _$ConditionAtStartModelToJson(
     <String, dynamic>{
       'conditions': instance.conditions,
       'faults': instance.faults,
-      'id': instance.id,
+      '_id': instance.id,
       'conditionDate': instance.conditionDate,
       'comment': instance.comment,
       'km': instance.km,

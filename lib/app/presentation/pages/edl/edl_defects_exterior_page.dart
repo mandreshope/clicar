@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'dart:ui';
 
 import 'package:clicar/app/core/states/base_state.dart';
 import 'package:clicar/app/core/utils/constants.dart';
@@ -39,7 +40,7 @@ class _EdlDefectsExteriorPageState extends State<EdlDefectsExteriorPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback(_getWidgetInfo);
+    WidgetsBinding.instance.addPostFrameCallback(_getWidgetInfo);
   }
 
   void _getWidgetInfo(_) {
@@ -59,7 +60,6 @@ class _EdlDefectsExteriorPageState extends State<EdlDefectsExteriorPage> {
     final edlBloc = context.read<EdlBloc>();
     final typeVehicle =
         edlBloc.contract.vehicle?.registration?.vehicleKind ?? "";
-    print(edlBloc.contract.vehicle?.registration?.vehicleKind);
     String imageDefectsExterior =
         "${assetsImages}citadine_defeacts_exterior.png";
     if (typeVehicle.isNotEmpty) {
@@ -398,7 +398,15 @@ class _EdlDefectsExteriorPageState extends State<EdlDefectsExteriorPage> {
                                     File('$path/edl_defects_exterior.png');
                                 file.writeAsBytesSync(
                                     List.from(imgByte.value!));
-
+                                showDialog(
+                                  context: context, 
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: const Text("Image"),
+                                      content: Image.file(file),
+                                    );
+                                  }
+                                );
                                 edlBloc.add(
                                   UploadPhotoDefectsExteriorEvent(
                                     file: file,

@@ -117,7 +117,7 @@ class DocumentBloc extends Bloc<DocumentEvent, BaseState> {
   ];
   List<DocumentItem> typesDocForClientGFlotte = [
     DocumentItem(type: "constat", label: "Constat"),
-    DocumentItem(type: "DVF", label: "Déclarations circonstancielle des faits"),
+    DocumentItem(type: "DVF", label: "Déclaration circonstanciée de fait"),
     DocumentItem(type: "Proces_verbal", label: "Procès verbal"),
     DocumentItem(type: "Main_courante", label: "Main courante"),
     DocumentItem(type: "Mise_en_cause", label: "Mise en cause"),

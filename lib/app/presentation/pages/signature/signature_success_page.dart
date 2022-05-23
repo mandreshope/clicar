@@ -1,6 +1,7 @@
 import 'package:clicar/app/core/states/base_state.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
+import 'package:clicar/app/presentation/pages/edl/bloc/edl_bloc.dart';
 import 'package:clicar/app/presentation/pages/signature/bloc/accept_contract/accept_contract_bloc.dart';
 import 'package:clicar/app/presentation/pages/signature/bloc/signature_bloc.dart';
 import 'package:clicar/app/presentation/pages/signature/enums/signature_associate.dart';
@@ -53,96 +54,96 @@ class SignatureSuccessPage extends StatelessWidget {
                             height: CustomTheme.extraSpacer,
                           ),
                           if (signatureBloc.signatureAssociate ==
-                                      SignatureAssociate.contract) ...[
-                                    ContractDetailCard(
-                                      contract: context
-                                          .read<SignatureBloc>()
-                                          .contract
-                                          .numberContrat,
-                                      intutile: context
-                                          .read<SignatureBloc>()
-                                          .contract
-                                          .driver
-                                          ?.address,
-                                      vehicle: context
-                                          .read<SignatureBloc>()
-                                          .contract
-                                          .vehicle
-                                          ?.mark,
-                                      typeLocation: context
-                                          .read<SignatureBloc>()
-                                          .contract
-                                          .rate
-                                          ?.rent
-                                          ?.first
-                                          .locationType,
-                                      departureDate: context
-                                          .read<SignatureBloc>()
-                                          .contract
-                                          .info
-                                          ?.departureDate,
-                                      returnDate: context
-                                          .read<SignatureBloc>()
-                                          .contract
-                                          .info
-                                          ?.returnDate,
-                                    ),
-                                  ] else if (signatureBloc.signatureAssociate ==
-                                      SignatureAssociate.reservation) ...[
-                                    ReservationtDetailCard(
-                                      reservation: context
-                                          .read<SignatureBloc>()
-                                          .reservation
-                                          .numberReservation,
-                                      vehicle: context
-                                          .read<SignatureBloc>()
-                                          .reservation
-                                          .vehicule
-                                          ?.mark,
-                                      typeLocation: context
-                                          .read<SignatureBloc>()
-                                          .reservation
-                                          .rate
-                                          ?.rent
-                                          ?.first
-                                          .locationType,
-                                      departureDate: context
-                                          .read<SignatureBloc>()
-                                          .reservation
-                                          .info
-                                          ?.departureDate,
-                                      returnDate: context
-                                          .read<SignatureBloc>()
-                                          .reservation
-                                          .info
-                                          ?.returnDate,
-                                    )
-                                  ] else if (signatureBloc.signatureAssociate ==
-                                      SignatureAssociate.bdc) ...[
-                                    BdcDetailCard(
-                                      bdc: context
-                                          .read<SignatureBloc>()
-                                          .bdc
-                                          .numberContrat,
-                                      typeLocation: context
-                                          .read<SignatureBloc>()
-                                          .bdc
-                                          .rate
-                                          ?.rent
-                                          ?.first
-                                          .locationType,
-                                      departureDate: context
-                                          .read<SignatureBloc>()
-                                          .bdc
-                                          .info
-                                          ?.departureDate,
-                                      returnDate: context
-                                          .read<SignatureBloc>()
-                                          .bdc
-                                          .info
-                                          ?.returnDate,
-                                    )
-                                  ],
+                              SignatureAssociate.contract) ...[
+                            ContractDetailCard(
+                              contract: context
+                                  .read<SignatureBloc>()
+                                  .contract
+                                  .numberContrat,
+                              intutile: context
+                                  .read<SignatureBloc>()
+                                  .contract
+                                  .driver
+                                  ?.address,
+                              vehicle: context
+                                  .read<SignatureBloc>()
+                                  .contract
+                                  .vehicle
+                                  ?.mark,
+                              typeLocation: context
+                                  .read<SignatureBloc>()
+                                  .contract
+                                  .rate
+                                  ?.rent
+                                  ?.first
+                                  .locationType,
+                              departureDate: context
+                                  .read<SignatureBloc>()
+                                  .contract
+                                  .info
+                                  ?.departureDate,
+                              returnDate: context
+                                  .read<SignatureBloc>()
+                                  .contract
+                                  .info
+                                  ?.returnDate,
+                            ),
+                          ] else if (signatureBloc.signatureAssociate ==
+                              SignatureAssociate.reservation) ...[
+                            ReservationtDetailCard(
+                              reservation: context
+                                  .read<SignatureBloc>()
+                                  .reservation
+                                  .numberReservation,
+                              vehicle: context
+                                  .read<SignatureBloc>()
+                                  .reservation
+                                  .vehicule
+                                  ?.mark,
+                              typeLocation: context
+                                  .read<SignatureBloc>()
+                                  .reservation
+                                  .rate
+                                  ?.rent
+                                  ?.first
+                                  .locationType,
+                              departureDate: context
+                                  .read<SignatureBloc>()
+                                  .reservation
+                                  .info
+                                  ?.departureDate,
+                              returnDate: context
+                                  .read<SignatureBloc>()
+                                  .reservation
+                                  .info
+                                  ?.returnDate,
+                            )
+                          ] else if (signatureBloc.signatureAssociate ==
+                              SignatureAssociate.bdc) ...[
+                            BdcDetailCard(
+                              bdc: context
+                                  .read<SignatureBloc>()
+                                  .bdc
+                                  .numberContrat,
+                              typeLocation: context
+                                  .read<SignatureBloc>()
+                                  .bdc
+                                  .rate
+                                  ?.rent
+                                  ?.first
+                                  .locationType,
+                              departureDate: context
+                                  .read<SignatureBloc>()
+                                  .bdc
+                                  .info
+                                  ?.departureDate,
+                              returnDate: context
+                                  .read<SignatureBloc>()
+                                  .bdc
+                                  .info
+                                  ?.returnDate,
+                            )
+                          ],
                           // Text(
                           //   signatureBloc.contract.numberContrat ?? "-",
                           //   style: TextStyle(
@@ -206,9 +207,10 @@ class SignatureSuccessPage extends StatelessWidget {
                                             isAccepted: false));
                                   }
                                   if (confirm == true) {
+                                    context.read<EdlBloc>().contract = signatureBloc.contract;
                                     Navigator.of(context)
                                         .pushNamedAndRemoveUntil(
-                                      AppRoutes.edlDeparture,
+                                      AppRoutes.edlSummary,
                                       (route) =>
                                           route.settings.name == AppRoutes.home,
                                     );

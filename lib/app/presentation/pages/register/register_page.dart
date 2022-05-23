@@ -168,7 +168,7 @@ class RegisterPage extends StatelessWidget {
                               BlocBuilder<AuthBloc, BaseState>(
                                 buildWhen: (prevState, currState) {
                                   if (currState.status == Status.logged) {
-                                    WidgetsBinding.instance!
+                                    WidgetsBinding.instance
                                         .addPostFrameCallback((timeStamp) {
                                       Navigator.of(context)
                                           .pushNamedAndRemoveUntil(

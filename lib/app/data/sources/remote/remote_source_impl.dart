@@ -13,6 +13,7 @@ import 'package:clicar/app/data/models/contravention/contravention_model.dart';
 import 'package:clicar/app/data/models/customer/customer_model.dart';
 import 'package:clicar/app/data/models/driver/driver_model.dart';
 import 'package:clicar/app/data/models/reservation/reservation_model.dart';
+import 'package:clicar/app/data/models/statistique/sale_turnover/sale_turnover_model.dart';
 import 'package:clicar/app/data/models/upload_file/upload_file_model.dart';
 import 'package:clicar/app/data/models/user/user_model.dart';
 import 'package:clicar/app/data/models/vehicle/vehicle_model.dart';
@@ -233,9 +234,9 @@ class RemoteSourceImpl extends RemoteSource {
     bool? hasEndingEdl,
   }) async {
     Uri url = Uri.parse(RemoteEndpoint.searchContract);
-    if(isSigned) {
+    if (isSigned) {
       url = Uri.parse(RemoteEndpoint.searchContractSigned);
-    } 
+    }
     final body = jsonEncode({
       'keyWord': keyWord,
       'isSigned': isSigned,
@@ -276,11 +277,9 @@ class RemoteSourceImpl extends RemoteSource {
       _refreshToken(response.headers);
       try {
         final Iterable iterable = jsonDecode(response.body);
-        return List.from(iterable)
-            .map((x){
-              return ReservationModel.fromJson(x);
-            })
-            .toList();
+        return List.from(iterable).map((x) {
+          return ReservationModel.fromJson(x);
+        }).toList();
       } catch (e) {
         rethrow;
       }
@@ -294,8 +293,7 @@ class RemoteSourceImpl extends RemoteSource {
   }
 
   @override
-  Future<List<BdcModel>> searchBdc(
-      {required String filter}) async {
+  Future<List<BdcModel>> searchBdc({required String filter}) async {
     final url = Uri.parse(RemoteEndpoint.searchBdc);
     final body = jsonEncode({
       'filter': {"filter": filter},
@@ -306,11 +304,9 @@ class RemoteSourceImpl extends RemoteSource {
       _refreshToken(response.headers);
       try {
         final Iterable iterable = jsonDecode(response.body);
-        return List.from(iterable)
-            .map((x){
-              return BdcModel.fromJson(x);
-            })
-            .toList();
+        return List.from(iterable).map((x) {
+          return BdcModel.fromJson(x);
+        }).toList();
       } catch (e) {
         rethrow;
       }
@@ -647,9 +643,7 @@ class RemoteSourceImpl extends RemoteSource {
     final url = Uri.parse(RemoteEndpoint.customerFilter);
     final response = await client.post(
       url,
-      body: jsonEncode({
-        'filter': filter,
-      }),
+      body: jsonEncode({'keyword': filter, 'blackChecked': false}),
     );
     if (response.statusCode == 200) {
       try {
@@ -713,15 +707,12 @@ class RemoteSourceImpl extends RemoteSource {
         _refreshToken(response.headers);
         final body = jsonDecode(response.body);
         Iterable iterable = body["vehicles"];
-        return List.from(iterable)
-            .map((x){
-              
-              if(x['options'].runtimeType == String) {
-                x['options'] = null;
-              }
-              return VehicleModel.fromJson(x);
-            })
-            .toList();
+        return List.from(iterable).map((x) {
+          if (x['options'].runtimeType == String) {
+            x['options'] = null;
+          }
+          return VehicleModel.fromJson(x);
+        }).toList();
       } catch (e) {
         rethrow;
       }
@@ -808,6 +799,7 @@ class RemoteSourceImpl extends RemoteSource {
         rethrow;
       }
     } else {
+      debugPrint(response.body);
       throw ServerException(
         statusCode: response.statusCode,
         message: response.reasonPhrase ?? 'Server Error',
@@ -840,11 +832,9 @@ class RemoteSourceImpl extends RemoteSource {
   }
 
   @override
-  Future<UploadFileModel> getPdfBdc(
-      {required String bdcId}) async {
+  Future<UploadFileModel> getPdfBdc({required String bdcId}) async {
     final url = Uri.parse(RemoteEndpoint.exportToPdfBdc);
-    final response =
-        await client.post(url, body: jsonEncode({"id": bdcId}));
+    final response = await client.post(url, body: jsonEncode({"id": bdcId}));
     if (response.statusCode == 200) {
       _refreshToken(response.headers);
       try {
@@ -899,6 +889,23 @@ class RemoteSourceImpl extends RemoteSource {
     } catch (e) {
       debugPrint("$logTrace $e");
       throw e;
+    }
+  }
+
+  @override
+  Future<SaleTurnoverModel> getStatSaleTurnover({required Map<String, dynamic> data}) async {
+    final url = Uri.parse(RemoteEndpoint.statistique);
+    final response = await client.post(url, body: jsonEncode(data));
+    if (response.statusCode == 200) {
+      _refreshToken(response.headers);
+      debugPrint(response.body);
+      return SaleTurnoverModel.fromJson(jsonDecode(response.body));
+    } else {
+      throw ServerException(
+        statusCode: response.statusCode,
+        message: response.reasonPhrase ?? 'Server Error',
+        body: response.body,
+      );
     }
   }
 }

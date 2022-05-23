@@ -73,7 +73,7 @@ class SignatureConfimPage extends StatelessWidget {
                       path: currState.uploadFile!.path!,
                       fileName: currState.uploadFile!.filename!,
                     ));
-              } else if (currState is DownloadFileSuccessState) {
+              } else if (currState is DownloadFileSuccessState && currState.file.path.isNotEmpty) {
                 Navigator.of(context).pushNamed(AppRoutes.signaturePdfViewer,
                     arguments: currState.file);
               } else if (currState is ErrorState) {

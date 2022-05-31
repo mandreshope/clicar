@@ -5,17 +5,21 @@ import 'package:flutter/material.dart';
 
 class ReservationtDetailCard extends StatelessWidget {
   final String? reservation;
+  final String? intutile;
   final String? vehicle;
   final String? typeLocation;
   final String? departureDate;
   final String? returnDate;
+  final String? immat;
   const ReservationtDetailCard({
     Key? key,
     this.reservation,
+    this.intutile,
     this.vehicle,
     this.typeLocation,
     this.departureDate,
     this.returnDate,
+    this.immat
   }) : super(key: key);
 
   @override
@@ -23,15 +27,30 @@ class ReservationtDetailCard extends StatelessWidget {
     return Column(
       children: [
         ContractDetailTile(
-          label: "reservation : ",
+          label: "Réservation : ",
           value: reservation ?? "-",
           fontWeight: FontWeight.bold,
+        ),
+        ContractDetailTile(
+          label: "Intutilé : ",
+          value: intutile ?? "-",
+          fontWeight: FontWeight.bold,
+        ),
+        const SizedBox(
+          height: CustomTheme.spacer,
         ),
         ContractDetailTile(
           label: "Véhicule : ",
           value: vehicle ?? "-",
           valueTextColor: Colors.grey,
         ),
+        if (immat != null) ...[
+          ContractDetailTile(
+            label: "Immat : ",
+            value: immat ?? "-",
+            valueTextColor: Colors.grey,
+          ),
+        ],
         ContractDetailTile(
           label: "Type de location : ",
           value: typeLocation ?? "-",

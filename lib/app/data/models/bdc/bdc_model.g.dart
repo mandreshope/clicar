@@ -30,7 +30,10 @@ BdcModel _$BdcModelFromJson(Map<String, dynamic> json) => BdcModel(
       search: json['search'] == null
           ? null
           : SearchModel.fromJson(json['search'] as Map<String, dynamic>),
-      vehicleBooking: json['vehicleBooking'] as Map<String, dynamic>?,
+      vehicleBooking: json['vehicleBooking'] == null
+          ? null
+          : VehicleBookingModel.fromJson(
+              json['vehicleBooking'] as Map<String, dynamic>),
       reglement: json['reglement'] as List<dynamic>?,
       sumReglement: json['sumReglement'] as String?,
       rate: json['rate'] == null
@@ -48,6 +51,9 @@ BdcModel _$BdcModelFromJson(Map<String, dynamic> json) => BdcModel(
       createdAt: json['createdAt'] as String?,
       otherHistory: json['otherHistory'] as List<dynamic>?,
       v: json['v'] as int?,
+      vehicle: json['vehicle'] == null
+          ? null
+          : VehicleModel.fromJson(json['vehicle'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$BdcModelToJson(BdcModel instance) => <String, dynamic>{
@@ -68,7 +74,7 @@ Map<String, dynamic> _$BdcModelToJson(BdcModel instance) => <String, dynamic>{
       'info': instance.info?.toJson(),
       'customer': instance.customer?.toJson(),
       'search': instance.search?.toJson(),
-      'vehicleBooking': instance.vehicleBooking,
+      'vehicleBooking': instance.vehicleBooking?.toJson(),
       'reglement': instance.reglement,
       'sumReglement': instance.sumReglement,
       'rate': instance.rate?.toJson(),
@@ -80,4 +86,5 @@ Map<String, dynamic> _$BdcModelToJson(BdcModel instance) => <String, dynamic>{
       'createdAt': instance.createdAt,
       'otherHistory': instance.otherHistory,
       'v': instance.v,
+      'vehicle': instance.vehicle?.toJson(),
     };

@@ -1,9 +1,11 @@
+import 'package:clicar/app/data/models/bdc/vehicle_booking_model.dart';
 import 'package:clicar/app/data/models/contract/history_reglement_model.dart';
 import 'package:clicar/app/data/models/contract/info_model.dart';
 import 'package:clicar/app/data/models/contract/rate_model.dart';
 import 'package:clicar/app/data/models/contract/search_model.dart';
 import 'package:clicar/app/data/models/customer/customer_model.dart';
 import 'package:clicar/app/data/models/user/user_model.dart';
+import 'package:clicar/app/data/models/vehicle/vehicle_model.dart';
 import 'package:clicar/app/domain/entities/bdc/bdc.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -28,7 +30,7 @@ class BdcModel extends Bdc {
   final ContractInfoModel? info;
   final CustomerModel? customer;
   final SearchModel? search;
-  final Map<String, dynamic>? vehicleBooking;
+  final VehicleBookingModel? vehicleBooking;
   final List<dynamic>? reglement;
   final String? sumReglement;
   final RateModel? rate;
@@ -39,6 +41,8 @@ class BdcModel extends Bdc {
   final String? createdAt;
   final List<dynamic>? otherHistory;
   final int? v;
+  final VehicleModel? vehicle;
+
   const BdcModel(
       {
       this.id,
@@ -68,7 +72,9 @@ class BdcModel extends Bdc {
       this.createdBy,
       this.createdAt,
       this.otherHistory,
-      this.v})
+      this.v,
+      this.vehicle
+      })
       : super(
           id: id,
           vehicleChecked: vehicleChecked,
@@ -97,6 +103,7 @@ class BdcModel extends Bdc {
           createdBy: createdBy,
           createdAt: createdAt,
           otherHistory: otherHistory,
+          vehicle: vehicle
         );
 
   factory BdcModel.fromJson(Map<String, dynamic> json) =>

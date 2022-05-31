@@ -183,6 +183,11 @@ class SignatureSummaryPage extends StatelessWidget {
                                           .read<SignatureBloc>()
                                           .reservation
                                           .numberReservation,
+                                      intutile: context
+                                          .read<SignatureBloc>()
+                                          .reservation
+                                          .driver
+                                          ?.address,
                                       vehicle: context
                                           .read<SignatureBloc>()
                                           .reservation
@@ -230,6 +235,11 @@ class SignatureSummaryPage extends StatelessWidget {
                                           .bdc
                                           .info
                                           ?.returnDate,
+                                      vehicle: context
+                                          .read<SignatureBloc>()
+                                          .bdc
+                                          .vehicleBooking
+                                          ?.markAndType,
                                     )
                                   ],
                                   const SizedBox(

@@ -8,12 +8,14 @@ class BdcDetailCard extends StatelessWidget {
   final String? typeLocation;
   final String? departureDate;
   final String? returnDate;
+  final String? vehicle;
   const BdcDetailCard({
     Key? key,
     this.bdc,
     this.typeLocation,
     this.departureDate,
-    this.returnDate
+    this.returnDate,
+    this.vehicle,
   }) : super(key: key);
 
   @override
@@ -24,6 +26,14 @@ class BdcDetailCard extends StatelessWidget {
           label: "Bon de commande : ",
           value: bdc ?? "-",
           fontWeight: FontWeight.bold,
+        ),
+        const SizedBox(
+          height: CustomTheme.spacer,
+        ),
+        ContractDetailTile(
+          label: "Véhicule : ",
+          value: vehicle ?? "-",
+          valueTextColor: Colors.grey,
         ),
         ContractDetailTile(
           label: "Type de location : ",

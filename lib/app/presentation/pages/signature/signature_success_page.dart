@@ -142,6 +142,11 @@ class SignatureSuccessPage extends StatelessWidget {
                                   .bdc
                                   .info
                                   ?.returnDate,
+                              vehicle: context
+                                  .read<SignatureBloc>()
+                                  .bdc
+                                  .vehicleBooking
+                                  ?.markAndType,
                             )
                           ],
                           // Text(
@@ -202,12 +207,10 @@ class SignatureSuccessPage extends StatelessWidget {
                                             "Voulez-vous continuer avec l'EDL ?",
                                       ),
                                     );
-                                    acceptContractBloc.add(
-                                        const AcceptContractEvent(
-                                            isAccepted: false));
                                   }
                                   if (confirm == true) {
-                                    context.read<EdlBloc>().contract = signatureBloc.contract;
+                                    context.read<EdlBloc>().contract =
+                                        signatureBloc.contract;
                                     Navigator.of(context)
                                         .pushNamedAndRemoveUntil(
                                       AppRoutes.edlSummary,
@@ -219,6 +222,12 @@ class SignatureSuccessPage extends StatelessWidget {
                                         .pushNamedAndRemoveUntil(
                                             AppRoutes.home, (route) => false);
                                   }
+                                  acceptContractBloc.add(
+                                      const AcceptContractEvent(
+                                          isAccepted: false));
+                                  acceptContractBloc.add(
+                                      const AcceptParapheEvent(
+                                          isAccepted: false));
                                 },
                                 child: Text(
                                   'Terminer',

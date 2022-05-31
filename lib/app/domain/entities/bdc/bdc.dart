@@ -1,3 +1,4 @@
+import 'package:clicar/app/domain/entities/bdc/vehicle_booking.dart';
 import 'package:clicar/app/domain/entities/contract/history_reglement.dart';
 import 'package:clicar/app/domain/entities/contract/info.dart';
 import 'package:clicar/app/domain/entities/contract/info_diver.dart';
@@ -28,7 +29,7 @@ class Bdc extends Equatable {
   final ContractInfo? info;
   final Customer? customer;
   final Search? search;
-  final Map<String, dynamic>? vehicleBooking;
+  final VehicleBooking? vehicleBooking;
   final List<dynamic>? reglement;
   final String? sumReglement;
   final Rate? rate;
@@ -38,6 +39,7 @@ class Bdc extends Equatable {
   final User? createdBy;
   final String? createdAt;
   final List<dynamic>? otherHistory;
+  final Vehicle? vehicle;
   final int? v;
 
   const Bdc(
@@ -68,7 +70,8 @@ class Bdc extends Equatable {
       this.createdBy, //
       this.createdAt, //
       this.v,
-      this.otherHistory //
+      this.otherHistory, //
+      this.vehicle
       });
 
   @override
@@ -100,6 +103,7 @@ class Bdc extends Equatable {
         createdBy, //
         createdAt, //
         v,
-        otherHistory //
+        otherHistory, //
+        vehicle,
       ];
 }

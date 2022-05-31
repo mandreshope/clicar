@@ -36,6 +36,13 @@ class SearchBdcResult extends StatelessWidget {
                   fontWeight: FontWeight.bold),
             ),
             Text(
+              bdc.vehicleBooking!.markAndType ?? '',
+              style: TextStyle(
+                  fontSize: CustomTheme.subtitle2.sp(context),
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold),
+            ),
+            Text(
               bdc.info?.departureDate != null
                   ? "EDL prévu le ${DateTime.parse(bdc.info!.departureDate!).formatDateyMd}"
                   : "-",

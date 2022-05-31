@@ -869,7 +869,7 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         "jaugeCarburantArrive": contract.conditionAtEnd?.fuelQuantity,
         "KmDepart": contract.conditionAtStart?.km,
         "KmArrive": contract.conditionAtEnd?.km,
-        "KmInclu": contract.rate?.rent?.first.kmInclus ?? "",
+        // "KmInclu": contract.rate?.rent?.first.kmInclus ?? "",
       };
       print("data before send to retourCondition $data");
       final result = typeEdl == TypeEdl.departure

@@ -10,23 +10,25 @@ class ContractDetailCard extends StatelessWidget {
   final String? typeLocation;
   final String? departureDate;
   final String? returnDate;
-  const ContractDetailCard({
-    Key? key,
-    this.contract,
-    this.intutile,
-    this.vehicle,
-    this.typeLocation,
-    this.departureDate,
-    this.returnDate,
-  }) : super(key: key);
+  final String? immat;
+  const ContractDetailCard(
+      {Key? key,
+      this.contract,
+      this.intutile,
+      this.vehicle,
+      this.typeLocation,
+      this.departureDate,
+      this.returnDate,
+      this.immat})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         ContractDetailTile(
-          label: "Contrat : ",
-          value: contract ?? "-",
+          label: "Contrat ",
+          value: "№ $contract",
           fontWeight: FontWeight.bold,
         ),
         ContractDetailTile(
@@ -42,6 +44,13 @@ class ContractDetailCard extends StatelessWidget {
           value: vehicle ?? "-",
           valueTextColor: Colors.grey,
         ),
+        if (immat != null) ...[
+          ContractDetailTile(
+            label: "Immat : ",
+            value: immat ?? "-",
+            valueTextColor: Colors.grey,
+          ),
+        ],
         ContractDetailTile(
           label: "Type de location : ",
           value: typeLocation ?? "-",

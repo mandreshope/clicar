@@ -19,6 +19,7 @@ import 'package:clicar/app/domain/usecases/contract/sign_contract_usecase.dart';
 import 'package:clicar/app/domain/usecases/reservation/get_pdf_reservation_usecase.dart';
 import 'package:clicar/app/domain/usecases/reservation/search_reservation_usecase.dart';
 import 'package:clicar/app/domain/usecases/reservation/sign_reservation_usecase.dart';
+import 'package:clicar/app/domain/usecases/upload_file/upload_multi_file_usecase.dart';
 import 'package:clicar/app/domain/usecases/upload_file/upload_single_file_usecase.dart';
 import 'package:clicar/app/presentation/pages/signature/enums/signature_associate.dart';
 import 'package:equatable/equatable.dart';
@@ -31,6 +32,7 @@ part './signature_state.dart';
 class SignatureBloc extends Bloc<SignatureEvent, BaseState> {
   final SearchContractUseCase searchContractUseCase;
   final UploadSingleFileUseCase uploadSingleFileUseCase;
+  final UploadMultiFileUseCase uploadMultiFileUseCase;
   final SignContractUseCase signContractUseCase;
   final GetPdfContractUsecase getPdfContractUsecase;
   final DownloadFileUsecase downloadFileUsecase;
@@ -40,7 +42,7 @@ class SignatureBloc extends Bloc<SignatureEvent, BaseState> {
   final GetPdfBdcUsecase getPdfBdcUsecase;
   final SignReservationUseCase signReservationUseCase;
   Contract contract = const Contract();
-  UploadFile uploadFile = const UploadFile();
+  List<UploadFile> uploadFile = const [];
   Reservation reservation = const Reservation();
   Bdc bdc = const Bdc();
 
@@ -48,6 +50,7 @@ class SignatureBloc extends Bloc<SignatureEvent, BaseState> {
   SignatureBloc({
     required this.searchContractUseCase,
     required this.uploadSingleFileUseCase,
+    required this.uploadMultiFileUseCase,
     required this.signContractUseCase,
     required this.getPdfContractUsecase,
     required this.downloadFileUsecase,
@@ -211,8 +214,14 @@ class SignatureBloc extends Bloc<SignatureEvent, BaseState> {
       UploadSignatureFileEvent event, Emitter emit) async {
     emit(const BaseState(status: Status.loading, message: 'loading ⌛'));
     try {
-      final upload = await uploadSingleFileUseCase(UploadSingleFileParams(
-          file: event.file, fileDestination: "signatures"));
+      // final upload = await uploadSingleFileUseCase(UploadSingleFileParams(
+      //     file: event.file, fileDestination: "signatures"));
+      final upload = await uploadMultiFileUseCase(
+        UploadMultiFileParams(
+          files: [event.file, event.paraphes],
+          fileDestination: "signatures",
+        ),
+      );
       upload.fold(
         (failure) {
           emit(SelectedContractState(
@@ -245,7 +254,8 @@ class SignatureBloc extends Bloc<SignatureEvent, BaseState> {
       /*final urlPhoto =
               "${RemoteConfig.baseUrl}/uploadFile/file/signatures/${success.filename}";*/
       /// add baseUrl to display this path
-      final urlPhoto = "$signatureServerFilePath${uploadFile.filename}";
+      final urlPhoto = "$signatureServerFilePath${uploadFile[0].filename}";
+      final urlParaphe = "$signatureServerFilePath${uploadFile[1].filename}";
       dynamic sign;
       switch (signatureAssociate) {
         case SignatureAssociate.contract:

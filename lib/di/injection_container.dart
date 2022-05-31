@@ -87,6 +87,7 @@ Future<void> init() async {
       getPdfContractUsecase: sl(),
       searchContractUseCase: sl(),
       uploadSingleFileUseCase: sl(),
+      uploadMultiFileUseCase: sl(),
       signContractUseCase: sl(),
       downloadFileUsecase: sl(),
       searchReservationUseCase: sl(),

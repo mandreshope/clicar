@@ -30,8 +30,14 @@ class SignatureDrawPage extends StatelessWidget {
     exportBackgroundColor: Colors.transparent,
   );
 
-  final ValueNotifier imgByte = ValueNotifier<Uint8List?>(null);
+  final SignatureController _paraphes = SignatureController(
+    penStrokeWidth: 2,
+    penColor: Colors.black,
+    exportBackgroundColor: Colors.transparent,
+  );
 
+  final ValueNotifier imgByte = ValueNotifier<Uint8List?>(null);
+  final ValueNotifier paraphesByte = ValueNotifier<Uint8List?>(null);
   @override
   Widget build(BuildContext context) {
     return AuthListenerWidget(
@@ -71,11 +77,59 @@ class SignatureDrawPage extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
+                      const TitleWithSeparator(title: "Paraphes"),
+                      const SizedBox(
+                        height: CustomTheme.spacer,
+                      ),
+                      BlocBuilder<AcceptContractBloc, BaseState>(
+                        buildWhen: (prevState, currState) {
+                          return currState is AcceptParapheState;
+                        },
+                        builder: (context, state) {
+                          return CheckboxListTile(
+                            activeColor: CustomTheme.primaryColor,
+                            controlAffinity: ListTileControlAffinity.leading,
+                            contentPadding: const EdgeInsets.all(0.0),
+                            value: state is AcceptParapheState
+                                ? state.isAccepted
+                                : false,
+                            onChanged: (v) {
+                              context
+                                  .read<AcceptContractBloc>()
+                                  .add(AcceptParapheEvent(isAccepted: v!));
+                            },
+                            title: Text(
+                              "Lu et approuvé",
+                              style: TextStyle(
+                                fontSize: CustomTheme.subtitle2.sp(context),
+                                color: CustomTheme.primaryColor,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(
+                        height: CustomTheme.spacer,
+                      ),
+                      ContainerRoundedGrey(
+                        child: Signature(
+                          controller: _paraphes,
+                          width: 300,
+                          height: 40.h(context),
+                          backgroundColor: CustomTheme.greyColor,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: CustomTheme.spacer,
+                      ),
                       const TitleWithSeparator(title: "Signature"),
                       const SizedBox(
                         height: CustomTheme.spacer,
                       ),
                       BlocBuilder<AcceptContractBloc, BaseState>(
+                        buildWhen: (prevState, currState) {
+                          return currState is AcceptContractState;
+                        },
                         builder: (context, state) {
                           return CheckboxListTile(
                             activeColor: CustomTheme.primaryColor,
@@ -123,8 +177,9 @@ class SignatureDrawPage extends StatelessWidget {
                                             .isAccepted,
                                     contract:
                                         context.read<SignatureBloc>().contract,
-                                    reservation:
-                                        context.read<SignatureBloc>().reservation,
+                                    reservation: context
+                                        .read<SignatureBloc>()
+                                        .reservation,
                                     bdc: context.read<SignatureBloc>().bdc,
                                     uploadFile: context
                                         .read<SignatureBloc>()
@@ -146,6 +201,12 @@ class SignatureDrawPage extends StatelessWidget {
                               isError: false,
                             );
                           } else if (currState.status == Status.signed) {
+                            final acceptContractBloc =
+                                BlocProvider.of<AcceptContractBloc>(context);
+                            acceptContractBloc.add(
+                                const AcceptContractEvent(isAccepted: false));
+                            acceptContractBloc.add(
+                                const AcceptParapheEvent(isAccepted: false));
                             Navigator.of(context).pushNamed(
                                 AppRoutes.signatureDetail,
                                 arguments: imgByte);
@@ -174,26 +235,28 @@ class SignatureDrawPage extends StatelessWidget {
                                 final acceptContractBloc =
                                     BlocProvider.of<AcceptContractBloc>(
                                         context);
-                                if (_controller.isNotEmpty) {
+                                if (_controller.isNotEmpty &&
+                                    _paraphes.isNotEmpty) {
                                   imgByte.value =
                                       await _controller.toPngBytes();
-
-                                  if (imgByte.value != null &&
-                                      (acceptContractBloc.state
-                                          is AcceptContractState) &&
-                                      (acceptContractBloc.state
-                                                  as AcceptContractState)
-                                              .status ==
-                                          Status.contractAccepted) {
+                                  paraphesByte.value =
+                                      await _paraphes.toPngBytes();
+                                  if (paraphesByte.value != null &&
+                                      imgByte.value != null &&
+                                      acceptContractBloc.isAcceptContract &&
+                                      acceptContractBloc.isAcceptParah) {
                                     ///convert pngBytes to file
                                     final path = await localPath;
                                     File file = File('$path/signature.png');
+                                    File paraphe = File('$path/paraphes.png');
                                     file.writeAsBytesSync(
                                         List.from(imgByte.value!));
-
+                                    paraphe.writeAsBytesSync(
+                                        List.from(paraphesByte.value!));
                                     context.read<SignatureBloc>().add(
                                         UploadSignatureFileEvent(
                                             file: file,
+                                            paraphes: paraphe,
                                             isAccepted: (state
                                                     as DownloadFileSuccessState)
                                                 .isAccepted,
@@ -201,12 +264,22 @@ class SignatureDrawPage extends StatelessWidget {
                                                 .read<SignatureBloc>()
                                                 .contract));
                                   } else {
-                                    SnackBarWidget.show(
-                                      isError: true,
-                                      message:
-                                          "Vous devez accepter le contrat svp",
-                                      context: context,
-                                    );
+                                    if (!acceptContractBloc.isAcceptContract) {
+                                      SnackBarWidget.show(
+                                        isError: true,
+                                        message:
+                                            "Vous devez accepter le contrat svp",
+                                        context: context,
+                                      );
+                                    } else if (!acceptContractBloc
+                                        .isAcceptParah) {
+                                      SnackBarWidget.show(
+                                        isError: true,
+                                        message:
+                                            "Vous devez lire et approuver le contrat svp",
+                                        context: context,
+                                      );
+                                    }
                                   }
                                 } else {
                                   SnackBarWidget.show(

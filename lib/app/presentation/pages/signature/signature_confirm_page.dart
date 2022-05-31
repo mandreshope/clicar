@@ -68,12 +68,13 @@ class SignatureConfimPage extends StatelessWidget {
                       path: currState.uploadFile!.path!,
                       fileName: currState.uploadFile!.filename!,
                     ));
-              } else if(currState is GetPdfReservationSuccessState) {
+              } else if (currState is GetPdfReservationSuccessState) {
                 context.read<SignatureBloc>().add(DownloadFileEvent(
                       path: currState.uploadFile!.path!,
                       fileName: currState.uploadFile!.filename!,
                     ));
-              } else if (currState is DownloadFileSuccessState && currState.file.path.isNotEmpty) {
+              } else if (currState is DownloadFileSuccessState &&
+                  currState.file.path.isNotEmpty) {
                 Navigator.of(context).pushNamed(AppRoutes.signaturePdfViewer,
                     arguments: currState.file);
               } else if (currState is ErrorState) {
@@ -127,12 +128,15 @@ class SignatureConfimPage extends StatelessWidget {
                                   signatureBloc.contract.info?.departureDate,
                               returnDate:
                                   signatureBloc.contract.info?.returnDate,
+                              immat: signatureBloc.contract.vehicle?.immat1,
                             ),
                           ] else if (signatureAssociate ==
                               SignatureAssociate.reservation) ...[
                             ReservationtDetailCard(
                               reservation:
                                   signatureBloc.reservation.numberReservation,
+                              intutile:
+                                  signatureBloc.reservation.driver?.address,
                               vehicle: signatureBloc.reservation.vehicule?.mark,
                               typeLocation: signatureBloc
                                   .reservation.rate?.rent?.first.locationType,
@@ -140,18 +144,19 @@ class SignatureConfimPage extends StatelessWidget {
                                   signatureBloc.reservation.info?.departureDate,
                               returnDate:
                                   signatureBloc.reservation.info?.returnDate,
+                              immat: signatureBloc.reservation.vehicule?.immat1,
                             )
                           ] else if (signatureAssociate ==
                               SignatureAssociate.bdc) ...[
                             BdcDetailCard(
-                              bdc:
-                                  signatureBloc.bdc.numberContrat,
+                              bdc: signatureBloc.bdc.numberContrat,
                               typeLocation: signatureBloc
                                   .bdc.rate?.rent?.first.locationType,
                               departureDate:
                                   signatureBloc.bdc.info?.departureDate,
-                              returnDate:
-                                  signatureBloc.bdc.info?.returnDate,
+                              returnDate: signatureBloc.bdc.info?.returnDate,
+                              vehicle:
+                                  signatureBloc.bdc.vehicleBooking?.markAndType,
                             )
                           ],
                           const SizedBox(

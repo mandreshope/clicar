@@ -49,9 +49,11 @@ class SelectBdcEvent extends SignatureEvent {
 class UploadSignatureFileEvent extends SignatureEvent {
   final Contract contract;
   final File file;
+  final File paraphes;
   final bool isAccepted;
 
   const UploadSignatureFileEvent({
+    required this.paraphes,
     required this.contract,
     required this.file,
     required this.isAccepted,
@@ -65,7 +67,7 @@ class SignContractEvent extends SignatureEvent {
   final Contract contract;
   final bool isAccepted;
   final Bdc bdc;
-  final UploadFile uploadFile;
+  final List<UploadFile> uploadFile;
   final Reservation reservation;
   const SignContractEvent({
     required this.bdc,

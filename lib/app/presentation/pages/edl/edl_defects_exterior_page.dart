@@ -398,15 +398,6 @@ class _EdlDefectsExteriorPageState extends State<EdlDefectsExteriorPage> {
                                     File('$path/edl_defects_exterior.png');
                                 file.writeAsBytesSync(
                                     List.from(imgByte.value!));
-                                showDialog(
-                                  context: context, 
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: const Text("Image"),
-                                      content: Image.file(file),
-                                    );
-                                  }
-                                );
                                 edlBloc.add(
                                   UploadPhotoDefectsExteriorEvent(
                                     file: file,

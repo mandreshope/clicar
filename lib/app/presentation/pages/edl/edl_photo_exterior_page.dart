@@ -163,23 +163,24 @@ class _EdlPhotoExteriorPageState extends State<EdlPhotoExteriorPage> {
                                       }
 
                                       if (edlBloc.imageSource != null) {
-                                        final XFile? image =
-                                            await _picker.pickImage(
-                                          source: edlBloc.imageSource!,
-                                          imageQuality: 35,
-                                        );
                                         if (edlBloc.imageSource ==
                                             ImageSource.camera) {
                                           await Navigator.of(context).pushNamed(
                                               AppRoutes.edlCameraExterior);
                                           edlBloc.add(ReloadEvent());
-                                        }
-                                        if (image != null) {
-                                          edlBloc.add(
-                                            AddFileOfCameraPosEvent(
-                                              file: File(image.path),
-                                            ),
+                                        } else {
+                                          final XFile? image =
+                                              await _picker.pickImage(
+                                            source: edlBloc.imageSource!,
+                                            imageQuality: 35,
                                           );
+                                          if (image != null) {
+                                            edlBloc.add(
+                                              AddFileOfCameraPosEvent(
+                                                file: File(image.path),
+                                              ),
+                                            );
+                                          }
                                         }
                                         return;
                                       }

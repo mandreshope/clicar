@@ -262,36 +262,38 @@ class SignatureBloc extends Bloc<SignatureEvent, BaseState> {
           final payload = SignContractParams(
             numberContrat: event.contract.numberContrat!,
             signature: Signature(
-              signature: urlPhoto,
-              signatureDate: DateTime.now().formatDatePayload,
-              isAccepted: event.isAccepted,
-            ),
+                signature: urlPhoto,
+                signatureDate: DateTime.now().formatDatePayload,
+                isAccepted: event.isAccepted,
+                paraph: urlParaphe),
           );
-           sign = await signContractUseCase(payload);
+          sign = await signContractUseCase(payload);
           break;
-        case SignatureAssociate.reservation: {
-          final payload = SignReservationParams(
-            numberReservation: event.reservation.numberReservation!,
-            signature: Signature(
-              signature: urlPhoto,
-              signatureDate: DateTime.now().formatDatePayload,
-              isAccepted: event.isAccepted,
-            ),
-          );
-           sign = await signReservationUseCase(payload);
-        }
+        case SignatureAssociate.reservation:
+          {
+            final payload = SignReservationParams(
+              numberReservation: event.reservation.numberReservation!,
+              signature: Signature(
+                  signature: urlPhoto,
+                  signatureDate: DateTime.now().formatDatePayload,
+                  isAccepted: event.isAccepted,
+                  paraph: urlParaphe),
+            );
+            sign = await signReservationUseCase(payload);
+          }
           break;
-        default: {
-          final payload = SignContractParams(
-            numberContrat: event.bdc.numberContrat!,
-            signature: Signature(
-              signature: urlPhoto,
-              signatureDate: DateTime.now().formatDatePayload,
-              isAccepted: event.isAccepted,
-            ),
-          );
-           sign = await signContractUseCase(payload);
-        }
+        default:
+          {
+            final payload = SignContractParams(
+              numberContrat: event.bdc.numberContrat!,
+              signature: Signature(
+                  signature: urlPhoto,
+                  signatureDate: DateTime.now().formatDatePayload,
+                  isAccepted: event.isAccepted,
+                  paraph: urlParaphe),
+            );
+            sign = await signContractUseCase(payload);
+          }
           break;
       }
       sign.fold(

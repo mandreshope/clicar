@@ -30,6 +30,7 @@ class CameraPosCarExterior extends StatelessWidget {
                     .map(
                       (e) => e.alignment == Alignment.topCenter
                           ? Visibility(
+                            
                               visible: isOnCamera,
                               child: Visibility(
                                 visible: e.isActive && e.hasPhoto == false,

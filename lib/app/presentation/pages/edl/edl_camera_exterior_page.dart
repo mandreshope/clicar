@@ -63,6 +63,9 @@ class _EdlCameraExteriorPageState extends State<EdlCameraExteriorPage>
   @override
   void dispose() {
     _ambiguate(WidgetsBinding.instance)?.removeObserver(this);
+    if (controller != null) {
+      controller!.dispose();
+    }
     super.dispose();
   }
 
@@ -259,6 +262,9 @@ class _EdlCameraExteriorPageState extends State<EdlCameraExteriorPage>
   }
 
   void onTakePictureButtonPressed() {
+    if(controller !=null  && !controller!.value.isInitialized) {
+      print("not initialize");
+    }
     if (edlBloc.cameraPosList.where((e) => e.hasPhoto == false).isEmpty) {
       Navigator.of(context).pushReplacementNamed(
         AppRoutes.edlPhotoList,

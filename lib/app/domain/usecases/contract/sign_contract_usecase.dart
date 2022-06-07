@@ -40,21 +40,24 @@ class Signature extends Equatable {
   final String signatureDate;
   final String signature;
   final bool isAccepted;
+  final String paraph;
 
   const Signature({
     required this.signature,
     required this.signatureDate,
     required this.isAccepted,
+    required this.paraph,
   });
 
   @override
-  List<Object> get props => [signatureDate, signature, isAccepted];
+  List<Object> get props => [signatureDate, signature, isAccepted, paraph];
 
   Map<String, dynamic> toMap() {
     return {
       'signatureDate': signatureDate,
       'signature': signature,
       'isAccepted': isAccepted,
+      'paraph': paraph,
     };
   }
 }

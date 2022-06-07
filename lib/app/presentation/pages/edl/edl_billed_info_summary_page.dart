@@ -17,6 +17,9 @@ class EdlBilledInfoSummaryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final edlBloc = context.read<EdlBloc>();
+    debugPrint(
+        "isNotEMpty ${edlBloc.billedInfoList.where((e) => e.isSelected).toList().isNotEmpty}");
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -80,7 +83,9 @@ class EdlBilledInfoSummaryPage extends StatelessWidget {
                         const SizedBox(
                           height: CustomTheme.spacer,
                         ),
-                        if (edlBloc.billedInfoList.isNotEmpty)
+                        if (edlBloc.billedInfoList
+                            .where((e) => e.isSelected)
+                            .isNotEmpty) ...[
                           ...edlBloc.billedInfoList
                               .where((e) => e.isSelected)
                               .map((e) => Padding(
@@ -111,6 +116,7 @@ class EdlBilledInfoSummaryPage extends StatelessWidget {
                                     ),
                                   ))
                               .toList(),
+                        ],
                         const SizedBox(
                           height: CustomTheme.spacer,
                         ),
@@ -129,14 +135,26 @@ class EdlBilledInfoSummaryPage extends StatelessWidget {
                                   fontSize: CustomTheme.subtitle2.sp(context),
                                 ),
                               ),
-                              Text(
-                                "${edlBloc.billedInfoList.where((e) => e.isSelected).map((e) => e.amount).reduce((a, b) => a + b)} €",
-                                style: TextStyle(
-                                  color: CustomTheme.primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: CustomTheme.subtitle2.sp(context),
+                              if (edlBloc.billedInfoList
+                                  .where((e) => e.isSelected)
+                                  .isNotEmpty)
+                                Text(
+                                  "${edlBloc.billedInfoList.where((e) => e.isSelected).map((e) => e.amount).reduce((a, b) => a + b)} €",
+                                  style: TextStyle(
+                                    color: CustomTheme.primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: CustomTheme.subtitle2.sp(context),
+                                  ),
+                                )
+                              else
+                                Text(
+                                  "0 €",
+                                  style: TextStyle(
+                                    color: CustomTheme.primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: CustomTheme.subtitle2.sp(context),
+                                  ),
                                 ),
-                              ),
                             ],
                           ),
                         ),

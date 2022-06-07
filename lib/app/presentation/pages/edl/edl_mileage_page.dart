@@ -19,6 +19,7 @@ class EdlMileagePage extends StatelessWidget {
   EdlMileagePage({Key? key}) : super(key: key);
 
   final TextEditingController mileage = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -105,44 +106,55 @@ class EdlMileagePage extends StatelessWidget {
                           const SizedBox(
                             height: CustomTheme.spacer,
                           ),
-                          TextFieldFilled(
-                            textInputType: TextInputType.number,
-                            textAlign: TextAlign.center,
-                            inputFormatters: [formatterInteger],
-                            controller: mileage,
-                            onChanged: (v) {
-                              int retourMileage =
-                                  formatterInteger.parse(v) ?? 0;
-                              int departureMileage =
-                                  edlBloc.contract.conditionAtStart?.km ?? 0;
-                              double additionalKmUnitPrice = edlBloc
-                                      .contract
-                                      .vehicle
-                                      ?.options
-                                      ?.additionalKmUnitPrice ??
-                                  0;
-                              int kmInclus = formatterInteger.parse(edlBloc
-                                          .contract
-                                          .rate
-                                          ?.rent
-                                          ?.first
-                                          .kmInclus ??
-                                      "") ??
-                                  0;
-                              context.read<MileageCubit>().change(
-                                    departMileage: departureMileage,
-                                    retourMileage: retourMileage,
-                                    kmInclus: kmInclus,
-                                    additionalKmUnitPrice:
-                                        additionalKmUnitPrice,
-                                  );
-                            },
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Kilométrage obligatoire';
-                              }
-                              return null;
-                            },
+                          Form(
+                            key: _formKey,
+                            child: TextFieldFilled(
+                              textInputType: TextInputType.number,
+                              textAlign: TextAlign.center,
+                              inputFormatters: [formatterInteger],
+                              controller: mileage,
+                              onChanged: (v) {
+                                int retourMileage =
+                                    formatterInteger.parse(v) ?? 0;
+                                int departureMileage =
+                                    edlBloc.contract.conditionAtStart?.km ?? 0;
+                                // double additionalKmUnitPrice = edlBloc
+                                //         .contract
+                                //         .vehicle
+                                //         ?.options
+                                //         ?.additionalKmUnitPrice ??
+                                //     0;
+                                double additionalKmUnitPrice = 0;
+                                if (edlBloc.contract.rate != null) {
+                                   additionalKmUnitPrice =
+                                      edlBloc.contract.rate!.options!.isNotEmpty
+                                          ? edlBloc
+                                              .contract.rate!.options![0].amount
+                                          : 0;
+                                }
+                                int kmInclus = formatterInteger.parse(edlBloc
+                                            .contract
+                                            .rate
+                                            ?.rent
+                                            ?.first
+                                            .kmInclus ??
+                                        "") ??
+                                    0;
+                                context.read<MileageCubit>().change(
+                                      departMileage: departureMileage,
+                                      retourMileage: retourMileage,
+                                      kmInclus: kmInclus,
+                                      additionalKmUnitPrice:
+                                          additionalKmUnitPrice,
+                                    );
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Kilométrage obligatoire';
+                                }
+                                return null;
+                              },
+                            ),
                           ),
                           if (edlBloc.typeEdl == TypeEdl.retour) ...[
                             const SizedBox(
@@ -246,24 +258,26 @@ class EdlMileagePage extends StatelessWidget {
                               onPressed: () {
                                 final mileageCubit =
                                     context.read<MileageCubit>();
-                                if ((mileageCubit.state as MileageChangeState)
-                                        .exceedPrice >
-                                    0) {
-                                  edlBloc.billedInfoList.add(
-                                    BilledInfo(
-                                      label:
-                                          "${(mileageCubit.state as MileageChangeState).exceedValue} km supplémentaire",
-                                      amount: (mileageCubit.state
-                                              as MileageChangeState)
-                                          .exceedPrice,
-                                      isSelected: true,
-                                    ),
-                                  );
+                                if (_formKey.currentState!.validate()) {
+                                  if ((mileageCubit.state as MileageChangeState)
+                                          .exceedPrice >
+                                      0) {
+                                    edlBloc.billedInfoList.add(
+                                      BilledInfo(
+                                        label:
+                                            "${(mileageCubit.state as MileageChangeState).exceedValue} km supplémentaire",
+                                        amount: (mileageCubit.state
+                                                as MileageChangeState)
+                                            .exceedPrice,
+                                        isSelected: true,
+                                      ),
+                                    );
+                                  }
+                                  edlBloc.add(EdlMileageEvent(
+                                      mileage: formatterInteger
+                                              .parse(mileage.text) ??
+                                          0));
                                 }
-                                edlBloc.add(EdlMileageEvent(
-                                    mileage:
-                                        formatterInteger.parse(mileage.text) ??
-                                            0));
                               },
                               child: Text(
                                 'Suivant'.toUpperCase(),

@@ -120,7 +120,7 @@ class SignatureConfimPage extends StatelessWidget {
                               SignatureAssociate.contract) ...[
                             ContractDetailCard(
                               contract: signatureBloc.contract.numberContrat,
-                              intutile: signatureBloc.contract.driver?.address,
+                              intutile: signatureBloc.contract.customer?.firstName,
                               vehicle: signatureBloc.contract.vehicle?.mark,
                               typeLocation: signatureBloc
                                   .contract.rate?.rent?.first.locationType,
@@ -136,7 +136,7 @@ class SignatureConfimPage extends StatelessWidget {
                               reservation:
                                   signatureBloc.reservation.numberReservation,
                               intutile:
-                                  signatureBloc.reservation.driver?.address,
+                                  signatureBloc.reservation.customer?.firstName,
                               vehicle: signatureBloc.reservation.vehicule?.mark,
                               typeLocation: signatureBloc
                                   .reservation.rate?.rent?.first.locationType,
@@ -157,6 +157,7 @@ class SignatureConfimPage extends StatelessWidget {
                               returnDate: signatureBloc.bdc.info?.returnDate,
                               vehicle:
                                   signatureBloc.bdc.vehicleBooking?.markAndType,
+                              intutile: signatureBloc.bdc.customer?.firstName,
                             )
                           ],
                           const SizedBox(

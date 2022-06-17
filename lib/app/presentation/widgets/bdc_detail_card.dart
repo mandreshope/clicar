@@ -9,6 +9,7 @@ class BdcDetailCard extends StatelessWidget {
   final String? departureDate;
   final String? returnDate;
   final String? vehicle;
+  final String? intutile;
   const BdcDetailCard({
     Key? key,
     this.bdc,
@@ -16,6 +17,7 @@ class BdcDetailCard extends StatelessWidget {
     this.departureDate,
     this.returnDate,
     this.vehicle,
+    this.intutile,
   }) : super(key: key);
 
   @override
@@ -25,6 +27,11 @@ class BdcDetailCard extends StatelessWidget {
         ContractDetailTile(
           label: "Bon de commande : ",
           value: bdc ?? "-",
+          fontWeight: FontWeight.bold,
+        ),
+        ContractDetailTile(
+          label: "Intutilé : ",
+          value: intutile ?? "-",
           fontWeight: FontWeight.bold,
         ),
         const SizedBox(

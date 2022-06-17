@@ -3,6 +3,7 @@ import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
 import 'package:clicar/app/presentation/pages/signature/bloc/signature_bloc.dart';
 import 'package:clicar/app/presentation/pages/signature/enums/signature_associate.dart';
+import 'package:clicar/app/presentation/pages/statistique/bloc/stat_bloc.dart';
 import 'package:clicar/app/presentation/routes/app_routes.dart';
 import 'package:clicar/app/presentation/widgets/auth_listener_widget.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
@@ -73,7 +74,7 @@ class StatistiquePage extends StatelessWidget {
                       ),
                       SecondaryButton(
                         onPressed: () {
-                          //TODO got to stat vehicule
+                          //Todo got to stat vehicule
                         },
                         width: double.infinity,
                         child: Text(
@@ -90,7 +91,9 @@ class StatistiquePage extends StatelessWidget {
                       ),
                       SecondaryButton(
                         onPressed: () {
-                          //TODO go to stat gestion de flotte page
+                          //Todo go to stat gestion de flotte page
+                          context.read<StatBloc>().add(GetStatFlotteEvent());
+                          Navigator.pushNamed(context,AppRoutes.flotte);
                         },
                         width: double.infinity,
                         child: Text(
@@ -107,7 +110,7 @@ class StatistiquePage extends StatelessWidget {
                       ),
                       SecondaryButton(
                         onPressed: () {
-                          //TODO go to encaissement page
+                          //Todo go to encaissement page
                         },
                         width: double.infinity,
                         child: Text(

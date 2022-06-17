@@ -72,7 +72,8 @@ class SignatureSummaryPage extends StatelessWidget {
                                           context
                                                   .read<SignatureBloc>()
                                                   .contract
-                                                  .numberContrat ??
+                                                  .vehicle
+                                                  ?.immat1 ??
                                               "-",
                                           style: TextStyle(
                                             fontSize: CustomTheme
@@ -93,7 +94,7 @@ class SignatureSummaryPage extends StatelessWidget {
                                           context
                                                   .read<SignatureBloc>()
                                                   .reservation
-                                                  .numberReservation ??
+                                                  .vehicule?.immat1 ??
                                               "-",
                                           style: TextStyle(
                                             fontSize: CustomTheme
@@ -151,8 +152,8 @@ class SignatureSummaryPage extends StatelessWidget {
                                       intutile: context
                                           .read<SignatureBloc>()
                                           .contract
-                                          .driver
-                                          ?.address,
+                                          .customer
+                                          ?.firstName,
                                       vehicle: context
                                           .read<SignatureBloc>()
                                           .contract
@@ -186,8 +187,8 @@ class SignatureSummaryPage extends StatelessWidget {
                                       intutile: context
                                           .read<SignatureBloc>()
                                           .reservation
-                                          .driver
-                                          ?.address,
+                                          .customer
+                                          ?.firstName,
                                       vehicle: context
                                           .read<SignatureBloc>()
                                           .reservation
@@ -240,6 +241,11 @@ class SignatureSummaryPage extends StatelessWidget {
                                           .bdc
                                           .vehicleBooking
                                           ?.markAndType,
+                                      intutile: context
+                                          .read<SignatureBloc>()
+                                          .bdc
+                                          .customer
+                                          ?.firstName,
                                     )
                                   ],
                                   const SizedBox(
@@ -266,7 +272,17 @@ class SignatureSummaryPage extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                            )
+                            ),
+                            Center(
+                              child: Image.asset(
+                                "${assetsImages}logo.png",
+                                width: 200,
+                                height: 30,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: CustomTheme.spacer,
+                            ),
                           ],
                         ),
                       ),

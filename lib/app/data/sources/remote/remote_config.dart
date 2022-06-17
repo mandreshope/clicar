@@ -1,7 +1,7 @@
 abstract class RemoteConfig {
   // static String baseUrl = "https://api-new.clicar.fr";
   static String baseUrl = "https://preprod-api.clicar.fr";
-  // static String baseUrl = "http://192.168.88.10:4400";
+  // static String baseUrl = "http://192.168.88.16:4400";
 }
 
 abstract class RemoteEndpoint {
@@ -42,4 +42,9 @@ abstract class RemoteEndpoint {
       RemoteConfig.baseUrl + "/exportToPdf/exportToPdfNonRestitution";
   static String signReservation = RemoteConfig.baseUrl + "/reservation/sign";
   static String statistique = RemoteConfig.baseUrl + "/statistique";
+  static String statistiqueEncaissement = RemoteConfig.baseUrl + "/statistique/statistiqueEncaissement";
+  static String statistiqueFlotte = RemoteConfig.baseUrl + "/statistique/statistiqueFlotte";
+  static String statListVehicle = RemoteConfig.baseUrl + "/statVehicle/listVehicleStat";
+  static String statVehicle = RemoteConfig.baseUrl + "/statistique/getVehicle";
+  static String statContract = RemoteConfig.baseUrl + "/statistique/contracts";
 }

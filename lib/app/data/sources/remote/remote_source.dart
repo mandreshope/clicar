@@ -9,7 +9,11 @@ import 'package:clicar/app/data/models/contravention/contravention_model.dart';
 import 'package:clicar/app/data/models/customer/customer_model.dart';
 import 'package:clicar/app/data/models/driver/driver_model.dart';
 import 'package:clicar/app/data/models/reservation/reservation_model.dart';
+import 'package:clicar/app/data/models/statistique/contract_stat/contract_stat_model.dart';
+import 'package:clicar/app/data/models/statistique/encaissement_stat/encaissement_stat_model.dart';
+import 'package:clicar/app/data/models/statistique/gestion_flotte_stat/gestion_flotte_stat_model.dart';
 import 'package:clicar/app/data/models/statistique/sale_turnover/sale_turnover_model.dart';
+import 'package:clicar/app/data/models/statistique/vehicle_stat/vehicle_stat_model.dart';
 import 'package:clicar/app/data/models/upload_file/upload_file_model.dart';
 import 'package:clicar/app/data/models/user/user_model.dart';
 import 'package:clicar/app/data/models/vehicle/vehicle_model.dart';
@@ -92,15 +96,22 @@ abstract class RemoteSource {
   Future<List<ContraventionModel>> searchContravention(
       {required String filter});
 
-  Future<List<ReservationModel>> searchReservation(
-      {required String filter});
-  
-  Future<List<BdcModel>> searchBdc(
-      {required String filter});
+  Future<List<ReservationModel>> searchReservation({required String filter});
+
+  Future<List<BdcModel>> searchBdc({required String filter});
   Future<File> downloadFile({required String path, required String fileName});
   Future<UploadFileModel> getPdfReservation({required String reservationId});
   Future<UploadFileModel> getPdfBdc({required String bdcId});
   Future<Reservation> signReservation(
       {required SignReservationParams signReservationParams});
-  Future<SaleTurnoverModel> getStatSaleTurnover({required Map<String, dynamic> data});
+  Future<SaleTurnoverModel> getStatSaleTurnover(
+      {required Map<String, dynamic> data});
+  Future<EncaissementStatModel> getStatEncaissement(
+      {required Map<String, dynamic> data});
+  Future<GestionFlotteStatModel> getStatFlotte(
+      {required Map<String, dynamic> data});
+  Future<List<VehicleStatModel>> getListVehicleStat();
+  Future<dynamic> getStatVehicle({required Map<String, dynamic> data});
+  Future<ContractStatModel> getStatContract(
+      {required Map<String, dynamic> data});
 }

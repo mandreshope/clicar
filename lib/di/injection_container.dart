@@ -7,6 +7,7 @@ import 'package:clicar/app/data/repositories/customer/customer_repository_impl.d
 import 'package:clicar/app/data/repositories/driver/driver_repository_impl.dart';
 import 'package:clicar/app/data/repositories/edl/edl_repository_impl.dart';
 import 'package:clicar/app/data/repositories/reservation/reservation_repository_impl.dart';
+import 'package:clicar/app/data/repositories/statistique/statistique_repository_impl.dart';
 import 'package:clicar/app/data/repositories/upload_file/upload_file_repository_impl.dart';
 import 'package:clicar/app/data/repositories/vehicle/vehicle_repository.dart';
 import 'package:clicar/app/domain/repositories/bdc/bdc_repository.dart';
@@ -16,6 +17,7 @@ import 'package:clicar/app/domain/repositories/customer/customer_repository.dart
 import 'package:clicar/app/domain/repositories/driver/driver_repository.dart';
 import 'package:clicar/app/domain/repositories/edl/edl_repository.dart';
 import 'package:clicar/app/domain/repositories/reservation/reservation_repository.dart';
+import 'package:clicar/app/domain/repositories/statistique/statistique_repository.dart';
 import 'package:clicar/app/domain/repositories/upload_file/upload_file_repository.dart';
 import 'package:clicar/app/domain/repositories/vehicle/vehicle_repository.dart';
 import 'package:clicar/app/domain/usecases/auth/change_password_usecase.dart';
@@ -37,6 +39,7 @@ import 'package:clicar/app/domain/usecases/edl/edl_retour_usecase.dart';
 import 'package:clicar/app/domain/usecases/reservation/get_pdf_reservation_usecase.dart';
 import 'package:clicar/app/domain/usecases/reservation/search_reservation_usecase.dart';
 import 'package:clicar/app/domain/usecases/reservation/sign_reservation_usecase.dart';
+import 'package:clicar/app/domain/usecases/statistique/get_stat_flotte_usecase.dart';
 import 'package:clicar/app/domain/usecases/upload_file/upload_multi_file_usecase.dart';
 import 'package:clicar/app/domain/usecases/upload_file/upload_single_file_usecase.dart';
 import 'package:clicar/app/domain/usecases/user/me_usecase.dart';
@@ -55,6 +58,7 @@ import 'package:clicar/app/presentation/pages/home/bloc/user/user_bloc.dart';
 import 'package:clicar/app/presentation/pages/login/bloc/auth_bloc.dart';
 import 'package:clicar/app/presentation/pages/signature/bloc/accept_contract/accept_contract_bloc.dart';
 import 'package:clicar/app/presentation/pages/signature/bloc/signature_bloc.dart';
+import 'package:clicar/app/presentation/pages/statistique/bloc/stat_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -74,6 +78,9 @@ final GetIt sl = GetIt.instance; //sl is referred to as Service Locator
 ///Dependency injection
 Future<void> init() async {
   ///Blocs
+  sl.registerFactory(() => StatBloc(
+    getStatFlotteUseCase: sl()
+  ));
   sl.registerFactory(() => AuthBloc(
       logoutUseCase: sl(),
       loginUseCase: sl(),
@@ -84,17 +91,17 @@ Future<void> init() async {
   sl.registerFactory(() => UserBloc(meUseCase: sl()));
   sl.registerFactory(() => UserInfoBloc(userInfoUpdateUseCase: sl()));
   sl.registerFactory(() => SignatureBloc(
-      getPdfContractUsecase: sl(),
-      searchContractUseCase: sl(),
-      uploadSingleFileUseCase: sl(),
-      uploadMultiFileUseCase: sl(),
-      signContractUseCase: sl(),
-      downloadFileUsecase: sl(),
-      searchReservationUseCase: sl(),
-      getPdfReservationUsecase: sl(),
-      searchBdcUseCase: sl(),
-      getPdfBdcUsecase: sl(),
-      signReservationUseCase: sl(),
+        getPdfContractUsecase: sl(),
+        searchContractUseCase: sl(),
+        uploadSingleFileUseCase: sl(),
+        uploadMultiFileUseCase: sl(),
+        signContractUseCase: sl(),
+        downloadFileUsecase: sl(),
+        searchReservationUseCase: sl(),
+        getPdfReservationUsecase: sl(),
+        searchBdcUseCase: sl(),
+        getPdfBdcUsecase: sl(),
+        signReservationUseCase: sl(),
       ));
   sl.registerFactory(() => AcceptContractBloc());
   sl.registerFactory(() => AccountBloc(
@@ -123,6 +130,7 @@ Future<void> init() async {
   );
 
   ///Use cases
+  sl.registerLazySingleton(() => GetStatFlotteUseCase(repository: sl()));
   sl.registerLazySingleton(() => LoginUseCase(repository: sl()));
   sl.registerLazySingleton(() => FetchTokenUseCase(repository: sl()));
   sl.registerLazySingleton(() => RegisterUseCase(repository: sl()));
@@ -154,8 +162,11 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetPdfBdcUsecase(repository: sl()));
   sl.registerLazySingleton(() => SignReservationUseCase(repository: sl()));
 
-
   ///Repositories
+  sl.registerLazySingleton<StatistiqueRepository>(
+    () => StatistiqueRepositoryImpl(
+        networkInfo: sl(), localDataSource: sl(), remoteDataSource: sl()),
+  );
   sl.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(
         networkInfo: sl(), localDataSource: sl(), remoteDataSource: sl()),
@@ -182,13 +193,16 @@ Future<void> init() async {
       networkInfo: sl(), localDataSource: sl(), remoteDataSource: sl()));
   sl.registerLazySingleton<VehicleRepository>(() => VehicleRepositoryImpl(
       networkInfo: sl(), localDataSource: sl(), remoteDataSource: sl()));
-  
-  sl.registerLazySingleton<ContraventionRepository>(() => ContraventionRepositoryImpl(
-      networkInfo: sl(), localDataSource: sl(), remoteDataSource: sl()));
-  sl.registerLazySingleton<ReservationRepository>(() => ReservationRepositoryImpl(
-      networkInfo: sl(), localDataSource: sl(), remoteDataSource: sl()));
+
+  sl.registerLazySingleton<ContraventionRepository>(() =>
+      ContraventionRepositoryImpl(
+          networkInfo: sl(), localDataSource: sl(), remoteDataSource: sl()));
+  sl.registerLazySingleton<ReservationRepository>(() =>
+      ReservationRepositoryImpl(
+          networkInfo: sl(), localDataSource: sl(), remoteDataSource: sl()));
   sl.registerLazySingleton<BdcRepository>(() => BdcRepositoryImpl(
       networkInfo: sl(), localDataSource: sl(), remoteDataSource: sl()));
+
   ///Data sources
   sl.registerLazySingleton<RemoteSource>(() => RemoteSourceImpl(client: sl()));
   sl.registerLazySingleton<LocalSource>(

@@ -6,6 +6,7 @@ import 'package:clicar/app/presentation/pages/home/bloc/user/user_bloc.dart';
 import 'package:clicar/app/presentation/pages/login/bloc/auth_bloc.dart';
 import 'package:clicar/app/presentation/pages/signature/bloc/accept_contract/accept_contract_bloc.dart';
 import 'package:clicar/app/presentation/pages/signature/bloc/signature_bloc.dart';
+import 'package:clicar/app/presentation/pages/statistique/bloc/stat_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'injection_container.dart';
@@ -25,6 +26,8 @@ List<SingleChildWidget> providers = [
   BlocProvider(create: (context) => sl<AccountBloc>()),
   BlocProvider(create: (context) => sl<EdlBloc>()),
   BlocProvider(create: (context) => sl<DocumentBloc>()),
+  BlocProvider(create: (context) => sl<StatBloc>()),
+
 ];
 
 class GlobalBlocObserver extends BlocObserver {

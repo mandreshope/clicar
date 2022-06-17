@@ -22,14 +22,14 @@ class SearchContractResult extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              contract.numberContrat ?? '-',
+               "Contrat № ${contract.numberContrat ?? '-'}",
               style: TextStyle(
                   fontSize: CustomTheme.subtitle2.sp(context),
                   color: Colors.grey,
                   fontWeight: FontWeight.bold),
             ),
             Text(
-              contract.driver?.address ?? '',
+              contract.customer?.firstName ?? '',
               style: TextStyle(
                   fontSize: CustomTheme.subtitle2.sp(context),
                   color: Colors.grey,

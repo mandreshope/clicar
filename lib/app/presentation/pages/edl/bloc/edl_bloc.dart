@@ -692,7 +692,7 @@ class EdlBloc extends Bloc<EdlEvent, BaseState> {
         "numberContrat": "${contract.numberContrat}",
         "conditionDate": DateTime.now().formatDatePayload,
         "conditions": [...photosExterior, ...photosInterior],
-        "cle": cle!=null? "$edlServerFilePath$cleFileName" : "",
+        "cle": cle != null ? "$edlServerFilePath$cleFileName" : "",
         // "conditions": images,
         //"comment": "quelconque commentaire",
         //"km": "2000",

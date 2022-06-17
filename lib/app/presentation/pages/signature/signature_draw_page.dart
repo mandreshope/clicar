@@ -210,6 +210,11 @@ class SignatureDrawPage extends StatelessWidget {
                             Navigator.of(context).pushNamed(
                                 AppRoutes.signatureDetail,
                                 arguments: imgByte);
+                            SnackBarWidget.show(
+                              context: context,
+                              message: "Signature enregistré avec succès",
+                              isError: false,
+                            );
                           } else if (currState is ErrorState) {
                             SnackBarWidget.show(
                               context: context,

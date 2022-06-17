@@ -22,14 +22,14 @@ class SearchBdcResult extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              bdc.numberContrat ?? '-',
+              "Bon de commande № ${bdc.numberContrat ?? '-'}",
               style: TextStyle(
                   fontSize: CustomTheme.subtitle2.sp(context),
                   color: Colors.grey,
                   fontWeight: FontWeight.bold),
             ),
             Text(
-              bdc.customer!.lastName ?? '',
+              bdc.customer!.firstName ?? '',
               style: TextStyle(
                   fontSize: CustomTheme.subtitle2.sp(context),
                   color: Colors.grey,

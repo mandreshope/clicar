@@ -13,7 +13,11 @@ import 'package:clicar/app/data/models/contravention/contravention_model.dart';
 import 'package:clicar/app/data/models/customer/customer_model.dart';
 import 'package:clicar/app/data/models/driver/driver_model.dart';
 import 'package:clicar/app/data/models/reservation/reservation_model.dart';
+import 'package:clicar/app/data/models/statistique/gestion_flotte_stat/gestion_flotte_stat_model.dart';
+import 'package:clicar/app/data/models/statistique/encaissement_stat/encaissement_stat_model.dart';
+import 'package:clicar/app/data/models/statistique/contract_stat/contract_stat_model.dart';
 import 'package:clicar/app/data/models/statistique/sale_turnover/sale_turnover_model.dart';
+import 'package:clicar/app/data/models/statistique/vehicle_stat/vehicle_stat_model.dart';
 import 'package:clicar/app/data/models/upload_file/upload_file_model.dart';
 import 'package:clicar/app/data/models/user/user_model.dart';
 import 'package:clicar/app/data/models/vehicle/vehicle_model.dart';
@@ -907,5 +911,47 @@ class RemoteSourceImpl extends RemoteSource {
         body: response.body,
       );
     }
+  }
+
+  @override
+  Future<List<VehicleStatModel>> getListVehicleStat() {
+    // TODO: implement getListVehicleStat
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ContractStatModel> getStatContract({required Map<String, dynamic> data}) {
+    // TODO: implement getStatContract
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<EncaissementStatModel> getStatEncaissement({required Map<String, dynamic> data}) {
+    // TODO: implement getStatEncaissement
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<GestionFlotteStatModel> getStatFlotte({required Map<String, dynamic> data}) async {
+    final url = Uri.parse(RemoteEndpoint.statistiqueFlotte);
+    final response = await client.post(url, body: jsonEncode(data));
+    debugPrint(response.body);
+    if (response.statusCode == 200) {
+      _refreshToken(response.headers);
+      debugPrint(response.body);
+      return GestionFlotteStatModel.fromJson(jsonDecode(response.body));
+    } else {
+      throw ServerException(
+        statusCode: response.statusCode,
+        message: response.reasonPhrase ?? 'Server Error',
+        body: response.body,
+      );
+    }
+  }
+
+  @override
+  Future getStatVehicle({required Map<String, dynamic> data}) {
+    // TODO: implement getStatVehicle
+    throw UnimplementedError();
   }
 }

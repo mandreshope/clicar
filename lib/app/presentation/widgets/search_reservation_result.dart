@@ -22,14 +22,14 @@ class SearchReservationResult extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              reservation.numberReservation ?? '-',
+              "Réservation № ${reservation.numberReservation ?? '-'}",
               style: TextStyle(
                   fontSize: CustomTheme.subtitle2.sp(context),
                   color: Colors.grey,
                   fontWeight: FontWeight.bold),
             ),
             Text(
-              reservation.driver?.address ?? '',
+              reservation.customer?.firstName ?? '',
               style: TextStyle(
                   fontSize: CustomTheme.subtitle2.sp(context),
                   color: Colors.grey,

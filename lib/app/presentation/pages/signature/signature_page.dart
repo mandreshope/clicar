@@ -67,8 +67,9 @@ class SignaturePage extends StatelessWidget {
             builder: (context, state) {
               return SingleChildScrollView(
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Padding(
+                    Container(
                       padding: EdgeInsets.symmetric(
                         vertical: 05.h(context).sp(context),
                         horizontal: 10.w(context).sp(context),
@@ -140,7 +141,10 @@ class SignaturePage extends StatelessWidget {
                                               child: CircularProgress(),
                                             ),
                                           ] else if (state
-                                              is SearchContractState && signatureAssociate == SignatureAssociate.contract) ...[
+                                                  is SearchContractState &&
+                                              signatureAssociate ==
+                                                  SignatureAssociate
+                                                      .contract) ...[
                                             if (state.contracts.isEmpty)
                                               const Padding(
                                                 padding: EdgeInsets.all(8.0),
@@ -177,7 +181,10 @@ class SignaturePage extends StatelessWidget {
                                                   )
                                                   .toList(),
                                           ] else if (state
-                                              is SearchReservationState && signatureAssociate == SignatureAssociate.reservation) ...[
+                                                  is SearchReservationState &&
+                                              signatureAssociate ==
+                                                  SignatureAssociate
+                                                      .reservation) ...[
                                             if (state.reservations.isEmpty)
                                               const Padding(
                                                 padding: EdgeInsets.all(8.0),
@@ -215,8 +222,9 @@ class SignaturePage extends StatelessWidget {
                                                           reservation:
                                                               reservation))
                                                   .toList(),
-                                          ] else if (state
-                                              is SearchBdcState && signatureAssociate == SignatureAssociate.bdc) ...[
+                                          ] else if (state is SearchBdcState &&
+                                              signatureAssociate ==
+                                                  SignatureAssociate.bdc) ...[
                                             if (state.bdcs.isEmpty)
                                               const Padding(
                                                 padding: EdgeInsets.all(8.0),
@@ -225,34 +233,27 @@ class SignaturePage extends StatelessWidget {
                                               )
                                             else
                                               ...state.bdcs
-                                                  .map((bdc) =>
-                                                      SearchBdcResult(
-                                                          onTap: () {
-                                                            search.clear();
-                                                            expandableController
-                                                                .toggle();
-                                                            final signatureBloc =
-                                                                context.read<
-                                                                    SignatureBloc>();
-                                                            signatureBloc
-                                                                    .bdc =
-                                                                bdc;
-                                                            signatureBloc.add(
-                                                                SelectBdcEvent(
-                                                              bdc:
-                                                                  bdc,
-                                                            ));
+                                                  .map((bdc) => SearchBdcResult(
+                                                      onTap: () {
+                                                        search.clear();
+                                                        expandableController
+                                                            .toggle();
+                                                        final signatureBloc =
+                                                            context.read<
+                                                                SignatureBloc>();
+                                                        signatureBloc.bdc = bdc;
+                                                        signatureBloc
+                                                            .add(SelectBdcEvent(
+                                                          bdc: bdc,
+                                                        ));
 
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pushNamed(
-                                                                    AppRoutes
-                                                                        .signatureSummary,
-                                                                    arguments:
-                                                                        signatureAssociate);
-                                                          },
-                                                          bdc:
-                                                              bdc))
+                                                        Navigator.of(context).pushNamed(
+                                                            AppRoutes
+                                                                .signatureSummary,
+                                                            arguments:
+                                                                signatureAssociate);
+                                                      },
+                                                      bdc: bdc))
                                                   .toList(),
                                           ]
                                         ],
@@ -282,11 +283,23 @@ class SignaturePage extends StatelessWidget {
                           ),
                         ],
                       ),
-                    )
+                    ),
+                    const SizedBox(
+                      height: CustomTheme.spacer,
+                    ),
                   ],
                 ),
               );
             },
+          ),
+        ),
+        bottomNavigationBar: Container(
+          color: Colors.white,
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Image.asset(
+            "${assetsImages}logo.png",
+            width: 100,
+            height: 30,
           ),
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:clicar/app/core/states/base_state.dart';
+import 'package:clicar/app/core/utils/constants.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
 import 'package:clicar/app/presentation/pages/edl/bloc/edl_bloc.dart';
@@ -110,7 +111,8 @@ class EdlSummaryPage extends StatelessWidget {
                                   const Divider(),
                                   ContractDetailCard(
                                     contract: edlBloc.contract.numberContrat,
-                                    intutile: edlBloc.contract.driver?.address,
+                                    intutile:
+                                        edlBloc.contract.customer?.firstName,
                                     vehicle: edlBloc.contract.vehicle?.mark,
                                     typeLocation: edlBloc.contract.rate?.rent
                                         ?.first.locationType,
@@ -142,7 +144,17 @@ class EdlSummaryPage extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                            )
+                            ),
+                            Center(
+                              child: Image.asset(
+                                "${assetsImages}logo.png",
+                                width: 200,
+                                height: 30,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: CustomTheme.spacer,
+                            ),
                           ],
                         ),
                       ),

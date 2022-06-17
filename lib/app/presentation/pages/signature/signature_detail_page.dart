@@ -74,8 +74,8 @@ class SignatureDetailPage extends StatelessWidget {
                               intutile: context
                                   .read<SignatureBloc>()
                                   .contract
-                                  .driver
-                                  ?.address,
+                                  .customer
+                                  ?.firstName,
                               vehicle: context
                                   .read<SignatureBloc>()
                                   .contract

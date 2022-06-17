@@ -63,7 +63,7 @@ class EdlSignatureConfimPage extends StatelessWidget {
                           ),
                           ContractDetailCard(
                             contract: edlBloc.contract.numberContrat,
-                            intutile: edlBloc.contract.driver?.address,
+                            intutile: edlBloc.contract.customer?.firstName,
                             vehicle: edlBloc.contract.vehicle?.mark,
                             typeLocation:
                                 edlBloc.contract.rate?.rent?.first.locationType,

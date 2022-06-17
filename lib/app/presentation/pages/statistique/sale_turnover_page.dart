@@ -37,7 +37,7 @@ class SaleTurnoverPage extends StatelessWidget {
                         height: CustomTheme.spacer,
                       ),
                       const TitleWithSeparator(title: "Chiffre d'affaires"),
-                      const OptionFilterCard(),
+                      OptionFilterCard(filterWithDay: (){},),
                       const ItemAmountCard(
                         title: "Montant à encaissé",
                         amount: "0.00",

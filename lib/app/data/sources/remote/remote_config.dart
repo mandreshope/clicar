@@ -1,7 +1,7 @@
 abstract class RemoteConfig {
   // static String baseUrl = "https://api-new.clicar.fr";
   static String baseUrl = "https://preprod-api.clicar.fr";
-  // static String baseUrl = "http://192.168.88.16:4400";
+  // static String baseUrl = "http://192.168.88.14:4400";
 }
 
 abstract class RemoteEndpoint {

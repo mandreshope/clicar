@@ -10,8 +10,8 @@ import 'package:clicar/app/presentation/widgets/scaffold_body.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class FlottePage extends StatelessWidget {
-  const FlottePage({Key? key}) : super(key: key);
+class EncaissementPage extends StatelessWidget {
+  const EncaissementPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class FlottePage extends StatelessWidget {
                         const SizedBox(
                           height: CustomTheme.spacer,
                         ),
-                        const TitleWithSeparator(title: "Gestion de flotte"),
+                        const TitleWithSeparator(title: "Encaissement"),
                         OptionFilterCard(
                           filterWithDay: (Map<String, dynamic> data) {
                             context

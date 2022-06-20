@@ -39,6 +39,7 @@ import 'package:clicar/app/presentation/pages/signature/signature_success_page.d
 import 'package:clicar/app/presentation/pages/signature/signature_summary_page.dart';
 import 'package:clicar/app/presentation/pages/signature/signature_choice_page.dart';
 import 'package:clicar/app/presentation/pages/splash/splash_page.dart';
+import 'package:clicar/app/presentation/pages/statistique/encaissement_page.dart';
 import 'package:clicar/app/presentation/pages/statistique/flotte_page.dart';
 import 'package:clicar/app/presentation/pages/statistique/sale_turnover_page.dart';
 import 'package:clicar/app/presentation/pages/statistique/statistique_page.dart';
@@ -91,6 +92,9 @@ abstract class AppRoutes {
   static const statistique = '/statistique';
   static const saleTurnover = '/sale-turnover';
   static const flotte = '/flotte';
+  static const encaissement = '/encaissement';
+
+
 
 
 
@@ -160,6 +164,6 @@ abstract class AppRoutes {
     AppRoutes.statistique: (BuildContext context) => const StatistiquePage(),
     AppRoutes.saleTurnover: (BuildContext context) => const SaleTurnoverPage(),
     AppRoutes.flotte: (BuildContext context) => const FlottePage(),
-
+    AppRoutes.encaissement: (BuildContext context) => const EncaissementPage(),
   };
 }

@@ -39,6 +39,7 @@ import 'package:clicar/app/domain/usecases/edl/edl_retour_usecase.dart';
 import 'package:clicar/app/domain/usecases/reservation/get_pdf_reservation_usecase.dart';
 import 'package:clicar/app/domain/usecases/reservation/search_reservation_usecase.dart';
 import 'package:clicar/app/domain/usecases/reservation/sign_reservation_usecase.dart';
+import 'package:clicar/app/domain/usecases/statistique/get_stat_encaissement_usecase.dart';
 import 'package:clicar/app/domain/usecases/statistique/get_stat_flotte_usecase.dart';
 import 'package:clicar/app/domain/usecases/upload_file/upload_multi_file_usecase.dart';
 import 'package:clicar/app/domain/usecases/upload_file/upload_single_file_usecase.dart';
@@ -78,9 +79,12 @@ final GetIt sl = GetIt.instance; //sl is referred to as Service Locator
 ///Dependency injection
 Future<void> init() async {
   ///Blocs
-  sl.registerFactory(() => StatBloc(
-    getStatFlotteUseCase: sl()
-  ));
+  sl.registerFactory(
+    () => StatBloc(
+      getStatFlotteUseCase: sl(),
+      getStatEncaissementUseCase: sl(),
+    ),
+  );
   sl.registerFactory(() => AuthBloc(
       logoutUseCase: sl(),
       loginUseCase: sl(),
@@ -131,6 +135,7 @@ Future<void> init() async {
 
   ///Use cases
   sl.registerLazySingleton(() => GetStatFlotteUseCase(repository: sl()));
+  sl.registerLazySingleton(() => GetStatEncaissementUseCase(repository: sl()));
   sl.registerLazySingleton(() => LoginUseCase(repository: sl()));
   sl.registerLazySingleton(() => FetchTokenUseCase(repository: sl()));
   sl.registerLazySingleton(() => RegisterUseCase(repository: sl()));

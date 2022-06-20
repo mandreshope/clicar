@@ -282,6 +282,7 @@ class RemoteSourceImpl extends RemoteSource {
       try {
         final Iterable iterable = jsonDecode(response.body);
         return List.from(iterable).map((x) {
+          print(x);
           return ReservationModel.fromJson(x);
         }).toList();
       } catch (e) {

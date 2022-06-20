@@ -24,6 +24,16 @@ class _OptionFilterCardState extends State<OptionFilterCard> {
   TextEditingController? beginDateController;
   TextEditingController? endDateController;
   Map<String, dynamic>? data;
+  void manageData({required String filter}) {
+    data = {
+      "filter": filter,
+      "month": month,
+      "filtreRangeBegin": dateBegin,
+      "filtreRangeEnd": dateEnd,
+      "day": day,
+      "week": week,
+    };
+  }
 
   void _onChangedWeek(DatePeriod newPeriod) {
     setState(() {
@@ -36,7 +46,8 @@ class _OptionFilterCardState extends State<OptionFilterCard> {
       }
       _selectedDate = newPeriod.start;
       _selectedPeriod = newPeriod;
-      // widget.filterWithDay();
+      manageData(filter: "week");
+      widget.filterWithDay(data);
     });
   }
 
@@ -45,6 +56,8 @@ class _OptionFilterCardState extends State<OptionFilterCard> {
       month = DateFormat('yyyy-MM').format(newDate).toString();
       debugPrint(month);
       _selectedDateMonth = newDate;
+      manageData(filter: 'month');
+      widget.filterWithDay(data);
     });
   }
 
@@ -60,7 +73,7 @@ class _OptionFilterCardState extends State<OptionFilterCard> {
     dateBegin = beginDateController!.text;
     dateEnd = endDateController!.text;
     day = DateTime.now().toString().split(" ")[0];
-    month = month = DateFormat('yyyy-MM').format(DateTime.now()).toString();
+    month = DateFormat('yyyy-MM').format(DateTime.now()).toString();
     int tempWeek = Jiffy(DateTime.now()).week;
     int tempYear = Jiffy(DateTime.now()).year;
     if (tempWeek < 10) {
@@ -68,7 +81,7 @@ class _OptionFilterCardState extends State<OptionFilterCard> {
     } else {
       week = "$tempYear-W$tempWeek";
     }
-    debugPrint("$dateBegin $dateEnd $day $month $week");
+    manageData(filter: 'day');
     super.initState();
   }
 
@@ -90,6 +103,7 @@ class _OptionFilterCardState extends State<OptionFilterCard> {
                   onPressed: () {
                     setState(() {
                       filterType = FilterDate.day;
+                      widget.filterWithDay(data);
                     });
                   },
                   child: Text(
@@ -107,6 +121,7 @@ class _OptionFilterCardState extends State<OptionFilterCard> {
                   onPressed: () {
                     setState(() {
                       filterType = FilterDate.week;
+                      widget.filterWithDay(data);
                     });
                   },
                   child: Text(
@@ -124,6 +139,7 @@ class _OptionFilterCardState extends State<OptionFilterCard> {
                   onPressed: () {
                     setState(() {
                       filterType = FilterDate.month;
+                      widget.filterWithDay(data);
                     });
                   },
                   child: Text(
@@ -143,6 +159,7 @@ class _OptionFilterCardState extends State<OptionFilterCard> {
                     setState(
                       () {
                         filterType = FilterDate.date;
+                        widget.filterWithDay(data);
                       },
                     );
                   },
@@ -178,7 +195,8 @@ class _OptionFilterCardState extends State<OptionFilterCard> {
                     dayController!.text = pickedDate.toString().split(' ')[0];
                     //Todo callback filter date
                     day = dayController!.text;
-                    widget.filterWithDay();
+                    manageData(filter: 'day');
+                    widget.filterWithDay(data);
                   }
                 },
               ),
@@ -217,7 +235,8 @@ class _OptionFilterCardState extends State<OptionFilterCard> {
                         pickedDate.toString().split(' ')[0];
                     //Todo callback filter date
                     dateBegin = beginDateController!.text;
-                    widget.filterWithDay();
+                    manageData(filter: 'date');
+                    widget.filterWithDay(data);
                   }
                 },
               ),
@@ -241,7 +260,8 @@ class _OptionFilterCardState extends State<OptionFilterCard> {
                         pickedDate.toString().split(' ')[0];
                     //Todo callback filter date
                     dateEnd = endDateController!.text;
-                    widget.filterWithDay();
+                    manageData(filter: 'date');
+                    widget.filterWithDay(data);
                   }
                 },
               ),

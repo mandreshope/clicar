@@ -4,8 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
 
 class OptionFilterCard extends StatefulWidget {
-  OptionFilterCard({Key? key, required this.filterWithDay}) : super(key: key);
-  Function filterWithDay;
+  const OptionFilterCard({Key? key, required this.filterWithDay}) : super(key: key);
+  final Function filterWithDay;
   @override
   State<OptionFilterCard> createState() => _OptionFilterCardState();
 }

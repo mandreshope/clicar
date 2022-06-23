@@ -217,13 +217,13 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 onPressed: () {
                                   // TODO: implement Consulter les statistiques
-                                  // Navigator.of(context)
-                                  //     .pushNamed(AppRoutes.statistique);
-                                  SnackBarWidget.show(
-                                    isError: true,
-                                    message: "Pas disponible",
-                                    context: context,
-                                  );
+                                  Navigator.of(context)
+                                      .pushNamed(AppRoutes.statistique);
+                                  // SnackBarWidget.show(
+                                  //   isError: true,
+                                  //   message: "Pas disponible",
+                                  //   context: context,
+                                  // );
                                 },
                               ),
                               const SizedBox(

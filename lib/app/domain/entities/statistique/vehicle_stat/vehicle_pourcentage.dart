@@ -1,4 +1,3 @@
-import 'package:clicar/app/domain/entities/vehicle/vehicle.dart';
 import 'package:equatable/equatable.dart';
 
 class VehiclePourcentage extends Equatable {

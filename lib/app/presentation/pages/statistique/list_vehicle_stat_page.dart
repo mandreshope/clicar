@@ -2,16 +2,15 @@ import 'package:clicar/app/core/states/base_state.dart';
 import 'package:clicar/app/core/utils/extension.dart';
 import 'package:clicar/app/core/utils/theme.dart';
 import 'package:clicar/app/presentation/pages/statistique/bloc/stat_bloc.dart';
-import 'package:clicar/app/presentation/pages/statistique/widget/item_stat_card.dart';
-import 'package:clicar/app/presentation/pages/statistique/widget/option_filter_card.dart';
+import 'package:clicar/app/presentation/pages/statistique/widget/item_list_vehicle.dart';
 import 'package:clicar/app/presentation/widgets/auth_listener_widget.dart';
 import 'package:clicar/app/presentation/widgets/basic_widgets.dart';
 import 'package:clicar/app/presentation/widgets/scaffold_body.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class EncaissementPage extends StatelessWidget {
-  const EncaissementPage({Key? key}) : super(key: key);
+class ListVehicleStatPage extends StatelessWidget {
+  const ListVehicleStatPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +22,11 @@ class EncaissementPage extends StatelessWidget {
         body: ScaffoldBody(
           child: BlocBuilder<StatBloc, BaseState>(
               buildWhen: (prevState, currState) {
-            return prevState != currState;
+            if (currState is GetListVehicleStatSuccessState) {
+              return true;
+            } else {
+              return false;
+            }
           }, builder: (context, state) {
             return SingleChildScrollView(
               child: Column(
@@ -37,40 +40,29 @@ class EncaissementPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        const TitleWithSeparator(title: "Liste des vehicules"),
                         const SizedBox(
                           height: CustomTheme.spacer,
                         ),
-                        const TitleWithSeparator(title: "Encaissement"),
-                        OptionFilterCard(
-                          filterWithDay: (Map<String, dynamic> data) {
-                            context
-                                .read<StatBloc>()
-                                .add(GetStatEncaissementEvent(data: data));
-                          },
-                        ),
-                        if (state.status == Status.loading)
+                        if (state is GetListVehicleLoadingState)
                           const Center(
                             child: CircularProgressIndicator(),
                           )
-                        else if (state is GetStatEncaissementSuccessState)
-                          Card(
-                            child: Column(
-                              children: [
-                                ItemStatCard(
-                                  trailing: Text(
-                                      "€ ${state.encaissementStat.montantTotalClosed}-100%"),
-                                  color: Colors.blue,
-                                  info: "Montant total closés",
-                                ),
-                                ItemStatCard(
-                                  trailing: Text(
-                                      "€ ${state.encaissementStat.retardPayingInClosedAmount}-${state.encaissementStat.calculPoucentageretardPayingInClosedAmount}%"),
-                                  color: const Color(0xFFb8dfff),
-                                  info: "Retard",
-                                ),
-                              ],
-                            ),
+                        else if (state is GetListVehicleStatSuccessState) ...[
+                          TextField(
+                            decoration: const InputDecoration(
+                                label: Text("Rechercher")),
+                            onChanged: (value) {
+                              //Todo search vehicle
+                            },
                           ),
+                          const SizedBox(
+                            height: CustomTheme.spacer,
+                          ),
+                          ...state.vehicles.map((e) {
+                            return ItemListVehicle(statVehicle: e);
+                          })
+                        ]
                       ],
                     ),
                   ),

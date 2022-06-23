@@ -41,8 +41,10 @@ import 'package:clicar/app/presentation/pages/signature/signature_choice_page.da
 import 'package:clicar/app/presentation/pages/splash/splash_page.dart';
 import 'package:clicar/app/presentation/pages/statistique/encaissement_page.dart';
 import 'package:clicar/app/presentation/pages/statistique/flotte_page.dart';
+import 'package:clicar/app/presentation/pages/statistique/list_vehicle_stat_page.dart';
 import 'package:clicar/app/presentation/pages/statistique/sale_turnover_page.dart';
 import 'package:clicar/app/presentation/pages/statistique/statistique_page.dart';
+import 'package:clicar/app/presentation/pages/statistique/vehicle_stat_page.dart';
 import 'package:flutter/cupertino.dart';
 
 abstract class AppRoutes {
@@ -93,10 +95,8 @@ abstract class AppRoutes {
   static const saleTurnover = '/sale-turnover';
   static const flotte = '/flotte';
   static const encaissement = '/encaissement';
-
-
-
-
+  static const listVehicle = '/listVehicle';
+  static const vehicleStat = '/vehicleStat';
 
   static Map<String, Widget Function(BuildContext)> routes = {
     AppRoutes.login: (BuildContext context) => LoginPage(),
@@ -165,5 +165,8 @@ abstract class AppRoutes {
     AppRoutes.saleTurnover: (BuildContext context) => const SaleTurnoverPage(),
     AppRoutes.flotte: (BuildContext context) => const FlottePage(),
     AppRoutes.encaissement: (BuildContext context) => const EncaissementPage(),
+    AppRoutes.listVehicle: (BuildContext context) =>
+        const ListVehicleStatPage(),
+    AppRoutes.vehicleStat: (BuildContext context) => const VehicleStatPage(),
   };
 }

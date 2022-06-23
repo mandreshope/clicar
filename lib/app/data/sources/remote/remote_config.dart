@@ -13,6 +13,8 @@ abstract class RemoteEndpoint {
   static String userInfoUpdate = RemoteConfig.baseUrl + "/user/edit";
   static String searchContractSigned =
       RemoteConfig.baseUrl + "/contrat/findWithSign";
+  static String findEdlDepart = "/contrat/findEdlDepart";
+  static String findEdlRetour = "/contrat/findEdlRetour";
   static String searchContract =
       RemoteConfig.baseUrl + "/contrat/findWithoutSign";
   static String signContract = RemoteConfig.baseUrl + "/contrat/sign";

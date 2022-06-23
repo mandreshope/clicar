@@ -13,6 +13,7 @@ import 'package:clicar/app/data/models/statistique/contract_stat/contract_stat_m
 import 'package:clicar/app/data/models/statistique/encaissement_stat/encaissement_stat_model.dart';
 import 'package:clicar/app/data/models/statistique/gestion_flotte_stat/gestion_flotte_stat_model.dart';
 import 'package:clicar/app/data/models/statistique/sale_turnover/sale_turnover_model.dart';
+import 'package:clicar/app/data/models/statistique/vehicle_stat/vehicle_stat_detail_model.dart';
 import 'package:clicar/app/data/models/statistique/vehicle_stat/vehicle_stat_model.dart';
 import 'package:clicar/app/data/models/upload_file/upload_file_model.dart';
 import 'package:clicar/app/data/models/user/user_model.dart';
@@ -110,8 +111,8 @@ abstract class RemoteSource {
       {required Map<String, dynamic> data});
   Future<GestionFlotteStatModel> getStatFlotte(
       {required Map<String, dynamic> data});
-  Future<List<VehicleStatModel>> getListVehicleStat();
-  Future<dynamic> getStatVehicle({required Map<String, dynamic> data});
+  Future<List<VehicleStatModel>> getListStatVehicle();
+  Future<VehicleStatDetailModel> getStatVehicle({required Map<String, dynamic> data});
   Future<ContractStatModel> getStatContract(
       {required Map<String, dynamic> data});
 }

@@ -109,6 +109,10 @@ class _StatistiquePageState extends State<StatistiquePage> {
                       SecondaryButton(
                         onPressed: () {
                           //Todo got to stat vehicule
+                          context
+                              .read<StatBloc>()
+                              .add(GetListVehicleStatEvent());
+                          Navigator.pushNamed(context, AppRoutes.listVehicle);
                         },
                         width: double.infinity,
                         child: Text(
@@ -147,6 +151,9 @@ class _StatistiquePageState extends State<StatistiquePage> {
                       SecondaryButton(
                         onPressed: () {
                           //Todo go to encaissement page
+                          context
+                              .read<StatBloc>()
+                              .add(GetStatEncaissementEvent(data: data!));
                           Navigator.pushNamed(context, AppRoutes.encaissement);
                         },
                         width: double.infinity,
@@ -173,127 +180,3 @@ class _StatistiquePageState extends State<StatistiquePage> {
     );
   }
 }
-// class StatistiquePage extends StatelessWidget {
-//   const StatistiquePage({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return AuthListenerWidget(
-//       child: Scaffold(
-//         appBar: AppBar(
-//           elevation: 0,
-//         ),
-//         body: ScaffoldBody(
-//           child: SingleChildScrollView(
-//             child: Column(
-//               children: [
-//                 Padding(
-//                   padding: EdgeInsets.symmetric(
-//                     vertical: 05.h(context).sp(context),
-//                     horizontal: 10.w(context).sp(context),
-//                   ),
-//                   child: Column(
-//                     children: [
-//                       const TitleWithSeparator(title: "Statistiques"),
-//                       const SizedBox(
-//                         height: 30,
-//                       ),
-//                       SecondaryButton(
-//                         onPressed: () {
-//                           //TODO go to chiffre d'affaire page
-//                           Navigator.pushNamed(context,AppRoutes.saleTurnover);
-//                         },
-//                         width: double.infinity,
-//                         child: Text(
-//                           "Chiffre d'affaires".toUpperCase(),
-//                           style: TextStyle(
-//                             fontSize: CustomTheme.mainBtnTextStyle.fontSize
-//                                 ?.sp(context),
-//                             color: CustomTheme.primaryColor,
-//                           ),
-//                         ),
-//                       ),
-//                       const SizedBox(
-//                         height: CustomTheme.spacer,
-//                       ),
-//                       SecondaryButton(
-//                         onPressed: () {
-//                           //TODO go to stat contrat
-//                         },
-//                         width: double.infinity,
-//                         child: Text(
-//                           "Contrat".toUpperCase(),
-//                           style: TextStyle(
-//                             fontSize: CustomTheme.mainBtnTextStyle.fontSize
-//                                 ?.sp(context),
-//                             color: CustomTheme.primaryColor,
-//                           ),
-//                         ),
-//                       ),
-//                       const SizedBox(
-//                         height: CustomTheme.spacer,
-//                       ),
-//                       SecondaryButton(
-//                         onPressed: () {
-//                           //Todo got to stat vehicule
-//                         },
-//                         width: double.infinity,
-//                         child: Text(
-//                           "Vehicule".toUpperCase(),
-//                           style: TextStyle(
-//                             fontSize: CustomTheme.mainBtnTextStyle.fontSize
-//                                 ?.sp(context),
-//                             color: CustomTheme.primaryColor,
-//                           ),
-//                         ),
-//                       ),
-//                       const SizedBox(
-//                         height: CustomTheme.spacer,
-//                       ),
-//                       SecondaryButton(
-//                         onPressed: () {
-//                           //Todo go to stat gestion de flotte page
-//                           context.read<StatBloc>().add(GetStatFlotteEvent());
-//                           Navigator.pushNamed(context,AppRoutes.flotte);
-//                         },
-//                         width: double.infinity,
-//                         child: Text(
-//                           "Gestion de flotte".toUpperCase(),
-//                           style: TextStyle(
-//                             fontSize: CustomTheme.mainBtnTextStyle.fontSize
-//                                 ?.sp(context),
-//                             color: CustomTheme.primaryColor,
-//                           ),
-//                         ),
-//                       ),
-//                       const SizedBox(
-//                         height: CustomTheme.spacer,
-//                       ),
-//                       SecondaryButton(
-//                         onPressed: () {
-//                           //Todo go to encaissement page
-//                         },
-//                         width: double.infinity,
-//                         child: Text(
-//                           "Encaissement".toUpperCase(),
-//                           style: TextStyle(
-//                             fontSize: CustomTheme.mainBtnTextStyle.fontSize
-//                                 ?.sp(context),
-//                             color: CustomTheme.primaryColor,
-//                           ),
-//                         ),
-//                       ),
-//                       const SizedBox(
-//                         height: CustomTheme.spacer,
-//                       ),
-//                     ],
-//                   ),
-//                 )
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }

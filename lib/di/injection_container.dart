@@ -39,8 +39,10 @@ import 'package:clicar/app/domain/usecases/edl/edl_retour_usecase.dart';
 import 'package:clicar/app/domain/usecases/reservation/get_pdf_reservation_usecase.dart';
 import 'package:clicar/app/domain/usecases/reservation/search_reservation_usecase.dart';
 import 'package:clicar/app/domain/usecases/reservation/sign_reservation_usecase.dart';
+import 'package:clicar/app/domain/usecases/statistique/get_list_vehicle_stat_usecase.dart';
 import 'package:clicar/app/domain/usecases/statistique/get_stat_encaissement_usecase.dart';
 import 'package:clicar/app/domain/usecases/statistique/get_stat_flotte_usecase.dart';
+import 'package:clicar/app/domain/usecases/statistique/get_vehicle_stat_usecase.dart';
 import 'package:clicar/app/domain/usecases/upload_file/upload_multi_file_usecase.dart';
 import 'package:clicar/app/domain/usecases/upload_file/upload_single_file_usecase.dart';
 import 'package:clicar/app/domain/usecases/user/me_usecase.dart';
@@ -83,6 +85,8 @@ Future<void> init() async {
     () => StatBloc(
       getStatFlotteUseCase: sl(),
       getStatEncaissementUseCase: sl(),
+      getListVehicleStatUseCase: sl(),
+      getVehicleStatUseCase: sl(),
     ),
   );
   sl.registerFactory(() => AuthBloc(
@@ -134,6 +138,8 @@ Future<void> init() async {
   );
 
   ///Use cases
+  sl.registerLazySingleton(() => GetListVehicleStatUseCase(repository: sl()));
+  sl.registerLazySingleton(() => GetVehicleStatUseCase(repository: sl()));
   sl.registerLazySingleton(() => GetStatFlotteUseCase(repository: sl()));
   sl.registerLazySingleton(() => GetStatEncaissementUseCase(repository: sl()));
   sl.registerLazySingleton(() => LoginUseCase(repository: sl()));

@@ -17,6 +17,7 @@ import 'package:clicar/app/data/models/statistique/gestion_flotte_stat/gestion_f
 import 'package:clicar/app/data/models/statistique/encaissement_stat/encaissement_stat_model.dart';
 import 'package:clicar/app/data/models/statistique/contract_stat/contract_stat_model.dart';
 import 'package:clicar/app/data/models/statistique/sale_turnover/sale_turnover_model.dart';
+import 'package:clicar/app/data/models/statistique/vehicle_stat/vehicle_stat_detail_model.dart';
 import 'package:clicar/app/data/models/statistique/vehicle_stat/vehicle_stat_model.dart';
 import 'package:clicar/app/data/models/upload_file/upload_file_model.dart';
 import 'package:clicar/app/data/models/user/user_model.dart';
@@ -239,7 +240,11 @@ class RemoteSourceImpl extends RemoteSource {
   }) async {
     Uri url = Uri.parse(RemoteEndpoint.searchContract);
     if (isSigned) {
-      url = Uri.parse(RemoteEndpoint.searchContractSigned);
+      if(hasStartingEdl!) {
+        url = Uri.parse(RemoteEndpoint.findEdlRetour);
+      } else {
+        url = Uri.parse(RemoteEndpoint.findEdlDepart);
+      }
     }
     final body = jsonEncode({
       'keyWord': keyWord,
@@ -915,9 +920,24 @@ class RemoteSourceImpl extends RemoteSource {
   }
 
   @override
-  Future<List<VehicleStatModel>> getListVehicleStat() {
-    // TODO: implement getListVehicleStat
-    throw UnimplementedError();
+  Future<List<VehicleStatModel>> getListStatVehicle() async {
+    final url = Uri.parse(RemoteEndpoint.statListVehicle);
+    final response = await client.get(url);
+    debugPrint(response.body);
+    if (response.statusCode == 200) {
+      _refreshToken(response.headers);
+      debugPrint(response.body);
+      final Iterable iterable = jsonDecode(response.body);
+        return List.from(iterable).map((x) {
+          return VehicleStatModel.fromJson(x);
+        }).toList();
+    } else {
+      throw ServerException(
+        statusCode: response.statusCode,
+        message: response.reasonPhrase ?? 'Server Error',
+        body: response.body,
+      );
+    }
   }
 
   @override
@@ -927,9 +947,21 @@ class RemoteSourceImpl extends RemoteSource {
   }
 
   @override
-  Future<EncaissementStatModel> getStatEncaissement({required Map<String, dynamic> data}) {
-    // TODO: implement getStatEncaissement
-    throw UnimplementedError();
+  Future<EncaissementStatModel> getStatEncaissement({required Map<String, dynamic> data})async {
+    final url = Uri.parse(RemoteEndpoint.statistiqueEncaissement);
+    final response = await client.post(url, body: jsonEncode(data));
+    debugPrint(response.body);
+    if (response.statusCode == 200) {
+      _refreshToken(response.headers);
+      debugPrint(response.body);
+      return EncaissementStatModel.fromJson(jsonDecode(response.body));
+    } else {
+      throw ServerException(
+        statusCode: response.statusCode,
+        message: response.reasonPhrase ?? 'Server Error',
+        body: response.body,
+      );
+    }
   }
 
   @override
@@ -951,8 +983,20 @@ class RemoteSourceImpl extends RemoteSource {
   }
 
   @override
-  Future getStatVehicle({required Map<String, dynamic> data}) {
-    // TODO: implement getStatVehicle
-    throw UnimplementedError();
+  Future<VehicleStatDetailModel> getStatVehicle({required Map<String, dynamic> data}) async {
+    final url = Uri.parse(RemoteEndpoint.statVehicle);
+    final response = await client.post(url, body: jsonEncode(data));
+    debugPrint(response.body);
+    if (response.statusCode == 200) {
+      _refreshToken(response.headers);
+      debugPrint(response.body);
+      return VehicleStatDetailModel.fromJson(jsonDecode(response.body));
+    } else {
+      throw ServerException(
+        statusCode: response.statusCode,
+        message: response.reasonPhrase ?? 'Server Error',
+        body: response.body,
+      );
+    }
   }
 }

@@ -1,5 +1,3 @@
-
-
 part of 'stat_bloc.dart';
 
 class GetStatFlotteSuccessState extends BaseState {
@@ -18,4 +16,32 @@ class GetStatEncaissementSuccessState extends BaseState {
     required Status status,
     required String message,
   }) : super(status: status, message: message);
+}
+
+class GetListVehicleStatSuccessState extends BaseState {
+  final List<VehicleStat> vehicles;
+  const GetListVehicleStatSuccessState({
+    required this.vehicles,
+    required Status status,
+    required String message,
+  }) : super(status: status, message: message);
+}
+
+class GetVehicleStatSuccessState extends BaseState {
+  final VehicleStatDetail statVehicle;
+  const GetVehicleStatSuccessState({
+    required this.statVehicle,
+    required Status status,
+    required String message,
+  }) : super(status: status, message: message);
+}
+
+class GetListVehicleLoadingState extends BaseState {
+  const GetListVehicleLoadingState({
+    required Status status,
+    required String message,
+  }) : super(
+          status: status,
+          message: message,
+        );
 }

@@ -224,7 +224,7 @@ class _EdlCameraExteriorPageState extends State<EdlCameraExteriorPage>
 
   void showInSnackBar(String message) {
     // ignore: deprecated_member_use
-    _scaffoldKey.currentState?.showSnackBar(SnackBar(content: Text(message)));
+    // _scaffoldKey.currentState?.showSnackBar(SnackBar(content: Text(message)));
   }
 
   void onNewCameraSelected(CameraDescription cameraDescription) async {
